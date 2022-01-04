@@ -1,0 +1,39 @@
+TARGETNAME = libibnetdisc
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\ibnetdisc_exports.def
+
+DLLENTRY = DllMain
+USE_MSVCRT = 1
+
+SOURCES = ibnetdisc_main.cpp ibnetdisc.c chassis.c query_smp.c ibnetdisc_cache.c
+	
+INCLUDES =	..\include\infiniband;\
+			..\include;..\include\windows;\
+			..\..\libibmad\include;\
+			..\..\..\tools\infiniband-diags\include;\
+			..\..\libibverbs\include;\
+			..\..\libibumad\include;\
+			..\..\..\inc;\
+			..\..\..\inc\user;\
+			..\..\..\inc\user\linux;\
+		    ..\..\libibumad\src\$(O);\
+			..\..\libibmad\src\$(O);\
+			..\..\..\core\complib\user\$(O);
+
+
+USER_C_FLAGS = $(USER_C_FLAGS)
+C_DEFINES = $(C_DEFINES) /DHAVE_CONFIG_H
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(SDK_LIB_PATH)\advapi32.lib	\
+	$(SDK_LIB_PATH)\user32.lib		\
+	$(SDK_LIB_PATH)\ole32.lib		\
+    $(TARGETPATH)\*\libibumad.lib	\
+    $(TARGETPATH)\*\libibmad.lib	\
+    $(TARGETPATH)\*\complib.lib

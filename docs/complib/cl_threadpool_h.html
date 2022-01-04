@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_threadpool_h.html</title>
+<!-- Source: ./inc/complib/cl_threadpool.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_threadpool.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo28">[Modules]<a name="Component20Library2fThread20Pool">
+Component Library/Thread Pool</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Thread <a href="./cl_pool_h.html#robo18">Pool</a> manages a user specified number of threads.
+
+       Each thread in the thread pool waits for a user initiated signal before
+       invoking a user specified callback function. All threads in the thread
+       pool invoke the same callback function.
+
+       The thread pool functions operate on a <a href="#robo644">cl_thread_pool_t</a> structure which
+       should be treated as opaque, and should be manipulated only through the
+       provided functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo644">cl_thread_pool_t</a>
+
+       Initialization:
+               <a href="#robo640">cl_thread_pool_construct</a>, <a href="#robo642">cl_thread_pool_init</a>, <a href="#robo641">cl_thread_pool_destroy</a>
+
+       Manipulation
+               <a href="#robo643">cl_thread_pool_signal</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo640">[Functions]<a name="Component20Library3a20Thread20Pool2fcl5fthread5fpool5fconstruct">
+Component Library: Thread Pool/cl_thread_pool_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_pool_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_pool_construct</strong> function initializes the state of a
+       thread pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_thread_pool_construct</strong>(
+        IN      <a href="#robo644">cl_thread_pool_t</a>* const p_thread_pool );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_thread_pool
+               [in] Pointer to a thread pool structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo641">cl_thread_pool_destroy</a> without first calling
+       <a href="#robo642">cl_thread_pool_init</a>.
+
+       Calling <strong>cl_thread_pool_construct</strong> is a prerequisite to calling any other
+       thread pool function except <a href="#robo642">cl_thread_pool_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo642">cl_thread_pool_init</a>, <a href="#robo641">cl_thread_pool_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo641">[Functions]<a name="Component20Library3a20Thread20Pool2fcl5fthread5fpool5fdestroy">
+Component Library: Thread Pool/cl_thread_pool_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_pool_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_pool_destroy</strong> function performs any necessary cleanup
+       for a thread pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_thread_pool_destroy</strong>(
+        IN      <a href="#robo644">cl_thread_pool_t</a>* const p_thread_pool );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_thread_pool
+               [in] Pointer to a thread pool structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function blocks until all threads exit, and must therefore not
+       be called from any of the thread pool's threads. Because of its blocking
+       nature, callers of <strong>cl_thread_pool_destroy</strong> must ensure that entering a wait
+       state is valid from the calling thread context.
+
+       This function should only be called after a call to
+       <a href="#robo640">cl_thread_pool_construct</a> or <a href="#robo642">cl_thread_pool_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo640">cl_thread_pool_construct</a>, <a href="#robo642">cl_thread_pool_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo642">[Functions]<a name="Component20Library3a20Thread20Pool2fcl5fthread5fpool5finit">
+Component Library: Thread Pool/cl_thread_pool_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_pool_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_pool_init</strong> function creates the threads to be
+       managed by a thread pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_thread_pool_init</strong>(
+        IN      <a href="#robo644">cl_thread_pool_t</a>* const         p_thread_pool,
+        IN      uint32_t                                        thread_count,
+        IN      <a href="./cl_thread_h.html#robo646">cl_pfn_thread_callback_t</a>        pfn_callback,
+        IN      const void* const                       context,
+        IN      const char* const                       name );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_thread_pool
+               [in] Pointer to a thread pool structure to initialize.
+
+       thread_count
+               [in] Number of threads to be managed by the thread pool.
+
+       pfn_callback
+               [in] Address of a function to be invoked by a thread.
+               See the <a href="./cl_thread_h.html#robo646">cl_pfn_thread_callback_t</a> function type definition for
+               details about the callback function.
+
+       context
+               [in] Value to pass to the callback function.
+
+       name
+               [in] Name to associate with the threads.  The name may be up to 16
+               characters, including a terminating null character.  All threads
+               created in the pool have the same name.
+
+ RETURN VALUES
+       CL_SUCCESS if the thread pool creation succeeded.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to inititalize
+       the thread pool.
+
+       CL_ERROR if the threads could not be created.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_thread_pool_init</strong> creates and starts the specified number of threads.
+       If thread_count is zero, the thread pool creates as many threads as there
+       are processors in the system.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo640">cl_thread_pool_construct</a>, <a href="#robo641">cl_thread_pool_destroy</a>,
+       <a href="#robo643">cl_thread_pool_signal</a>, <a href="./cl_thread_h.html#robo646">cl_pfn_thread_callback_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo643">[Functions]<a name="Component20Library3a20Thread20Pool2fcl5fthread5fpool5fsignal">
+Component Library: Thread Pool/cl_thread_pool_signal</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_pool_signal</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_pool_signal</strong> function signals a single thread of
+       the thread pool to invoke the thread pool’s callback function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_thread_pool_signal</strong>(
+        IN      <a href="#robo644">cl_thread_pool_t</a>* const p_thread_pool );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_thread_pool
+               [in] Pointer to a thread pool structure to signal.
+
+ RETURN VALUES
+       CL_SUCCESS if the thread pool was successfully signalled.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Each call to this function wakes up at most one waiting thread in
+       the thread pool.
+
+       If all threads are running, <strong>cl_thread_pool_signal</strong> has no effect.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo644">[Structures]<a name="Component20Library3a20Thread20Pool2fcl5fthread5fpool5ft">
+Component Library: Thread Pool/cl_thread_pool_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_pool_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Thread pool structure.
+
+       The <strong>cl_thread_pool_t</strong> structure should be treated as opaque, and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_thread_pool
+{
+        <a href="./cl_thread_h.html#robo646">cl_pfn_thread_callback_t</a>        pfn_callback;
+        const void                                      *context;
+        <a href="./cl_list_h.html#robo394">cl_list_t</a>                                       thread_list;
+        cl_event_t                                      wakeup_event;
+        cl_event_t                                      destroy_event;
+        boolean_t                                       exit;
+        cl_state_t                                      state;
+        atomic32_t                                      running_count;
+
+} <strong>cl_thread_pool_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pfn_callback
+               Callback function for the thread to invoke.
+
+       context
+               Context to pass to the thread callback function.
+
+       thread_list
+               <a href="./cl_list_h.html#robo11">List</a> of threads managed by the thread pool.
+
+       event
+               <a href="./cl_event_h.html#robo7">Event</a> used to signal threads to wake up and do work.
+
+       destroy_event
+               <a href="./cl_event_h.html#robo7">Event</a> used to signal threads to exit.
+
+       exit
+               Flag used to indicates threads to exit.
+
+       state
+               State of the thread pool.
+
+       running_count
+               Number of threads running.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span>
+</body>
+</html>

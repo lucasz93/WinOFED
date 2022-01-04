@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_math_h.html</title>
+<!-- Source: ./inc/complib/cl_math.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_math.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo421">[Definitions]<a name="Component20Library3a20Math2fMAX">
+Component Library: Math/MAX</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>MAX</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>MAX</strong> macro returns the greater of two values.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>MAX</strong>( x, y );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       x
+               [in] First of two values to compare.
+
+       y
+               [in] Second of two values to compare.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the greater of the x and y parameters.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo422">MIN</a>, <a href="#robo423">ROUNDUP</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo422">[Definitions]<a name="Component20Library3a20Math2fMIN">
+Component Library: Math/MIN</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>MIN</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>MIN</strong> macro returns the greater of two values.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>MIN</strong>( x, y );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       x
+               [in] First of two values to compare.
+
+       y
+               [in] Second of two values to compare.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the lesser of the x and y parameters.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo421">MAX</a>, <a href="#robo423">ROUNDUP</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo423">[Definitions]<a name="Component20Library3a20Math2fROUNDUP">
+Component Library: Math/ROUNDUP</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>ROUNDUP</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>ROUNDUP</strong> macro rounds a value up to a given multiple.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>ROUNDUP</strong>( val, align );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value that is to be rounded up. The type of the value is
+               indeterminate, but must be at most the size of a natural integer
+               for the platform.
+
+       align
+               [in] Multiple to which the val parameter must be rounded up.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns a value that is the input value specified by val rounded up to
+       the nearest multiple of align.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The value provided must be of a type at most the size of a natural integer.
+</pre>
+</span>
+</body>
+</html>

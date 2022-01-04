@@ -1,0 +1,22 @@
+TARGETNAME = winmad
+
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+NTTARGETFILES=Custom_target
+
+DLLDEF = $(OBJ_PATH)\$O\wm_exports.def
+
+DLLENTRY = DllMain
+USE_NTDLL = 1
+
+SOURCES = winmad.rc	wm_main.cpp wm_provider.cpp
+
+INCLUDES = ..;..\..\..\inc;..\..\..\inc\user;
+
+USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_WM_SYMBOLS
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib

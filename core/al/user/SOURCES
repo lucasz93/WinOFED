@@ -1,0 +1,92 @@
+TARGETNAME=ibal
+
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+DLLENTRY=DllMain
+
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+#!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+NTTARGETFILES=Custom_target
+
+DLLDEF=$(OBJ_PATH)\$O\al_exports.def
+
+USE_NTDLL=1
+
+SOURCES=\
+	ibal.rc					\
+	al_dll.c				\
+	al_mad_pool.c			\
+	ual_av.c				\
+	ual_ca.c				\
+	ual_ci_ca.c				\
+	ual_cm_cep.c			\
+	ual_cq.c				\
+	ual_mad.c				\
+	ual_mad_pool.c			\
+	ual_mcast.c				\
+	ual_mgr.c				\
+	ual_mr.c				\
+	ual_mw.c				\
+	ual_pd.c				\
+	ual_pnp.c				\
+	ual_qp.c				\
+	ual_sa_req.c			\
+	ual_srq.c				\
+	..\al.c					\
+	..\al_av.c				\
+	..\al_ca.c				\
+	..\al_ci_ca_shared.c	\
+	..\al_cm_qp.c			\
+	..\al_common.c			\
+	..\al_ref_trace.c		\
+	..\al_cq.c				\
+	..\al_dm.c				\
+	..\al_init.c			\
+	..\al_mad.c				\
+	..\al_mcast.c			\
+	..\al_mgr_shared.c		\
+	..\al_mr_shared.c		\
+	..\al_mw.c				\
+	..\al_pd.c				\
+	..\al_qp.c				\
+	..\al_query.c			\
+	..\al_reg_svc.c			\
+	..\al_res_mgr.c			\
+	..\al_srq.c				\
+	..\al_sub.c				\
+	..\ib_common.c			\
+	..\ib_statustext.c
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\user;..\..\complib\user\$(O);
+
+USER_C_FLAGS=$(USER_C_FLAGS) -DEXPORT_AL_SYMBOLS -DCL_NO_TRACK_MEM -DWPP_OLDCC
+
+TARGETLIBS= \
+			$(SDK_LIB_PATH)\kernel32.lib \
+			$(SDK_LIB_PATH)\Advapi32.lib \
+                        $(TARGETPATH)\*\complib.lib
+
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG=1
+!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -ext: .c .h .C .H \
+	-scan:..\al_debug.h \
+	-func:AL_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:AL_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) \
+	-dll
+!ENDIF
+
+
+MSC_WARNING_LEVEL= /W4

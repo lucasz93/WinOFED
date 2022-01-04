@@ -1,0 +1,38 @@
+TARGETNAME=alts
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+SOURCES= alts.rc			\
+	alts_driver.c			\
+	..\allocdeallocpd.c		\
+	..\alts_misc.c			\
+	..\cmtests.c			\
+	..\createanddestroycq.c	\
+	..\createdestroyav.c	\
+	..\creatememwindow.c	\
+	..\ibquery.c			\
+	..\madtests.c			\
+	..\multisendrecv.c		\
+	..\openclose.c			\
+	..\querycaattr.c		\
+	..\registermemregion.c	\
+	..\registerpnp.c		\
+	..\smatests.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\kernel;..
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\ibal.lib
+	
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+#
+# The driver is built in the Win2K build environment
+# - use the library version of safe strings 
+#
+TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\ntstrsafe.lib
+!endif
+
+MSC_WARNING_LEVEL= /W4 /wd4127

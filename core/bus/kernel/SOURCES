@@ -1,0 +1,55 @@
+TARGETNAME=ibbus
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+NTTARGETFILES=Custom_target
+
+SOURCES= ibbus.rc		\
+	bus_ev_log.mc		\
+	bus_driver.c		\
+	bus_pnp.c			\
+	bus_port_mgr.c		\
+	bus_iou_mgr.c		\
+	bus_stat.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\kernel;..\..\al;..\..\al\kernel;..\..\bus\kernel\$O;\
+         ..\..\..\hw\mlx4\inc;..\..\..\inc\kernel\iba;..\..\complib\kernel\$(O);..\..\al\kernel\$(O);\
+	 ..\..\fip\inc;..\..\fip\kernel\$(o)
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -DNEED_CL_OBJ
+
+TARGETLIBS= \
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+    $(DDK_LIB_PATH)\netio.lib \
+    $(DDK_LIB_PATH)\msnetioid.lib \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\ibal.lib \
+	$(TARGETPATH)\*\fip.lib \
+    $(TARGETPATH)\*\genutils.lib \
+    $(TARGETPATH)\*\ibat.lib \
+	
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="WinXP"
+TARGETLIBS=$(TARGETLIBS) $(DDK_LIB_PATH)\csq.lib
+!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H 
+
+!ENDIF
+
+
+MSC_WARNING_LEVEL= /W4
+
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_PCH=precomp.pch
+

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_thread_h.html</title>
+<!-- Source: ./inc/complib/cl_thread.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_thread.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo645">[Functions]<a name="Component20Library3a20Thread2fcl5fis5fblockable">
+Component Library: Thread/cl_is_blockable</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_blockable</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_blockable</strong> indicates if the current caller context is
+       blockable.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT boolean_t CL_API
+<strong>cl_is_blockable</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       TRUE if the caller's thread context can be blocked, i.e it is safe
+       to perform a sleep, or call a down operation on a semaphore.
+
+       FALSE otherwise
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo646">[Definitions]<a name="Component20Library3a20Thread2fcl5fpfn5fthread5fcallback5ft">
+Component Library: Thread/cl_pfn_thread_callback_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_thread_callback_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_thread_callback_t</strong> function type defines the prototype
+       for functions invoked by thread objects
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_thread_callback_t</strong>)(
+        IN      void*   context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       context
+               [in] Value specified in a call to cl_thread_init or
+               cl_thread_pool_create.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for
+       the function provided by users as a parameter to the cl_thread_init
+       and cl_thread_pool_create functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo647">[Functions]<a name="Component20Library3a20Thread2fcl5fproc5fcount">
+Component Library: Thread/cl_proc_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_proc_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_proc_count</strong> function returns the number of processors in the system.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint32_t CL_API
+<strong>cl_proc_count</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the number of processors in the system.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo648">[Functions]<a name="Component20Library3a20Thread2fcl5fthread5fstall">
+Component Library: Thread/cl_thread_stall</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_stall</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_stall</strong> function stalls the calling thread for a minimum of
+       the specified number of microseconds.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_thread_stall</strong>(
+        IN      const uint32_t  pause_us );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       pause_us
+               [in] Number of microseconds to stall the calling thread.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_thread_stall</strong> function performs a busy wait for the specified
+       number of microseconds. Care should be taken when using this function as
+       it does not relinquish its quantum of operation. For longer wait
+       operations, users should call <a href="#robo649">cl_thread_suspend</a> if possible.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread, <a href="#robo649">cl_thread_suspend</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo649">[Functions]<a name="Component20Library3a20Thread2fcl5fthread5fsuspend">
+Component Library: Thread/cl_thread_suspend</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_thread_suspend</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_thread_suspend</strong> function suspends the calling thread for a minimum
+       of the specified number of milliseconds.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_thread_suspend</strong>(
+        IN      const uint32_t  pause_ms );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       pause_ms
+               [in] Number of milliseconds to suspend the calling thread.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function should only be called if it is valid for the caller's thread
+       to enter a wait state. For stalling a thread that cannot enter a wait
+       state, callers should use <a href="#robo648">cl_thread_stall</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Thread, <a href="#robo648">cl_thread_stall</a>
+</pre>
+</span>
+</body>
+</html>

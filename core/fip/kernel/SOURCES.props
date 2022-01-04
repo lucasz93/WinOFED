@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TARGETNAME Condition="'$(OVERRIDE_TARGETNAME)'!='true'">fip</TARGETNAME>
+    <TARGETPATH Condition="'$(OVERRIDE_TARGETPATH)'!='true'">..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)</TARGETPATH>
+    <TARGETTYPE Condition="'$(OVERRIDE_TARGETTYPE)'!='true'">DRIVER_LIBRARY</TARGETTYPE>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(FREEBUILD)'!='' And $(FREEBUILD)!=0">
+      <PropertyGroup>
+        <ENABLE_EVENT_TRACING Condition="'$(OVERRIDE_ENABLE_EVENT_TRACING)'!='true'">1</ENABLE_EVENT_TRACING>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <PropertyGroup>
+    <KMDF_VERSION_MAJOR Condition="'$(OVERRIDE_KMDF_VERSION_MAJOR)'!='true'">1</KMDF_VERSION_MAJOR>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="(!('$(DDK_TARGET_OS)'!='')) Or ('$(DDK_TARGET_OS)'=='WinLH')">
+      <PropertyGroup>
+        <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) -DNDIS61_MINIPORT=1 -DWMI_CUSTOM_OIDS=1</C_DEFINES>
+        <KMDF_VERSION_MINOR Condition="'$(OVERRIDE_KMDF_VERSION_MINOR)'!='true'">7</KMDF_VERSION_MINOR>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(DDK_TARGET_OS)'=='Win7'">
+      <PropertyGroup>
+        <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) -DNDIS620_MINIPORT=1</C_DEFINES>
+        <KMDF_VERSION_MINOR Condition="'$(OVERRIDE_KMDF_VERSION_MINOR)'!='true'">9</KMDF_VERSION_MINOR>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="'$(FIP_COMPILE)'!=''">
+      <PropertyGroup>
+        <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) -DFIP_COMPILE</C_DEFINES>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <PropertyGroup>
+    <USECXX_FLAG Condition="'$(OVERRIDE_USECXX_FLAG)'!='true'">1</USECXX_FLAG>
+    <DLLDEF Condition="'$(OVERRIDE_DLLDEF)'!='true'">core.def</DLLDEF>
+    <NTTARGETFILES Condition="'$(OVERRIDE_NTTARGETFILES)'!='true'">Custom_target</NTTARGETFILES>
+    <SOURCES Condition="'$(OVERRIDE_SOURCES)'!='true'">fip_main.cpp		 	fip_thread.cpp           	fip_dbg.cpp		 	send_recv.cpp		 	fip_utils.cpp		 	fip_vhub_table.cpp	 	fip_vnic.cpp		 	fip_gw.cpp		 	fip_port.cpp		 	fip_eoib_interface.cpp</SOURCES>
+    <INCLUDES Condition="'$(OVERRIDE_INCLUDES)'!='true'">..;..\inc;               ..\..\..\hw\mlx4\kernel\genutils;              ..\..\..\hw\mlx4\kernel\inc;              ..\..\..\hw\mlx4\inc;              ..\..\..\hw\mlx4\kernel\bus\inc;              ..\..\..\inc\kernel;              ..\..\..\inc\;              ..\..\al\kernel; 	     ..\..\al\;</INCLUDES>
+    <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN -DUSE_WDM_INTERRUPTS</C_DEFINES>
+    <TARGETLIBS Condition="'$(OVERRIDE_TARGETLIBS)'!='true'">$(DDK_LIB_PATH)\ntstrsafe.lib</TARGETLIBS>
+  </PropertyGroup>
+  <ItemGroup>
+    <InvokedTargetsList Include="Custom_target">
+      <Pass>All</Pass>
+      <Condition>
+      </Condition>
+    </InvokedTargetsList>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(ENABLE_EVENT_TRACING)'!=''">
+      <PropertyGroup>
+        <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) -DEVENT_TRACING</C_DEFINES>
+        <RUN_WPP Condition="'$(OVERRIDE_RUN_WPP)'!='true'">$(SOURCES) -km -dll -ext: .c .cpp .h .C .CPP .H 	-preserveext:.cpp .h 	-scan:..\inc\fip_debug.h 	-func:FIP_PRINT(LEVEL,FLAGS,MSG,...)</RUN_WPP>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <PropertyGroup>
+    <PRECOMPILED_INCLUDE Condition="'$(OVERRIDE_PRECOMPILED_INCLUDE)'!='true'">precomp.h</PRECOMPILED_INCLUDE>
+    <PRECOMPILED_PCH Condition="'$(OVERRIDE_PRECOMPILED_PCH)'!='true'">precomp.pch</PRECOMPILED_PCH>
+    <PRECOMPILED_CXX Condition="'$(OVERRIDE_PRECOMPILED_CXX)'!='true'">1</PRECOMPILED_CXX>
+    <MC_SOURCEDIR Condition="'$(OVERRIDE_MC_SOURCEDIR)'!='true'">.</MC_SOURCEDIR>
+    <MSC_WARNING_LEVEL Condition="'$(OVERRIDE_MSC_WARNING_LEVEL)'!='true'">/W4</MSC_WARNING_LEVEL>
+  </PropertyGroup>
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

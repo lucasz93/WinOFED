@@ -1,0 +1,111 @@
+This document describes installation steps for developers and is
+not end users.  The process described here is for developers running
+on a homogeneous Windows HPC cluster.
+
+Installation is divided into several phases in order to allow for
+quick replacement of specific drivers and/or libraries.  Before
+starting, the developer should note the following:
+
+- OS version running on the cluster (2003, 2008)
+- Processor architecture of the cluster (x86, x64, ia64)
+- Whether they want to install checked or free versions of
+  drivers and libraries.
+
+
+1. Build the sources.
+
+Refer to docs\built.txt and bldwo.bat for details on building the
+source code.  As an example, this will build the sources to install
+on a 2008 HPC cluster running on 64-bit processors.
+
+	bldwo chk x32 2008
+	bldwo fre x32 2008
+	bldwo chk x64 2008
+	bldwo fre x64 2008
+
+You must build both the checked and free versions of the source to
+use this installation process, and include 32-bit binaries when
+installing on a 64-bit system.  This is because the inf files
+reference 32-bit checked and free and 64-bit checked and free
+versions of the libraries in the install process.
+The correct version (checked or free) of the drivers and executables
+will be installed.
+
+Note: during development, you only need to rebuild the actual
+version undergoing testing, as long as the other files are
+available.  You may also build from a specific directory in
+the source tree to only rebuild those files undergoing active
+development.
+
+
+2. Create packages.
+
+Use etc\pkgwo.bat to sort the compiled source code into their
+respective packages.  The separation of the source code into
+packages allows quick rebuilding and replacement of selected
+modules.  For example, the following creates packages for a
+2008 HPC cluster.
+
+	pkgwo fre x64 2008 all
+
+This creates packages for all the various drivers under
+install\2008\x64\fre (ibbus, ipoib, mlx4_bus, winverbs, etc.)
+
+
+3. Deploy the packages to the head node.
+
+Use etc\depwo.bat to copy the packaged files to the HPC cluster
+head node for installation across the cluster.  The files are
+copied into \winof\install on the head node.  For example, the
+following deploys the packages to a head node named 'hpc-head'.
+
+	depwo fre x64 2008 hpc-head
+
+
+4. Add a test certificate.
+
+NOTE: This step only needs to be done once.
+
+As part of the package deployment, batch files were copied to the
+head node.  Run \winof\install\addcert.bat on the head node to create
+a test certificate (WinOFCert.cer) that can be used to test sign the
+drivers.
+
+	cd \winof\install
+	addcert
+
+To support test signed drivers, you may need to execute the following
+command across the cluster.
+
+	clusrun bcdedit -set testsigning on
+	clusrun shutdown /r
+
+
+5. Sign the drivers.
+
+Run \winof\install\signall to create driver catalog files and sign
+all drivers, libraries, and executables that were deployed to the
+head node.
+
+	cd \winof\install
+	signall
+
+You can limit signing to a specific package by changing into that
+package's directory and running signwo.bat.
+
+
+6. Install the packages.
+
+You can install the packages by running dpinst in each package.  Packages
+should be installed in the following order, depending on your HCA type:
+
+	mlx4_bus -> mlx4_hca -> ipoib
+	mthca -> ipoib
+
+Note: The HCA drivers automatically install the ibbus, winverbs, and
+winmad packages.  Separate installations of those packages are not
+necessary.  The following provides an installation example:
+
+	clusrun \\hpc-head\c$\winof\install\mlx4_bus\dpinst -f -q -c
+	clusrun \\hpc-head\c$\winof\install\mlx4_hca\dpinst -f -q -c
+	clusrun \\hpc-head\c$\winof\install\ipoib\dpinst -f -q -c

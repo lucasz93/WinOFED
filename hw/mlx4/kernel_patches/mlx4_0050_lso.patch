@@ -1,0 +1,249 @@
+From 33c5e1a802583cd84b55a4c5270e9d7753ac29bf Mon Sep 17 00:00:00 2001
+From: Eli Cohen <eli@mellanox.co.il>
+Date: Tue, 15 Jan 2008 18:57:09 +0200
+Subject: [PATCH] Add LSO support to mlx4
+
+mlx4: Add LSO support.
+
+Changes:
+Adjusted setting "reserve" value in set_kernel_sq_size to fit changes
+in qp_flags patch.
+
+Signed-off-by: Eli Cohen <eli@mellnaox.co.il>
+Signed-off-by: Jack Morgenstein <jackm@dev.mellanox.co.il>
+
+---
+ drivers/infiniband/hw/mlx4/cq.c   |    3 ++
+ drivers/infiniband/hw/mlx4/main.c |    4 +++
+ drivers/infiniband/hw/mlx4/qp.c   |   52 +++++++++++++++++++++++++++++++++---
+ drivers/net/mlx4/fw.c             |    9 ++++++
+ drivers/net/mlx4/fw.h             |    1 +
+ drivers/net/mlx4/main.c           |    1 +
+ include/linux/mlx4/device.h       |    1 +
+ include/linux/mlx4/qp.h           |    5 +++
+ 8 files changed, 71 insertions(+), 5 deletions(-)
+
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/cq.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/cq.c	2008-01-23 16:01:48.392614000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/cq.c	2008-01-23 16:05:20.076983000 +0200
+@@ -408,6 +408,9 @@ static int mlx4_ib_poll_one(struct mlx4_
+ 		case MLX4_OPCODE_BIND_MW:
+ 			wc->opcode    = IB_WC_BIND_MW;
+ 			break;
++		case MLX4_OPCODE_LSO:
++			wc->opcode    = IB_WC_LSO;
++			break;
+ 		}
+ 	} else {
+ 		wc->byte_len = be32_to_cpu(cqe->byte_cnt);
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/main.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/main.c	2008-01-23 16:01:48.398613000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/main.c	2008-01-23 16:05:20.081982000 +0200
+@@ -102,6 +102,8 @@ static int mlx4_ib_query_device(struct i
+ 		props->device_cap_flags |= IB_DEVICE_UD_AV_PORT_ENFORCE;
+ 	if (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_IPOIB_CSUM)
+ 		props->device_cap_flags |= IB_DEVICE_IP_CSUM;
++	if (dev->dev->caps.max_gso_sz)
++		props->device_cap_flags |= IB_DEVICE_TCP_TSO;
+ 
+ 	props->vendor_id	   = be32_to_cpup((__be32 *) (out_mad->data + 36)) &
+ 		0xffffff;
+@@ -617,6 +619,8 @@ static void *mlx4_ib_add(struct mlx4_dev
+ 
+ 	if (ibdev->dev->caps.flags & MLX4_DEV_CAP_FLAG_IPOIB_CSUM)
+ 		ibdev->ib_dev.flags |= IB_DEVICE_IP_CSUM;
++	if (ibdev->dev->caps.max_gso_sz)
++		ibdev->ib_dev.flags |= IB_DEVICE_TCP_TSO;
+ 
+ 	if (init_node_data(ibdev))
+ 		goto err_map;
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/qp.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/qp.c	2008-01-23 16:01:51.101506000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/qp.c	2008-01-23 16:08:04.078114000 +0200
+@@ -69,6 +69,7 @@ enum {
+ 
+ static const __be32 mlx4_ib_opcode[] = {
+ 	[IB_WR_SEND]			= __constant_cpu_to_be32(MLX4_OPCODE_SEND),
++	[IB_WR_LSO]			= __constant_cpu_to_be32(MLX4_OPCODE_LSO),
+ 	[IB_WR_SEND_WITH_IMM]		= __constant_cpu_to_be32(MLX4_OPCODE_SEND_IMM),
+ 	[IB_WR_RDMA_WRITE]		= __constant_cpu_to_be32(MLX4_OPCODE_RDMA_WRITE),
+ 	[IB_WR_RDMA_WRITE_WITH_IMM]	= __constant_cpu_to_be32(MLX4_OPCODE_RDMA_WRITE_IMM),
+@@ -244,6 +245,7 @@ static int set_kernel_sq_size(struct mlx
+ {
+ 	struct ib_qp_cap *cap = &init_attr->cap;
+ 	enum ib_qp_type type = init_attr->qp_type;
++	int reserve = 0;
+ 
+ 	/* Sanity check SQ size before proceeding */
+ 	if (cap->max_send_wr	 > dev->dev->caps.max_wqes  ||
+@@ -260,12 +262,16 @@ static int set_kernel_sq_size(struct mlx
+ 	    cap->max_send_sge + 2 > dev->dev->caps.max_sq_sg)
+ 		return -EINVAL;
+ 
++	if (qp->flags & MLX4_QP_LSO)
++		reserve = 64;
++
+ 	qp->sq.wqe_shift = ilog2(roundup_pow_of_two(max(cap->max_send_sge *
+-							sizeof (struct mlx4_wqe_data_seg),
++							sizeof (struct mlx4_wqe_data_seg) +
++								reserve,
+ 							cap->max_inline_data +
+ 							sizeof (struct mlx4_wqe_inline_seg)) +
+ 						    send_wqe_overhead(type)));
+-	qp->sq.max_gs    = ((1 << qp->sq.wqe_shift) - send_wqe_overhead(type)) /
++	qp->sq.max_gs    = ((1 << qp->sq.wqe_shift) -reserve - send_wqe_overhead(type)) /
+ 		sizeof (struct mlx4_wqe_data_seg);
+ 
+ 	/*
+@@ -756,9 +764,11 @@ static int __mlx4_ib_modify_qp(struct ib
+ 		}
+ 	}
+ 
+-	if (ibqp->qp_type == IB_QPT_GSI || ibqp->qp_type == IB_QPT_SMI ||
+-	    ibqp->qp_type == IB_QPT_UD)
++	if (ibqp->qp_type == IB_QPT_GSI || ibqp->qp_type == IB_QPT_SMI)
+ 		context->mtu_msgmax = (IB_MTU_4096 << 5) | 11;
++	else if (ibqp->qp_type == IB_QPT_UD)
++		context->mtu_msgmax = (IB_MTU_4096 << 5) |
++			ilog2(dev->dev->caps.max_gso_sz);
+ 	else if (attr_mask & IB_QP_PATH_MTU) {
+ 		if (attr->path_mtu < IB_MTU_256 || attr->path_mtu > IB_MTU_4096) {
+ 			printk(KERN_ERR "path MTU (%u) is invalid\n",
+@@ -1276,6 +1286,28 @@ static void __set_data_seg(struct mlx4_w
+ 	dseg->addr       = cpu_to_be64(sg->addr);
+ }
+ 
++static int build_lso_seg(struct mlx4_lso_seg *wqe, struct ib_send_wr *wr,
++			 struct mlx4_ib_qp *qp, int *lso_seg_len)
++{
++	int halign;
++
++	halign = ALIGN(wr->wr.ud.hlen, 16);
++	if (unlikely(!(qp->flags & MLX4_QP_LSO) && wr->num_sge > qp->sq.max_gs - (halign >> 4)))
++                return -EINVAL;
++
++	memcpy(wqe->header, wr->wr.ud.header, wr->wr.ud.hlen);
++
++	/* make sure LSO header is written before
++	   overwriting stamping */
++	wmb();
++
++	wqe->mss_hdr_size = cpu_to_be32(((wr->wr.ud.mss - wr->wr.ud.hlen)
++					 << 16) | wr->wr.ud.hlen);
++
++	*lso_seg_len = halign;
++	return 0;
++}
++
+ int mlx4_ib_post_send(struct ib_qp *ibqp, struct ib_send_wr *wr,
+ 		      struct ib_send_wr **bad_wr)
+ {
+@@ -1366,6 +1398,19 @@ int mlx4_ib_post_send(struct ib_qp *ibqp
+ 			set_datagram_seg(wqe, wr);
+ 			wqe  += sizeof (struct mlx4_wqe_datagram_seg);
+ 			size += sizeof (struct mlx4_wqe_datagram_seg) / 16;
++
++			if (wr->opcode == IB_WR_LSO) {
++				int hlen;
++
++				err = build_lso_seg(wqe, wr, qp, &hlen);
++				if (err) {
++					*bad_wr = wr;
++					goto out;
++				}
++				wqe += hlen;
++				size += hlen >> 4;
++			}
++
+ 			break;
+ 
+ 		case IB_QPT_SMI:
+Index: ofed_kernel/drivers/net/mlx4/fw.c
+===================================================================
+--- ofed_kernel.orig/drivers/net/mlx4/fw.c	2008-01-23 16:01:48.430615000 +0200
++++ ofed_kernel/drivers/net/mlx4/fw.c	2008-01-23 16:05:20.106981000 +0200
+@@ -133,6 +133,7 @@ int mlx4_QUERY_DEV_CAP(struct mlx4_dev *
+ #define QUERY_DEV_CAP_MAX_AV_OFFSET		0x27
+ #define QUERY_DEV_CAP_MAX_REQ_QP_OFFSET		0x29
+ #define QUERY_DEV_CAP_MAX_RES_QP_OFFSET		0x2b
++#define QUERY_DEV_CAP_MAX_GSO_OFFSET		0x2d
+ #define QUERY_DEV_CAP_MAX_RDMA_OFFSET		0x2f
+ #define QUERY_DEV_CAP_RSZ_SRQ_OFFSET		0x33
+ #define QUERY_DEV_CAP_ACK_DELAY_OFFSET		0x35
+@@ -215,6 +216,13 @@ int mlx4_QUERY_DEV_CAP(struct mlx4_dev *
+ 	dev_cap->max_requester_per_qp = 1 << (field & 0x3f);
+ 	MLX4_GET(field, outbox, QUERY_DEV_CAP_MAX_RES_QP_OFFSET);
+ 	dev_cap->max_responder_per_qp = 1 << (field & 0x3f);
++	MLX4_GET(field, outbox, QUERY_DEV_CAP_MAX_GSO_OFFSET);
++	field &= 0x1f;
++	if (!field)
++		dev_cap->max_gso_sz = 0;
++	else
++		dev_cap->max_gso_sz = 1 << field;
++
+ 	MLX4_GET(field, outbox, QUERY_DEV_CAP_MAX_RDMA_OFFSET);
+ 	dev_cap->max_rdma_global = 1 << (field & 0x3f);
+ 	MLX4_GET(field, outbox, QUERY_DEV_CAP_ACK_DELAY_OFFSET);
+@@ -377,6 +385,7 @@ int mlx4_QUERY_DEV_CAP(struct mlx4_dev *
+ 		 dev_cap->max_sq_desc_sz, dev_cap->max_sq_sg);
+ 	mlx4_dbg(dev, "Max RQ desc size: %d, max RQ S/G: %d\n",
+ 		 dev_cap->max_rq_desc_sz, dev_cap->max_rq_sg);
++	mlx4_dbg(dev, "Max GSO size: %d\n", dev_cap->max_gso_sz);
+ 
+ 	dump_dev_cap_flags(dev, dev_cap->flags);
+ 
+Index: ofed_kernel/drivers/net/mlx4/fw.h
+===================================================================
+--- ofed_kernel.orig/drivers/net/mlx4/fw.h	2008-01-23 15:58:48.837059000 +0200
++++ ofed_kernel/drivers/net/mlx4/fw.h	2008-01-23 16:05:20.109984000 +0200
+@@ -96,6 +96,7 @@ struct mlx4_dev_cap {
+ 	u8  bmme_flags;
+ 	u32 reserved_lkey;
+ 	u64 max_icm_sz;
++	int max_gso_sz;
+ };
+ 
+ struct mlx4_adapter {
+Index: ofed_kernel/drivers/net/mlx4/main.c
+===================================================================
+--- ofed_kernel.orig/drivers/net/mlx4/main.c	2008-01-23 15:58:48.841058000 +0200
++++ ofed_kernel/drivers/net/mlx4/main.c	2008-01-23 16:05:20.115981000 +0200
+@@ -159,6 +159,7 @@ static int mlx4_dev_cap(struct mlx4_dev 
+ 	dev->caps.page_size_cap	     = ~(u32) (dev_cap->min_page_sz - 1);
+ 	dev->caps.flags		     = dev_cap->flags;
+ 	dev->caps.stat_rate_support  = dev_cap->stat_rate_support;
++	dev->caps.max_gso_sz	     = dev_cap->max_gso_sz;
+ 
+ 	return 0;
+ }
+Index: ofed_kernel/include/linux/mlx4/device.h
+===================================================================
+--- ofed_kernel.orig/include/linux/mlx4/device.h	2008-01-23 15:58:48.844060000 +0200
++++ ofed_kernel/include/linux/mlx4/device.h	2008-01-23 16:05:20.138984000 +0200
+@@ -181,6 +181,7 @@ struct mlx4_caps {
+ 	u32			flags;
+ 	u16			stat_rate_support;
+ 	u8			port_width_cap[MLX4_MAX_PORTS + 1];
++	int			max_gso_sz;
+ };
+ 
+ struct mlx4_buf_list {
+Index: ofed_kernel/include/linux/mlx4/qp.h
+===================================================================
+--- ofed_kernel.orig/include/linux/mlx4/qp.h	2008-01-23 16:01:48.448613000 +0200
++++ ofed_kernel/include/linux/mlx4/qp.h	2008-01-23 16:05:20.142981000 +0200
+@@ -215,6 +215,11 @@ struct mlx4_wqe_datagram_seg {
+ 	__be32			reservd[2];
+ };
+ 
++struct mlx4_lso_seg {
++	__be32                  mss_hdr_size;
++	__be32                  header[0];
++};
++
+ struct mlx4_wqe_bind_seg {
+ 	__be32			flags1;
+ 	__be32			flags2;

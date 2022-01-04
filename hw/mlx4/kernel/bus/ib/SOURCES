@@ -1,0 +1,47 @@
+TARGETNAME=mlx4_ib
+TARGETPATH=..\..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+USECXX_FLAG=1
+
+DLLDEF=ib.def
+NTTARGETFILES=Custom_target
+
+SOURCES= ib.rc		\
+	ah.c			\
+	cq.c			\
+	doorbell.c		\
+	mad.c			\
+	main.c			\
+	mr.c			\
+	qp.c			\
+	srq.c			
+
+INCLUDES=..;..\inc;..\..\inc;..\core\$(O);..\..\..\inc;..\..\..\..\..\inc;..\..\..\..\..\inc\kernel;..\..\..\..\..\core\complib\kernel\$(O);$(ND_SDK_PATH)\include;
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN
+
+TARGETLIBS= \
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\mlx4_core.lib \
+	
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:..\..\inc\mlx4_debug.h \
+	-func:MLX4_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:MLX4_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

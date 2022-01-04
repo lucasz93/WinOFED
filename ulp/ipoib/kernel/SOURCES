@@ -1,0 +1,102 @@
+TARGETNAME=ipoib
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+# WDK build - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=netipoib
+INF_TARGET=..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES=ipoib_log.mc \
+		ipoib.rc \
+		ipoib_driver.cpp \
+		ipoib_adapter.cpp \
+		ipoib_endpoint.cpp \
+		ipoib_port.cpp \
+		ipoib_cm.cpp	\
+		ipoib_xfr_mgr.cpp \
+		ipoib_stat.cpp \
+		ipoib_debug.cpp
+
+!if defined(NDK_COMPILE) && defined(AMD64)
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;..\..\..\etc\ndis6.30
+
+C_DEFINES=$(C_DEFINES) -DNDIS_MINIPORT_DRIVER -DNDIS_WDM=1		\
+	-DDEPRECATE_DDK_FUNCTIONS -DNDIS61_MINIPORT=1 -DNEED_CL_OBJ 	\
+	-DBINARY_COMPATIBLE=0  -DNDIS630_MINIPORT=1 -DIPOIB_CM=1 -D_PORT_REFS=0 \
+	-DUD_NBL_IN_DESC=1 -DNDIS_HINTS=1 \
+	-DFORCE_CM_MODE=0
+
+# LINKER_FLAGS=/MAP:"B:\users\leonid\ipoib.map"
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib            	\
+	$(TARGETPATH)\*\ibal.lib				\
+	$(TARGETPATH)\*\ndk.lib                 \
+	..\..\..\etc\ndis6.30\am64chk\ndis.lib  \
+	$(DDK_LIB_PATH)\ntstrsafe.lib           \
+	$(DDK_LIB_PATH)\strsafe.lib             \
+	$(DDK_LIB_PATH)\netio.lib 
+
+!else
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;
+
+C_DEFINES=$(C_DEFINES) -DNDIS_MINIPORT_DRIVER -DNDIS_WDM=1 \
+	-DDEPRECATE_DDK_FUNCTIONS -DNDIS61_MINIPORT=1 -DNEED_CL_OBJ \
+	-DBINARY_COMPATIBLE=0 -DIPOIB_CM=1 -D_PORT_REFS=0 \
+	-DUD_NBL_IN_DESC=1 -DNDIS_HINTS=1 \
+	-DFORCE_CM_MODE=0 \
+	-DEXTRA_DBG=0
+
+#	-DPERF_TRACK_ON=1
+
+
+# UD_NBL_IN_DESC==1 NBL & MDL static alloc/dealloc with ipoib_recv_desc_t
+#				==0 dynamic alloc/dealloc in recv path (slower)
+# NDIS_HINTS==1 NBL/NB recv hints for packet type: NdisSetNblFlags() .
+#			==0 no hints
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\ibal.lib \
+	$(DDK_LIB_PATH)\ndis.lib \
+	$(DDK_LIB_PATH)\ntstrsafe.lib \
+	$(DDK_LIB_PATH)\netio.lib \
+	$(DDK_LIB_PATH)\strsafe.lib
+
+!endif
+
+
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+#
+# The driver is built in the Win2K build environment
+# - use the library version of safe strings 
+#
+#TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\ntstrsafe.lib
+!endif
+
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .cpp .h .C .CPP .H\
+	-scan:ipoib_debug.h \
+	-func:IPOIB_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:IPOIB_PRINT_EXIT(LEVEL,FLAGS,(MSG,...))
+!ENDIF
+
+PRECOMPILED_INCLUDE=Precompile.h
+PRECOMPILED_PCH=Precompile.pch
+PRECOMPILED_CXX=1
+
+MSC_WARNING_LEVEL= /W4

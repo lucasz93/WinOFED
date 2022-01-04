@@ -1,0 +1,61 @@
+TARGETNAME=l2w
+TARGETPATH=..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+USECXX_FLAG=1
+
+DLLDEF=l2w.def
+
+NTTARGETFILES=Custom_target
+
+SOURCES= \
+	l2w.rc	\
+	l2w.c			\
+	l2w_debug.c			\
+	l2w_radix.c		\
+	packer.c		\
+	ud_header.c		\
+	l2w_memory.c		\
+	l2w_workqueue.c		\
+	l2w_umem.c		\
+	l2w_dbg.c
+
+INCLUDES=..\..\..\..\inc;	\
+	..\..\..\..\inc\kernel;	\
+	..\inc; 			\
+	..\bus\inc; \
+	..\bus\core; \
+	..\bus\net; \
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS 
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib \
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -km -dll -ext: .c .cpp .h .C .CPP .H\
+	-preserveext:.c .h\
+	-scan:l2w_wpptrace.h\
+	-func:L2W_PRINT(LEVEL,FLAGS,MSG,...) 
+!ENDIF
+
+MC_SOURCEDIR=.  
+
+MSC_WARNING_LEVEL= /W4
+
+
+PRECOMPILED_INCLUDE=l2w_precomp.h
+PRECOMPILED_PCH=l2w_precomp.pch
+PRECOMPILED_CXX=1
+

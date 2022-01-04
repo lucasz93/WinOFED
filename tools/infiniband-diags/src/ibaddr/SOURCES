@@ -1,0 +1,35 @@
+TARGETNAME = ibaddr
+TARGETPATH = ..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+
+UMTYPE = console
+UMENTRY = main
+
+USE_MSVCRT = 1
+NTTARGETFILES=Custom_target
+
+SOURCES = ..\ibaddr.c ..\ibdiag_common.c ..\ibdiag_windows.c ibaddr.rc
+	
+INCLUDES = ..\..\include;..\..\include\windows;\
+		   ..\..\..\..\ulp\libibnetdisc\include;\
+		   ..\..\..\..\ulp\libibmad\include;\
+		   ..\..\..\..\ulp\libibumad\include;\
+		   ..\..\..\..\inc;..\..\..\..\inc\user;\
+		   ..\..\..\..\inc\user\linux; \
+		   ..\..\..\..\core\al\user\$(O); \
+	       ..\..\..\..\ulp\libibmad\src\$(O); \
+	       ..\..\..\..\ulp\libibumad\src\$(O); \
+	       ..\..\..\..\ulp\libibnetdisc\src\$(O); \
+
+C_DEFINES = $(C_DEFINES) /DHAVE_CONFIG_H /DUSE_INET
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(TARGETPATH)\*\ibal.lib		\
+	$(TARGETPATH)\*\libibmad.lib	\
+	$(TARGETPATH)\*\libibumad.lib	\
+	$(TARGETPATH)\*\libibnetdisc.lib
+
+
+MSC_WARNING_LEVEL = /W3 /wd4007

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   OpenFabrics Enterprise Distribution for x86 Windows Server 2008 or Vista
+-->
+
+<?define OS=win7?>
+<?define ARCH=x86?>
+<?define ARCHP=x86?>
+<?define SysNative=SystemFolder?>
+<?define ProgramFilesNative=ProgramFilesFolder?>
+<?define Win64=no?>
+
+<?include ..\..\common\Config.inc ?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:DifxApp='http://schemas.microsoft.com/wix/DifxAppExtension' >
+  <Product
+    Name="$(var.PRODUCT) $(var.WOFREL) $(var.ARCHP)"
+    Version="$(var.WOFRELNUM)"
+    Id="3A6A276E-A636-48e8-8624-9A0DE3F2A15E"
+    UpgradeCode='E38964D6-359D-4E38-9BBF-8C79D84DF6CF'
+    Language="1033" Codepage="1252"
+    Manufacturer="OpenFabrics Alliance">
+
+    <?include ..\..\common\Package.inc ?>
+
+    <Condition Message="Administrator required to install [ProductName].">
+     Privileged
+    </Condition>
+
+    <Condition Message="This package can be installed on x86 systems only">
+     <![CDATA[(Not Intel64) And (Not Msix64)]]>
+    </Condition>
+
+    <Condition
+      Message="[ProductName] requires Windows 7 or Server 2008 R2 to install.">
+      <![CDATA[(VersionNT=601)]]>
+    </Condition>
+
+    <?include ..\..\common\requirements.inc ?>
+
+    <?include ..\..\common\directory_structure.inc ?>
+
+    <?include ..\..\common\PgmMenuShortcuts.inc ?>
+
+    <?include ..\..\common\Drivers.inc ?>
+
+    <DirectoryRef Id="INSTALLDIR">
+
+      <?include ..\..\common\Docs.inc ?>
+      <?include ..\..\common\Tools.inc ?>
+      <?include ..\..\common\OpenSM_service.inc ?>
+      <?include ..\..\common\winverbs_OFED.inc ?>
+      <?include ..\..\common\network_providers.inc ?>
+      <?include ..\..\common\dapl_rt.inc ?>
+
+    </DirectoryRef>
+
+    <DirectoryRef Id="WINROOT">
+
+      <?include ..\..\common\DAT_config.inc ?>
+
+      <?include ..\..\common\ib_sdk.inc ?>
+
+    </DirectoryRef>
+
+    <?include ..\..\common\system_files.inc ?>
+
+    <!-- End of installed Files -->
+
+    <?include ..\..\common\arp.inc ?>
+
+    <?include ..\..\common\std_features.inc ?>
+
+    <?include ..\..\common\InstallExecuteSeq.inc ?>
+
+    <?include ..\..\common\UserInterface.inc ?>
+
+  </Product>
+</Wix>

@@ -1,0 +1,15 @@
+#include <oib_ver.h>
+
+#define VER_FILETYPE				VFT_APP
+#define VER_FILESUBTYPE				VFT2_UNKNOWN
+
+#if DBG
+#define VER_FILEDESCRIPTION_STR		"Partition manager application(Debug)"
+#else
+#define VER_FILEDESCRIPTION_STR		"Partition manager application"
+#endif
+
+#define VER_INTERNALNAME_STR		"part_man.exe"
+#define VER_ORIGINALFILENAME_STR	"part_man.exe"
+
+#include <common.ver>

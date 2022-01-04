@@ -1,0 +1,36 @@
+TARGETNAME=alts
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=alts_main.c		\
+	..\allocdeallocpd.c		\
+	..\alts_misc.c			\
+	..\cmtests.c			\
+	..\createanddestroycq.c	\
+	..\createanddestroyqp.c	\
+	..\createdestroyav.c	\
+	..\creatememwindow.c	\
+	..\ibquery.c			\
+	..\madtests.c			\
+	..\multisendrecv.c		\
+	..\openclose.c			\
+	..\querycaattr.c		\
+	..\registermemregion.c	\
+	..\registerpnp.c		\
+	..\smatests.c
+	
+INCLUDES=..\..\..\inc;..\..\..\inc\user;..;..\..\..\core\complib\user\$(O);..\..\..\core\al\user\$(O);
+
+
+TARGETLIBS= $(TARGETLIBS) \
+            $(TARGETPATH)\*\complib.lib \
+            $(TARGETPATH)\*\ibal.lib
+
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+!endif
+
+MSC_WARNING_LEVEL= /W3

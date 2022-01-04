@@ -1,0 +1,11 @@
+DIRS =			\
+    wsdinstall		\
+    perftests		\
+    vstat		\
+    part_man		\
+    infiniband-diags	\
+    qlgcvnic_config	\
+    nsc			\
+    ndlist		\
+    ndinstall
+

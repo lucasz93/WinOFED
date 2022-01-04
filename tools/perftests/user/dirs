@@ -1,0 +1,7 @@
+DIRS=\
+	read_bw	\
+	read_lat \
+	send_bw \ 
+	send_lat \
+	write_bw  \
+	write_lat

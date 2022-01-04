@@ -1,0 +1,5 @@
+DIRS=\
+	hca \
+	bus \
+	l2w \
+    genutils 

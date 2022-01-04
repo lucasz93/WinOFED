@@ -1,0 +1,22 @@
+TARGETNAME=cmtest
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=cmtest_main.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\user;..\..\..\core\complib\user\$(O);\
+			..\..\..\core\al\user\$(O);
+
+
+TARGETLIBS= $(TARGETLIBS) \
+			$(TARGETPATH)\*\complib.lib \
+			$(TARGETPATH)\*\ibal.lib
+
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+!endif
+
+MSC_WARNING_LEVEL= /W3

@@ -1,0 +1,19 @@
+TARGETNAME = winmad
+TARGETPATH = ..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DRIVER
+
+KMDF_VERSION_MAJOR = 1
+NTTARGETFILES=Custom_target
+TARGETLIBS = $(TARGETLIBS) \
+			 $(DDK_LIB_PATH)\wdmsec.lib		\
+			 $(TARGETPATH)\*\complib.lib
+
+SOURCES = \
+	winmad.rc		\
+	wm_driver.c		\
+	wm_provider.c	\
+	wm_reg.c
+
+INCLUDES = ..;..\..\..\inc;..\..\..\inc\kernel;..\..\..\inc\user;..\..\..\etc\kernel;..\..\complib\kernel\$(O);
+
+C_DEFINES = $(C_DEFINES) -DIOCTL_INTERFACE=1

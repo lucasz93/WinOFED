@@ -1,0 +1,1535 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="./robodoc.css" type="text/css">
+<title>Functions</title>
+<!-- Source: ./inc/ -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<p>
+[<a href="./robo_sourcefiles.html#top">Sourcefiles</a>]
+[<a href="./masterindex.html#top">Index</a>]
+[<a href="./robo_definitions.html#top">Definitions</a>]
+[<a href="#top">Functions</a>]
+[<a href="./robo_modules.html#top">Modules</a>]
+[<a href="./robo_strutures.html#top">Structures</a>]
+</p>
+<h1>Functions</h1>
+<table cellspacing="3">
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_async_proc_h.html#robo270"><tt>
+cl_async_proc_construct</tt></a></td>
+<td  class="even"><a href="./complib/cl_async_proc_h.html#robo271"><tt>
+cl_async_proc_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_async_proc_h.html#robo272"><tt>
+cl_async_proc_init</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_async_proc_h.html#robo274"><tt>
+cl_async_proc_queue</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_atomic_h.html#robo277"><tt>
+cl_atomic_add</tt></a></td>
+<td  class="even"><a href="./complib/cl_atomic_h.html#robo278"><tt>
+cl_atomic_comp_xchg</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_atomic_h.html#robo279"><tt>
+cl_atomic_dec</tt></a></td>
+<td  class="even"><a href="./complib/cl_atomic_h.html#robo280"><tt>
+cl_atomic_inc</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_atomic_h.html#robo281"><tt>
+cl_atomic_sub</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_atomic_h.html#robo282"><tt>
+cl_atomic_xchg</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_debug_h.html#robo310"><tt>
+cl_break</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo424"><tt>
+cl_check_for_read</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo425"><tt>
+cl_check_for_write</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo426"><tt>
+cl_copy_from_user</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo427"><tt>
+cl_copy_to_user</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_comppool_h.html#robo296"><tt>
+cl_cpool_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_comppool_h.html#robo297"><tt>
+cl_cpool_count</tt></a></td>
+<td  class="even"><a href="./complib/cl_comppool_h.html#robo298"><tt>
+cl_cpool_destroy</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_comppool_h.html#robo299"><tt>
+cl_cpool_get</tt></a></td>
+<td  class="even"><a href="./complib/cl_comppool_h.html#robo300"><tt>
+cl_cpool_grow</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_comppool_h.html#robo301"><tt>
+cl_cpool_init</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_comppool_h.html#robo302"><tt>
+cl_cpool_put</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_debug_h.html#robo311"><tt>
+cl_dbg_out</tt></a></td>
+<td  class="even"><a href="./complib/cl_event_h.html#robo320"><tt>
+cl_event_construct</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_event_h.html#robo321"><tt>
+cl_event_destroy</tt></a></td>
+<td  class="even"><a href="./complib/cl_event_h.html#robo322"><tt>
+cl_event_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_event_h.html#robo323"><tt>
+cl_event_reset</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_event_h.html#robo324"><tt>
+cl_event_signal</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_event_h.html#robo325"><tt>
+cl_event_wait_on</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo327"><tt>
+cl_fmap_apply_func</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo328"><tt>
+cl_fmap_count</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo329"><tt>
+cl_fmap_delta</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo330"><tt>
+cl_fmap_end</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo331"><tt>
+cl_fmap_get</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo332"><tt>
+cl_fmap_head</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo333"><tt>
+cl_fmap_init</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo334"><tt>
+cl_fmap_insert</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo336"><tt>
+cl_fmap_key</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo337"><tt>
+cl_fmap_merge</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo338"><tt>
+cl_fmap_next</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo339"><tt>
+cl_fmap_prev</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo340"><tt>
+cl_fmap_remove</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo341"><tt>
+cl_fmap_remove_all</tt></a></td>
+<td  class="even"><a href="./complib/cl_fleximap_h.html#robo342"><tt>
+cl_fmap_remove_item</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo344"><tt>
+cl_fmap_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_memory_h.html#robo428"><tt>
+cl_free</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo429"><tt>
+cl_get_pagesize</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo430"><tt>
+cl_get_physaddr</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo650"><tt>
+cl_get_tick_count</tt></a></td>
+<td  class="even"><a href="./complib/cl_timer_h.html#robo651"><tt>
+cl_get_tick_freq</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo652"><tt>
+cl_get_time_stamp</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_timer_h.html#robo653"><tt>
+cl_get_time_stamp_sec</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo654"><tt>
+cl_get_time_stamp_usec</tt></a></td>
+<td  class="even"><a href="./complib/cl_byteswap_h.html#robo284"><tt>
+cl_hton16</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_byteswap_h.html#robo286"><tt>
+cl_hton32</tt></a></td>
+<td  class="even"><a href="./complib/cl_byteswap_h.html#robo288"><tt>
+cl_hton64</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo348"><tt>
+cl_ioctl_cmd</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_ioctl_h.html#robo349"><tt>
+cl_ioctl_complete</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo350"><tt>
+cl_ioctl_ctl_code</tt></a></td>
+<td  class="even"><a href="./complib/cl_ioctl_h.html#robo352"><tt>
+cl_ioctl_in_buf</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo353"><tt>
+cl_ioctl_in_size</tt></a></td>
+<td  class="even"><a href="./complib/cl_ioctl_h.html#robo354"><tt>
+cl_ioctl_out_buf</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo355"><tt>
+cl_ioctl_out_size</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_ioctl_h.html#robo356"><tt>
+cl_ioctl_process</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo357"><tt>
+cl_ioctl_request</tt></a></td>
+<td  class="even"><a href="./complib/cl_ioctl_h.html#robo358"><tt>
+cl_ioctl_result</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_ioctl_h.html#robo359"><tt>
+cl_ioctl_type</tt></a></td>
+<td  class="even"><a href="./complib/cl_irqlock_h.html#robo362"><tt>
+cl_irqlock_acquire</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_irqlock_h.html#robo363"><tt>
+cl_irqlock_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_irqlock_h.html#robo364"><tt>
+cl_irqlock_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_irqlock_h.html#robo365"><tt>
+cl_irqlock_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_irqlock_h.html#robo366"><tt>
+cl_irqlock_release</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_thread_h.html#robo645"><tt>
+cl_is_blockable</tt></a></td>
+<td  class="even"><a href="./complib/cl_comppool_h.html#robo304"><tt>
+cl_is_cpool_inited</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_fleximap_h.html#robo345"><tt>
+cl_is_fmap_empty</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo534"><tt>
+cl_is_item_in_qlist</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo367"><tt>
+cl_is_list_empty</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo368"><tt>
+cl_is_list_inited</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo400"><tt>
+cl_is_map_empty</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo326"><tt>
+cl_is_map_inited</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo369"><tt>
+cl_is_object_in_list</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_pool_h.html#robo510"><tt>
+cl_is_pool_inited</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qcomppool_h.html#robo521"><tt>
+cl_is_qcpool_inited</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo535"><tt>
+cl_is_qlist_empty</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo574"><tt>
+cl_is_qmap_empty</tt></a></td>
+<td  class="even"><a href="./complib/cl_qpool_h.html#robo597"><tt>
+cl_is_qpool_inited</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo609"><tt>
+cl_is_rbmap_empty</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_syscallback_h.html#robo635"><tt>
+cl_is_sys_callback_inited</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo370"><tt>
+cl_list_apply_func</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo371"><tt>
+cl_list_construct</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo372"><tt>
+cl_list_count</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo373"><tt>
+cl_list_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo374"><tt>
+cl_list_end</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_list_h.html#robo375"><tt>
+cl_list_find_from_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo376"><tt>
+cl_list_find_from_tail</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo377"><tt>
+cl_list_head</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo378"><tt>
+cl_list_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo379"><tt>
+cl_list_insert_array_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo380"><tt>
+cl_list_insert_array_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_list_h.html#robo381"><tt>
+cl_list_insert_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo382"><tt>
+cl_list_insert_next</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo383"><tt>
+cl_list_insert_prev</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo384"><tt>
+cl_list_insert_tail</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo386"><tt>
+cl_list_next</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo387"><tt>
+cl_list_obj</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_list_h.html#robo388"><tt>
+cl_list_prev</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo389"><tt>
+cl_list_remove_all</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo390"><tt>
+cl_list_remove_head</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo391"><tt>
+cl_list_remove_item</tt></a></td>
+<td  class="even"><a href="./complib/cl_list_h.html#robo392"><tt>
+cl_list_remove_object</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_list_h.html#robo393"><tt>
+cl_list_remove_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_list_h.html#robo395"><tt>
+cl_list_tail</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_log_h.html#robo398"><tt>
+cl_log_event</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo431"><tt>
+cl_malloc</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo401"><tt>
+cl_map_construct</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo402"><tt>
+cl_map_count</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo403"><tt>
+cl_map_delta</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_map_h.html#robo404"><tt>
+cl_map_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo405"><tt>
+cl_map_end</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo406"><tt>
+cl_map_get</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo407"><tt>
+cl_map_head</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo408"><tt>
+cl_map_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo409"><tt>
+cl_map_insert</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_map_h.html#robo411"><tt>
+cl_map_key</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo412"><tt>
+cl_map_merge</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo413"><tt>
+cl_map_next</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo414"><tt>
+cl_map_obj</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo415"><tt>
+cl_map_prev</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo416"><tt>
+cl_map_remove</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_map_h.html#robo417"><tt>
+cl_map_remove_all</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_map_h.html#robo418"><tt>
+cl_map_remove_item</tt></a></td>
+<td  class="even"><a href="./complib/cl_map_h.html#robo420"><tt>
+cl_map_tail</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo432"><tt>
+cl_mem_display</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo433"><tt>
+cl_memclr</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo434"><tt>
+cl_memcmp</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_memory_h.html#robo435"><tt>
+cl_memcpy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo436"><tt>
+cl_memset</tt></a></td>
+<td  class="even"><a href="./complib/cl_debug_h.html#robo314"><tt>
+cl_msg_out</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_mutex_h.html#robo440"><tt>
+cl_mutex_acquire</tt></a></td>
+<td  class="even"><a href="./complib/cl_mutex_h.html#robo441"><tt>
+cl_mutex_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_mutex_h.html#robo442"><tt>
+cl_mutex_destroy</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_mutex_h.html#robo443"><tt>
+cl_mutex_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_mutex_h.html#robo444"><tt>
+cl_mutex_release</tt></a></td>
+<td  class="even"><a href="./complib/cl_byteswap_h.html#robo289"><tt>
+cl_ntoh</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_byteswap_h.html#robo290"><tt>
+cl_ntoh16</tt></a></td>
+<td  class="even"><a href="./complib/cl_byteswap_h.html#robo292"><tt>
+cl_ntoh32</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_byteswap_h.html#robo294"><tt>
+cl_ntoh64</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_obj_h.html#robo447"><tt>
+cl_obj_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo448"><tt>
+cl_obj_deinit</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo449"><tt>
+cl_obj_deref</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo450"><tt>
+cl_obj_destroy</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo451"><tt>
+cl_obj_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo452"><tt>
+cl_obj_insert_rel</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_obj_h.html#robo453"><tt>
+cl_obj_insert_rel_parent_locked</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo454"><tt>
+cl_obj_lock</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo455"><tt>
+cl_obj_mgr_create</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo456"><tt>
+cl_obj_mgr_destroy</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo458"><tt>
+cl_obj_ref</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo460"><tt>
+cl_obj_remove_rel</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_obj_h.html#robo461"><tt>
+cl_obj_reset</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo463"><tt>
+cl_obj_type</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo464"><tt>
+cl_obj_unlock</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo437"><tt>
+cl_palloc</tt></a></td>
+<td  class="even"><a href="./complib/cl_types_h.html#robo319"><tt>
+cl_panic</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_perf_h.html#robo476"><tt>
+cl_perf_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_perf_h.html#robo477"><tt>
+cl_perf_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_perf_h.html#robo478"><tt>
+cl_perf_display</tt></a></td>
+<td  class="even"><a href="./complib/cl_perf_h.html#robo480"><tt>
+cl_perf_init</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_perf_h.html#robo482"><tt>
+cl_perf_reset</tt></a></td>
+<td  class="even"><a href="./complib/cl_passivelock_h.html#robo468"><tt>
+cl_plock_acquire</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_passivelock_h.html#robo469"><tt>
+cl_plock_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_passivelock_h.html#robo470"><tt>
+cl_plock_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_passivelock_h.html#robo471"><tt>
+cl_plock_excl_acquire</tt></a></td>
+<td  class="even"><a href="./complib/cl_passivelock_h.html#robo472"><tt>
+cl_plock_init</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_passivelock_h.html#robo473"><tt>
+cl_plock_release</tt></a></td>
+<td  class="even"><a href="./complib/cl_pool_h.html#robo513"><tt>
+cl_pool_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_pool_h.html#robo514"><tt>
+cl_pool_count</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_pool_h.html#robo515"><tt>
+cl_pool_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_pool_h.html#robo516"><tt>
+cl_pool_get</tt></a></td>
+<td  class="even"><a href="./complib/cl_pool_h.html#robo517"><tt>
+cl_pool_grow</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_pool_h.html#robo518"><tt>
+cl_pool_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_pool_h.html#robo519"><tt>
+cl_pool_put</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_thread_h.html#robo647"><tt>
+cl_proc_count</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo493"><tt>
+cl_ptr_vector_apply_func</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo494"><tt>
+cl_ptr_vector_at</tt></a></td>
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo495"><tt>
+cl_ptr_vector_construct</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo496"><tt>
+cl_ptr_vector_destroy</tt></a></td>
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo497"><tt>
+cl_ptr_vector_find_from_end</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo498"><tt>
+cl_ptr_vector_find_from_start</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo499"><tt>
+cl_ptr_vector_get</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo500"><tt>
+cl_ptr_vector_get_capacity</tt></a></td>
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo501"><tt>
+cl_ptr_vector_get_size</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo502"><tt>
+cl_ptr_vector_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo503"><tt>
+cl_ptr_vector_insert</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo504"><tt>
+cl_ptr_vector_remove</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo505"><tt>
+cl_ptr_vector_set</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo506"><tt>
+cl_ptr_vector_set_capacity</tt></a></td>
+<td  class="even"><a href="./complib/cl_ptr_vector_h.html#robo507"><tt>
+cl_ptr_vector_set_min_size</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_ptr_vector_h.html#robo508"><tt>
+cl_ptr_vector_set_size</tt></a></td>
+<td  class="even"><a href="./complib/cl_memory_h.html#robo438"><tt>
+cl_pzalloc</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qcomppool_h.html#robo525"><tt>
+cl_qcpool_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qcomppool_h.html#robo526"><tt>
+cl_qcpool_count</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qcomppool_h.html#robo527"><tt>
+cl_qcpool_destroy</tt></a></td>
+<td  class="even"><a href="./complib/cl_qcomppool_h.html#robo528"><tt>
+cl_qcpool_get</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qcomppool_h.html#robo529"><tt>
+cl_qcpool_grow</tt></a></td>
+<td  class="even"><a href="./complib/cl_qcomppool_h.html#robo530"><tt>
+cl_qcpool_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qcomppool_h.html#robo531"><tt>
+cl_qcpool_put</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qcomppool_h.html#robo532"><tt>
+cl_qcpool_put_list</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo540"><tt>
+cl_qlist_apply_func</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo541"><tt>
+cl_qlist_count</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo542"><tt>
+cl_qlist_end</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo543"><tt>
+cl_qlist_find_from_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo544"><tt>
+cl_qlist_find_from_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo545"><tt>
+cl_qlist_find_next</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo546"><tt>
+cl_qlist_find_prev</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo547"><tt>
+cl_qlist_head</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo548"><tt>
+cl_qlist_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo549"><tt>
+cl_qlist_insert_array_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo550"><tt>
+cl_qlist_insert_array_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo551"><tt>
+cl_qlist_insert_head</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo552"><tt>
+cl_qlist_insert_list_head</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo553"><tt>
+cl_qlist_insert_list_tail</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo554"><tt>
+cl_qlist_insert_next</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo555"><tt>
+cl_qlist_insert_prev</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo556"><tt>
+cl_qlist_insert_tail</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo557"><tt>
+cl_qlist_move_items</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo558"><tt>
+cl_qlist_next</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo559"><tt>
+cl_qlist_obj</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo560"><tt>
+cl_qlist_prev</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo561"><tt>
+cl_qlist_remove_all</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo562"><tt>
+cl_qlist_remove_head</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo563"><tt>
+cl_qlist_remove_item</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo564"><tt>
+cl_qlist_remove_tail</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlist_h.html#robo565"><tt>
+cl_qlist_set_obj</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qlist_h.html#robo567"><tt>
+cl_qlist_tail</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlockpool_h.html#robo568"><tt>
+cl_qlock_pool_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlockpool_h.html#robo569"><tt>
+cl_qlock_pool_destroy</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qlockpool_h.html#robo570"><tt>
+cl_qlock_pool_get</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qlockpool_h.html#robo571"><tt>
+cl_qlock_pool_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_qlockpool_h.html#robo572"><tt>
+cl_qlock_pool_put</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo578"><tt>
+cl_qmap_apply_func</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo579"><tt>
+cl_qmap_count</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo580"><tt>
+cl_qmap_delta</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo581"><tt>
+cl_qmap_end</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo582"><tt>
+cl_qmap_get</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo583"><tt>
+cl_qmap_head</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo584"><tt>
+cl_qmap_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo585"><tt>
+cl_qmap_insert</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo586"><tt>
+cl_qmap_key</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo587"><tt>
+cl_qmap_merge</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo588"><tt>
+cl_qmap_next</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo589"><tt>
+cl_qmap_obj</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo590"><tt>
+cl_qmap_prev</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo591"><tt>
+cl_qmap_remove</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo592"><tt>
+cl_qmap_remove_all</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo593"><tt>
+cl_qmap_remove_item</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qmap_h.html#robo594"><tt>
+cl_qmap_set_obj</tt></a></td>
+<td  class="even"><a href="./complib/cl_qmap_h.html#robo596"><tt>
+cl_qmap_tail</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qpool_h.html#robo600"><tt>
+cl_qpool_construct</tt></a></td>
+<td  class="even"><a href="./complib/cl_qpool_h.html#robo601"><tt>
+cl_qpool_count</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qpool_h.html#robo602"><tt>
+cl_qpool_destroy</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_qpool_h.html#robo603"><tt>
+cl_qpool_get</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_qpool_h.html#robo604"><tt>
+cl_qpool_grow</tt></a></td>
+<td  class="even"><a href="./complib/cl_qpool_h.html#robo605"><tt>
+cl_qpool_init</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_qpool_h.html#robo606"><tt>
+cl_qpool_put</tt></a></td>
+<td  class="even"><a href="./complib/cl_qpool_h.html#robo607"><tt>
+cl_qpool_put_list</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo610"><tt>
+cl_rbmap_count</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_rbmap_h.html#robo611"><tt>
+cl_rbmap_end</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo612"><tt>
+cl_rbmap_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_rbmap_h.html#robo613"><tt>
+cl_rbmap_insert</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo615"><tt>
+cl_rbmap_left</tt></a></td>
+<td  class="even"><a href="./complib/cl_rbmap_h.html#robo616"><tt>
+cl_rbmap_remove_item</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo617"><tt>
+cl_rbmap_reset</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_rbmap_h.html#robo618"><tt>
+cl_rbmap_right</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_rbmap_h.html#robo619"><tt>
+cl_rbmap_root</tt></a></td>
+<td  class="even"><a href="./complib/cl_obj_h.html#robo466"><tt>
+cl_rel_alloc</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_obj_h.html#robo467"><tt>
+cl_rel_free</tt></a></td>
+<td  class="even"><a href="./complib/cl_reqmgr_h.html#robo623"><tt>
+cl_req_mgr_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_reqmgr_h.html#robo624"><tt>
+cl_req_mgr_destroy</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_reqmgr_h.html#robo625"><tt>
+cl_req_mgr_get</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_reqmgr_h.html#robo626"><tt>
+cl_req_mgr_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_reqmgr_h.html#robo627"><tt>
+cl_req_mgr_resume</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_spinlock_h.html#robo630"><tt>
+cl_spinlock_acquire</tt></a></td>
+<td  class="even"><a href="./complib/cl_spinlock_h.html#robo631"><tt>
+cl_spinlock_construct</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_spinlock_h.html#robo632"><tt>
+cl_spinlock_destroy</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_spinlock_h.html#robo633"><tt>
+cl_spinlock_init</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_spinlock_h.html#robo634"><tt>
+cl_spinlock_release</tt></a></td>
+<td  class="even"><a href="./complib/cl_syscallback_h.html#robo637"><tt>
+cl_sys_callback_get</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_syscallback_h.html#robo638"><tt>
+cl_sys_callback_put</tt></a></td>
+<td  class="even"><a href="./complib/cl_syscallback_h.html#robo639"><tt>
+cl_sys_callback_queue</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_threadpool_h.html#robo640"><tt>
+cl_thread_pool_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_threadpool_h.html#robo641"><tt>
+cl_thread_pool_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_threadpool_h.html#robo642"><tt>
+cl_thread_pool_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_threadpool_h.html#robo643"><tt>
+cl_thread_pool_signal</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_thread_h.html#robo648"><tt>
+cl_thread_stall</tt></a></td>
+<td  class="even"><a href="./complib/cl_thread_h.html#robo649"><tt>
+cl_thread_suspend</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo656"><tt>
+cl_timer_construct</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_timer_h.html#robo657"><tt>
+cl_timer_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo658"><tt>
+cl_timer_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_timer_h.html#robo659"><tt>
+cl_timer_start</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_timer_h.html#robo660"><tt>
+cl_timer_stop</tt></a></td>
+<td  class="even"><a href="./complib/cl_timer_h.html#robo661"><tt>
+cl_timer_trim</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo667"><tt>
+cl_vector_apply_func</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_vector_h.html#robo668"><tt>
+cl_vector_at</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo669"><tt>
+cl_vector_construct</tt></a></td>
+<td  class="even"><a href="./complib/cl_vector_h.html#robo670"><tt>
+cl_vector_destroy</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo671"><tt>
+cl_vector_find_from_end</tt></a></td>
+<td  class="even"><a href="./complib/cl_vector_h.html#robo672"><tt>
+cl_vector_find_from_start</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo673"><tt>
+cl_vector_get</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_vector_h.html#robo674"><tt>
+cl_vector_get_capacity</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo675"><tt>
+cl_vector_get_ptr</tt></a></td>
+<td  class="even"><a href="./complib/cl_vector_h.html#robo676"><tt>
+cl_vector_get_size</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo677"><tt>
+cl_vector_init</tt></a></td>
+<td  class="even"><a href="./complib/cl_vector_h.html#robo678"><tt>
+cl_vector_set</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo679"><tt>
+cl_vector_set_capacity</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_vector_h.html#robo680"><tt>
+cl_vector_set_min_size</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_vector_h.html#robo681"><tt>
+cl_vector_set_size</tt></a></td>
+<td  class="even"><a href="./complib/cl_waitobj_h.html#robo683"><tt>
+cl_waitobj_create</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_waitobj_h.html#robo684"><tt>
+cl_waitobj_deref</tt></a></td>
+<td  class="even"><a href="./complib/cl_waitobj_h.html#robo685"><tt>
+cl_waitobj_destroy</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_waitobj_h.html#robo687"><tt>
+cl_waitobj_ref</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./complib/cl_waitobj_h.html#robo688"><tt>
+cl_waitobj_reset</tt></a></td>
+<td  class="uneven"><a href="./complib/cl_waitobj_h.html#robo689"><tt>
+cl_waitobj_signal</tt></a></td>
+<td  class="even"><a href="./complib/cl_waitobj_h.html#robo690"><tt>
+cl_waitobj_wait_on</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./complib/cl_memory_h.html#robo439"><tt>
+cl_zalloc</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo38"><tt>
+ib_add_svc_entry</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo40"><tt>
+ib_alloc_pd</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo50"><tt>
+ib_bind_mw</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo54"><tt>
+ib_cancel_mad</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo55"><tt>
+ib_cancel_query</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo57"><tt>
+ib_ci_call</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo824"><tt>
+ib_class_is_rmpp</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo825"><tt>
+ib_class_is_vendor_specific</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo826"><tt>
+ib_class_is_vendor_specific_high</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo827"><tt>
+ib_class_is_vendor_specific_low</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo59"><tt>
+ib_close_al</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo60"><tt>
+ib_close_ca</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo61"><tt>
+ib_cm_apr</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo64"><tt>
+ib_cm_cancel</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo66"><tt>
+ib_cm_drep</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo69"><tt>
+ib_cm_dreq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo73"><tt>
+ib_cm_handoff</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo74"><tt>
+ib_cm_lap</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo77"><tt>
+ib_cm_listen</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo79"><tt>
+ib_cm_mra</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo82"><tt>
+ib_cm_rej</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo85"><tt>
+ib_cm_rep</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo88"><tt>
+ib_cm_req</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo91"><tt>
+ib_cm_rtu</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo94"><tt>
+ib_copy_ca_attr</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo96"><tt>
+ib_create_av</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo97"><tt>
+ib_create_cq</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo98"><tt>
+ib_create_ioc</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo99"><tt>
+ib_create_mad_pool</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo100"><tt>
+ib_create_mw</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo101"><tt>
+ib_create_qp</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo102"><tt>
+ib_create_srq</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo103"><tt>
+ib_dealloc_pd</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo104"><tt>
+ib_dereg_mad_pool</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo105"><tt>
+ib_dereg_mr</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo106"><tt>
+ib_dereg_pnp</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo107"><tt>
+ib_dereg_svc</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo108"><tt>
+ib_destroy_av</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo109"><tt>
+ib_destroy_cq</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo110"><tt>
+ib_destroy_ioc</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo111"><tt>
+ib_destroy_mad_pool</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo112"><tt>
+ib_destroy_mw</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo113"><tt>
+ib_destroy_qp</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo114"><tt>
+ib_destroy_srq</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo975"><tt>
+ib_dm_get_slot_lo_hi</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo976"><tt>
+ib_dm_set_slot_lo_hi</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo119"><tt>
+ib_force_apm</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo831"><tt>
+ib_get_async_event_str</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo120"><tt>
+ib_get_ca_by_gid</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo121"><tt>
+ib_get_ca_guids</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo832"><tt>
+ib_get_err_str</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo122"><tt>
+ib_get_guid</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo123"><tt>
+ib_get_mad</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo124"><tt>
+ib_get_mad_buf</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo833"><tt>
+ib_get_node_type_str</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo125"><tt>
+ib_get_port_by_gid</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo834"><tt>
+ib_get_port_state_from_str</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo835"><tt>
+ib_get_port_state_str</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo836"><tt>
+ib_get_qp_type_str</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo126"><tt>
+ib_get_query_node_rec</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo127"><tt>
+ib_get_query_path_rec</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo128"><tt>
+ib_get_query_portinfo_rec</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo129"><tt>
+ib_get_query_result</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo130"><tt>
+ib_get_query_svc_rec</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo131"><tt>
+ib_get_spl_qp</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo837"><tt>
+ib_get_wc_status_str</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo838"><tt>
+ib_get_wc_type_str</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo839"><tt>
+ib_get_wr_type_str</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo840"><tt>
+ib_gid_get_guid</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo841"><tt>
+ib_gid_get_subnet_prefix</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo842"><tt>
+ib_gid_is_link_local</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo843"><tt>
+ib_gid_is_site_local</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo845"><tt>
+ib_gid_set_default</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo848"><tt>
+ib_grh_get_ver_class_flow</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo849"><tt>
+ib_grh_set_ver_class_flow</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo852"><tt>
+ib_inform_get_dev_id</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo853"><tt>
+ib_inform_get_prod_type</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo854"><tt>
+ib_inform_get_qpn</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo855"><tt>
+ib_inform_get_resp_time_val</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo856"><tt>
+ib_inform_get_trap_num</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo857"><tt>
+ib_inform_get_vend_id</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo859"><tt>
+ib_inform_set_dev_id</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo860"><tt>
+ib_inform_set_prod_type</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo861"><tt>
+ib_inform_set_qpn</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo862"><tt>
+ib_inform_set_resp_time_val</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo863"><tt>
+ib_inform_set_trap_num</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo864"><tt>
+ib_inform_set_vend_id</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo134"><tt>
+ib_init_dgrm_svc</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo866"><tt>
+ib_iou_info_diag_dev_id</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo867"><tt>
+ib_iou_info_option_rom</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo136"><tt>
+ib_join_mcast</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo138"><tt>
+ib_leave_mcast</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo143"><tt>
+ib_local_mad</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo870"><tt>
+ib_mad_init_new</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo871"><tt>
+ib_mad_init_response</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo872"><tt>
+ib_mad_is_response</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo874"><tt>
+ib_member_get_scope</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo875"><tt>
+ib_member_get_scope_state</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo876"><tt>
+ib_member_get_sl_flow_hop</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo877"><tt>
+ib_member_get_state</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo879"><tt>
+ib_member_set_join_state</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo880"><tt>
+ib_member_set_scope</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo881"><tt>
+ib_member_set_scope_state</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo882"><tt>
+ib_member_set_sl_flow_hop</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo883"><tt>
+ib_member_set_state</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo149"><tt>
+ib_modify_av</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo150"><tt>
+ib_modify_ca</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo151"><tt>
+ib_modify_cq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo152"><tt>
+ib_modify_qp</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo153"><tt>
+ib_modify_srq</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo887"><tt>
+ib_node_info_get_local_port_num</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo888"><tt>
+ib_node_info_get_vendor_id</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo890"><tt>
+ib_notice_get_count</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo891"><tt>
+ib_notice_get_dev_id</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo892"><tt>
+ib_notice_get_generic</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo893"><tt>
+ib_notice_get_prod_type</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo894"><tt>
+ib_notice_get_toggle</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo895"><tt>
+ib_notice_get_trap_num</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo896"><tt>
+ib_notice_get_type</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo897"><tt>
+ib_notice_get_vend_id</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo898"><tt>
+ib_notice_set_count</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo899"><tt>
+ib_notice_set_dev_id</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo900"><tt>
+ib_notice_set_generic</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo901"><tt>
+ib_notice_set_prod_type</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo902"><tt>
+ib_notice_set_toggle</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo903"><tt>
+ib_notice_set_trap_num</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo904"><tt>
+ib_notice_set_type</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo905"><tt>
+ib_notice_set_vend_id</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo158"><tt>
+ib_open_al</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo159"><tt>
+ib_open_ca</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo906"><tt>
+ib_path_get_ipd</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo907"><tt>
+ib_path_rec_flow_lbl</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo908"><tt>
+ib_path_rec_hop_limit</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo909"><tt>
+ib_path_rec_init_local</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo910"><tt>
+ib_path_rec_mtu</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo911"><tt>
+ib_path_rec_mtu_sel</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo912"><tt>
+ib_path_rec_num_path</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo913"><tt>
+ib_path_rec_pkt_life</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo914"><tt>
+ib_path_rec_pkt_life_sel</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo915"><tt>
+ib_path_rec_rate</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo916"><tt>
+ib_path_rec_rate_sel</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo917"><tt>
+ib_path_rec_set_hop_flow_raw</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo918"><tt>
+ib_path_rec_sl</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo161"><tt>
+ib_peek_cq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo162"><tt>
+ib_pfn_cm_apr_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo163"><tt>
+ib_pfn_cm_drep_cb_t</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo164"><tt>
+ib_pfn_cm_dreq_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo165"><tt>
+ib_pfn_cm_lap_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo166"><tt>
+ib_pfn_cm_mra_cb_t</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo167"><tt>
+ib_pfn_cm_rej_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo168"><tt>
+ib_pfn_cm_rep_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo169"><tt>
+ib_pfn_cm_req_cb_t</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo170"><tt>
+ib_pfn_cm_rtu_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo171"><tt>
+ib_pfn_comp_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo172"><tt>
+ib_pfn_destroy_cb_t</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo173"><tt>
+ib_pfn_event_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo174"><tt>
+ib_pfn_listen_err_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo175"><tt>
+ib_pfn_mad_comp_cb_t</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo176"><tt>
+ib_pfn_mcast_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo177"><tt>
+ib_pfn_pnp_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo178"><tt>
+ib_pfn_query_cb_t</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo179"><tt>
+ib_pfn_reg_svc_cb_t</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo180"><tt>
+ib_pfn_report_cb_t</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo181"><tt>
+ib_pfn_sub_cb_t</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo920"><tt>
+ib_pkey_get_base</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo921"><tt>
+ib_pkey_is_full_member</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo922"><tt>
+ib_pkey_is_invalid</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo193"><tt>
+ib_poll_cq</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo925"><tt>
+ib_port_info_compute_rate</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo926"><tt>
+ib_port_info_get_init_type</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo927"><tt>
+ib_port_info_get_link_speed_active</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo928"><tt>
+ib_port_info_get_link_speed_sup</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo929"><tt>
+ib_port_info_get_lmc</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo930"><tt>
+ib_port_info_get_mpb</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo931"><tt>
+ib_port_info_get_mtu_cap</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo932"><tt>
+ib_port_info_get_neighbor_mtu</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo933"><tt>
+ib_port_info_get_op_vls</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo934"><tt>
+ib_port_info_get_port_state</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo935"><tt>
+ib_port_info_get_sm_sl</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo936"><tt>
+ib_port_info_get_vl_cap</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo937"><tt>
+ib_port_info_set_link_speed_sup</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo938"><tt>
+ib_port_info_set_lmc</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo939"><tt>
+ib_port_info_set_mpb</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo940"><tt>
+ib_port_info_set_neighbor_mtu</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo941"><tt>
+ib_port_info_set_op_vls</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo942"><tt>
+ib_port_info_set_port_state</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo943"><tt>
+ib_port_info_set_sm_sl</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo944"><tt>
+ib_port_info_set_state_no_change</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo945"><tt>
+ib_port_info_set_timeout</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo197"><tt>
+ib_post_recv</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo198"><tt>
+ib_post_send</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo199"><tt>
+ib_post_srq_recv</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo200"><tt>
+ib_put_mad</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo207"><tt>
+ib_query</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo208"><tt>
+ib_query_av</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo209"><tt>
+ib_query_ca</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo210"><tt>
+ib_query_ca_by_guid</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo211"><tt>
+ib_query_cq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo212"><tt>
+ib_query_mr</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo213"><tt>
+ib_query_mw</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo214"><tt>
+ib_query_qp</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo217"><tt>
+ib_query_srq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo219"><tt>
+ib_rearm_cq</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo220"><tt>
+ib_rearm_n_cq</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo223"><tt>
+ib_reg_ioc</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo224"><tt>
+ib_reg_mad_pool</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo225"><tt>
+ib_reg_mad_svc</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo226"><tt>
+ib_reg_mem</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo227"><tt>
+ib_reg_phys</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo228"><tt>
+ib_reg_pnp</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo229"><tt>
+ib_reg_shared</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo230"><tt>
+ib_reg_shmid</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_al_h.html#robo231"><tt>
+ib_reg_svc</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo236"><tt>
+ib_reject_ioc</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo237"><tt>
+ib_remove_svc_entry</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo241"><tt>
+ib_rereg_mem</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo242"><tt>
+ib_rereg_phys</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo947"><tt>
+ib_rmpp_is_flag_set</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo949"><tt>
+ib_sa_mad_get_payload_ptr</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo244"><tt>
+ib_send_mad</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo951"><tt>
+ib_slvl_table_get_vl</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo953"><tt>
+ib_slvl_table_set_vl</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo956"><tt>
+ib_sminfo_get_priority</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo957"><tt>
+ib_sminfo_get_state</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo958"><tt>
+ib_smp_get_payload_ptr</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo959"><tt>
+ib_smp_get_status</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo960"><tt>
+ib_smp_init_new</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo961"><tt>
+ib_smp_is_d</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo962"><tt>
+ib_smp_is_response</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo254"><tt>
+ib_subscribe</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo966"><tt>
+ib_switch_info_clear_state_change</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo967"><tt>
+ib_switch_info_get_state_change</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo255"><tt>
+ib_sync_destroy</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo256"><tt>
+ib_unsubscribe</tt></a></td>
+<td  class="even"><a href="./iba/ib_types_h.html#robo969"><tt>
+ib_vl_arb_element_get_vl</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_types_h.html#robo970"><tt>
+ib_vl_arb_element_set_vl</tt></a></td>
+</tr>
+<tr  class="uneven">
+<td  class="even"><a href="./iba/ib_types_h.html#robo974"><tt>
+ioc_at_slot</tt></a></td>
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo262"><tt>
+mlnx_create_fmr</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo263"><tt>
+mlnx_destroy_fmr</tt></a></td>
+</tr>
+<tr  class="even">
+<td  class="uneven"><a href="./iba/ib_al_h.html#robo265"><tt>
+mlnx_map_fmr</tt></a></td>
+<td  class="even"><a href="./iba/ib_al_h.html#robo266"><tt>
+mlnx_unmap_fmr</tt></a></td>
+<td></td>
+</tr>
+</table>
+</body>
+</html>

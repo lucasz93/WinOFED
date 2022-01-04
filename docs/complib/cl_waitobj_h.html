@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_waitobj_h.html</title>
+<!-- Source: ./inc/complib/cl_waitobj.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_waitobj.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo31">[Modules]<a name="Component20Library2fWait20Object">
+Component Library/Wait Object</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Wait <a href="./cl_obj_h.html#robo14">Object</a> provides the capability for a user mode process to
+       create and manipulate a wait object that can also be manipulated from
+       kernel mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo686">cl_waitobj_handle_t</a>
+
+       User Mode Initialization/Destruction:
+               <a href="#robo683">cl_waitobj_create</a>
+               <a href="#robo685">cl_waitobj_destroy</a>
+
+       Kernel Mode Access:
+               <a href="#robo687">cl_waitobj_ref</a>
+               <a href="#robo684">cl_waitobj_deref</a>
+
+       Manipulation:
+               <a href="#robo689">cl_waitobj_signal</a>
+               <a href="#robo688">cl_waitobj_reset</a>
+               <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo683">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fcreate">
+Component Library: Wait Object/cl_waitobj_create</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_create</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_create</strong> function creates a wait object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_waitobj_create</strong>(
+        IN      const boolean_t                         manual_reset, 
+        OUT     <a href="#robo686">cl_waitobj_handle_t</a>* const      ph_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       manual_reset
+               [in] If FALSE, indicates that the event resets itself after releasing 
+               a single waiter.  If TRUE, the event remains in the signalled state 
+               until explicitly reset by a call to <a href="./cl_event_h.html#robo323">cl_event_reset</a>.
+
+       ph_wait_obj
+               [out] Pointer to a wait object handle set upon successful creation.
+
+ RETURN VALUES
+       CL_SUCCESS if the wait object was created successfully.
+
+       CL_ERROR if the wait object creation failed.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is only available in user mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo686">cl_waitobj_handle_t</a>, <a href="#robo685">cl_waitobj_destroy</a>, 
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo684">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fderef">
+Component Library: Wait Object/cl_waitobj_deref</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_deref</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_deref</strong> function release a reference on a kernel mode 
+       wait object handle and allows the wait object to be destroyed.
+                                                               
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_waitobj_deref</strong>(
+        IN      <a href="#robo686">cl_waitobj_handle_t</a>     h_kernel_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_kernel_wait_obj
+               [in] A wait object handle returned by a previous call to <a href="#robo687">cl_waitobj_ref</a>. 
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is only available in kernel mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo686">cl_waitobj_handle_t</a>, <a href="#robo687">cl_waitobj_ref</a>, 
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo685">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fdestroy">
+Component Library: Wait Object/cl_waitobj_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_destroy</strong> function destroys a wait object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_waitobj_destroy</strong>(
+        IN      <a href="#robo686">cl_waitobj_handle_t</a>     h_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_wait_obj
+               [in] A handle to the wait object to destroy, obtained by a pervious
+               call to <a href="#robo683">cl_waitobj_create</a>.
+
+ RETURN VALUES
+       CL_SUCCESS if the wait object handle is destroyed.
+
+       CL_INVALID_PARAMETER if the wait object handle is invalid.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is only available in user mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo686">cl_waitobj_handle_t</a>, <a href="#robo683">cl_waitobj_create</a>, 
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo686">[Definitions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fhandle5ft">
+Component Library: Wait Object/cl_waitobj_handle_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_handle_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Defines the handle for an OS wait object.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The wait object handle should be treated as opaque and is defined
+       differently depending on the target environment.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo683">cl_waitobj_create</a>, <a href="#robo685">cl_waitobj_destroy</a>,
+       <a href="#robo687">cl_waitobj_ref</a>, <a href="#robo684">cl_waitobj_deref</a>, <a href="#robo689">cl_waitobj_signal</a>,
+       <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo687">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fref">
+Component Library: Wait Object/cl_waitobj_ref</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_ref</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_ref</strong> function validates a user mode wait object handle 
+       and returns a kernel mode wait object handle.  A reference is taken
+       on the object to prevent its destruction even if the user mode 
+       application destroys it.
+                                                               
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo686">cl_waitobj_handle_t</a> CL_API
+<strong>cl_waitobj_ref</strong>(
+        IN      void                                    *h_user_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_user_wait_obj
+               [in] A wait object handle passed from user mode. 
+
+ RETURN VALUES
+       Returns a kernel wait object handle upon success.  The returned handle 
+       should only be used as parameters to kernel mode calls.
+
+       Returns NULL in case of failure.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is only available in kernel mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo686">cl_waitobj_handle_t</a>, <a href="#robo684">cl_waitobj_deref</a>,
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo688">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5freset">
+Component Library: Wait Object/cl_waitobj_reset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_reset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_reset</strong> function sets an wait object to the non-signalled state.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_waitobj_reset</strong>(
+        IN      <a href="#robo686">cl_waitobj_handle_t</a>     h_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_wait_obj
+               [in] A handle to the wait object that needs to reset.
+
+ RETURN VALUES
+       CL_SUCCESS if the wait object was successfully reset.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       In kernel mode, a pointer to a cl_event_t can safely be used instead of
+       a wait object handle.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo683">cl_waitobj_create</a>, <a href="#robo685">cl_waitobj_destroy</a>,
+       <a href="#robo687">cl_waitobj_ref</a>, <a href="#robo684">cl_waitobj_deref</a>,
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo689">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fsignal">
+Component Library: Wait Object/cl_waitobj_signal</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_signal</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_signal</strong> function sets a wait object to the signalled 
+       state and releases one or more waiting threads.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_waitobj_signal</strong>(
+        IN      <a href="#robo686">cl_waitobj_handle_t</a>     h_wait_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_wait_obj
+               [in] A handle to the wait object that needs to be signaled.
+ 
+ RETURN VALUES
+       CL_SUCCESS if the event was successfully signalled.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       For auto-reset wait objects, the wait object is reset automatically once 
+       a wait operation is satisfied. 
+
+       Triggering the wait object multiple times does not guarantee that the same 
+       number of wait operations are satisfied. This is because wait objects are 
+       either in a signalled on non-signalled state, and triggering a wait object 
+       that is already in the signalled state has no effect.
+
+       In kernel mode, a pointer to a cl_event_t can safely be used instead of
+       a wait object handle.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo683">cl_waitobj_create</a>, <a href="#robo685">cl_waitobj_destroy</a>,
+       <a href="#robo687">cl_waitobj_ref</a>, <a href="#robo684">cl_waitobj_deref</a>,
+       <a href="#robo688">cl_waitobj_reset</a>, <a href="#robo690">cl_waitobj_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo690">[Functions]<a name="Component20Library3a20Wait20Object2fcl5fwaitobj5fwait5fon">
+Component Library: Wait Object/cl_waitobj_wait_on</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_waitobj_wait_on</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_waitobj_wait_on</strong> function waits for the specified wait object to be 
+       triggered for a minimum amount of time.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_waitobj_wait_on</strong>(
+        IN      <a href="#robo686">cl_waitobj_handle_t</a>             h_wait_obj,
+        IN      const uint32_t                  wait_us,
+        IN      const boolean_t                 interruptible );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_wait_obj
+               [in] A handle to the wait object on which to wait.
+
+       wait_us 
+               [in] Number of microseconds to wait.
+
+       interruptible
+               [in] Indicates whether the wait operation can be interrupted
+               by external signals.
+
+ RETURN VALUES
+       CL_SUCCESS if the wait operation succeeded in response to the wait object 
+       being set.
+
+       CL_TIMEOUT if the specified time period elapses.
+
+       CL_NOT_DONE if the wait was interrupted by an external signal.
+
+       CL_ERROR if the wait operation failed.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       If wait_us is set to EVENT_NO_TIMEOUT, the function will wait until the 
+       wait object is triggered and never timeout.
+
+       If the timeout value is zero, this function simply tests the state of 
+       the wait object.
+
+       If the wait object is already in the signalled state at the time of the call
+       to <strong>cl_waitobj_wait_on</strong>, the call completes immediately with CL_SUCCESS.
+
+       In kernel mode, a pointer to a cl_event_t can safely be used instead of
+       a wait object handle.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Wait <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo683">cl_waitobj_create</a>, <a href="#robo685">cl_waitobj_destroy</a>,
+       <a href="#robo687">cl_waitobj_ref</a>, <a href="#robo684">cl_waitobj_deref</a>, 
+       <a href="#robo689">cl_waitobj_signal</a>, <a href="#robo688">cl_waitobj_reset</a>
+</pre>
+</span>
+</body>
+</html>

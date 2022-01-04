@@ -1,0 +1,61 @@
+CompLib
+Leonid Keller <leonid@mellanox.co.il>
+Tzachi Dar <tzachid@mellanox.co.il>
+
+DAPL/DAT
+NOTE: main source repository is OFA dapl git tree
+WinOF mirrors source code
+Arlin Davis <arlin.davis@intel.com>
+
+IBBus
+Leonid Keller <leonid@mellanox.co.il>
+Tzachi Dar <tzachid@mellanox.co.il>
+
+Infiniband-diags
+NOTE: main source repository is OFA management git tree
+WinOF mirrors source code
+Sean Hefty <sean.hefty@intel.com>
+
+IPoIB
+Tzachi Dar <tzachid@mellanox.co.il>
+
+mlx4
+Leonid Keller <leonid@mellanox.co.il>
+Tzachi Dar <tzachid@mellanox.co.il>
+
+mthca
+Leonid Keller <leonid@mellanox.co.il>
+Tzachi Dar <tzachid@mellanox.co.il>
+
+OFED compatibility libraries:
+libibverbs, libibmad, libibumad, librdmacm, libibnetdisc
+NOTE:
+libibverbs, libibumad, and librdmacm are windows implementations
+of the OFED interfaces
+libibmad and libibnetdisc are WinOF mirrors of code maintained
+in the OFA management git tree
+Sean Hefty <sean.hefty@intel.com>
+
+OpenSM
+Yevgeny Kliteynik <kliteyn@dev.mellanox.co.il>
+
+perftest (tests/perftest)
+Sean Hefty <sean.hefty@intel.com>
+
+QlgcVNIC
+No current maintainer.
+
+SRP
+Leonid Keller <leonid@mellanox.co.il>
+
+WinOF Installer
+Stan Smith <stan.smith@intel.com>
+
+WinMAD
+Sean Hefty <sean.hefty@intel.com>
+
+WinVerbs
+Sean Hefty <sean.hefty@intel.com>
+
+WSD
+Tzachi Dar <tzachid@mellanox.co.il>

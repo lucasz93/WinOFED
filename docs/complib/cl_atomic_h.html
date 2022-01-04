@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_atomic_h.html</title>
+<!-- Source: ./inc/complib/cl_atomic.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_atomic.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo2">[Modules]<a name="Component20Library2fAtomic20Operations">
+Component Library/Atomic Operations</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Atomic Operations
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Atomic Operations functions allow callers to operate on
+       32-bit signed integers in an atomic fashion.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo277">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5fadd">
+Component Library: Atomic Operations/cl_atomic_add</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_add</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_add</strong> function atomically adds a value to a
+       32-bit signed integer and returns the resulting value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_add</strong>(
+        IN      atomic32_t* const       p_value,
+        IN      const int32_t           increment );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer that will be added to.
+
+       increment
+               [in] Value by which to increment the integer pointed to by p_value.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the value pointed to by p_value after the addition.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The provided increment is added to the value and the result returned in
+       one atomic operation.
+
+       <strong>cl_atomic_add</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo280">cl_atomic_inc</a>, <a href="#robo279">cl_atomic_dec</a>, <a href="#robo281">cl_atomic_sub</a>,
+       <a href="#robo282">cl_atomic_xchg</a>, <a href="#robo278">cl_atomic_comp_xchg</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo278">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5fcomp5fxchg">
+Component Library: Atomic Operations/cl_atomic_comp_xchg</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_comp_xchg</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_comp_xchg</strong> function atomically compares a 32-bit signed
+       integer to a desired value, sets that integer to the
+       specified value if equal, and returns the initial value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_comp_xchg</strong>(
+        IN      atomic32_t* const       p_value,
+        IN      const int32_t           compare,
+        IN      const int32_t           new_value );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer to exchange with new_value.
+
+       compare
+               [in] Value to compare to the value pointed to by p_value.
+
+       new_value
+               [in] Value to assign if the value pointed to by p_value is equal to
+               the value specified by the compare parameter.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the initial value of the variable pointed to by p_value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The value pointed to by p_value is compared to the value specified by the
+       compare parameter.  If the two values are equal, the p_value variable is
+       set to new_value.  The initial value pointed to by p_value is returned.
+
+       <strong>cl_atomic_comp_xchg</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo280">cl_atomic_inc</a>, <a href="#robo279">cl_atomic_dec</a>, <a href="#robo277">cl_atomic_add</a>,
+       <a href="#robo281">cl_atomic_sub</a>, <a href="#robo282">cl_atomic_xchg</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo279">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5fdec">
+Component Library: Atomic Operations/cl_atomic_dec</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_dec</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_dec</strong> function atomically decrements a 32-bit signed
+       integer and returns the decremented value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_dec</strong>(
+        IN      atomic32_t* const       p_value );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer to decrement.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the decremented value pointed to by p_value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The provided value is decremented and its value returned in one atomic
+       operation.
+
+       <strong>cl_atomic_dec</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo280">cl_atomic_inc</a>, <a href="#robo277">cl_atomic_add</a>, <a href="#robo281">cl_atomic_sub</a>,
+       <a href="#robo282">cl_atomic_xchg</a>, <a href="#robo278">cl_atomic_comp_xchg</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo280">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5finc">
+Component Library: Atomic Operations/cl_atomic_inc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_inc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_inc</strong> function atomically increments a 32-bit signed
+       integer and returns the incremented value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_inc</strong>(
+        IN      atomic32_t* const       p_value );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer to increment.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the incremented value pointed to by p_value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The provided value is incremented and its value returned in one atomic
+       operation.
+
+       <strong>cl_atomic_inc</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo279">cl_atomic_dec</a>, <a href="#robo277">cl_atomic_add</a>, <a href="#robo281">cl_atomic_sub</a>,
+       <a href="#robo282">cl_atomic_xchg</a>, <a href="#robo278">cl_atomic_comp_xchg</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo281">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5fsub">
+Component Library: Atomic Operations/cl_atomic_sub</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_sub</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_sub</strong> function atomically subtracts a value from a
+       32-bit signed integer and returns the resulting value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_sub</strong>(
+        IN      atomic32_t* const       p_value,
+        IN      const int32_t           decrement );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer that will be subtracted from.
+
+       decrement
+               [in] Value by which to decrement the integer pointed to by p_value.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the value pointed to by p_value after the subtraction.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The provided decrement is subtracted from the value and the result
+       returned in one atomic operation.
+
+       <strong>cl_atomic_sub</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo280">cl_atomic_inc</a>, <a href="#robo279">cl_atomic_dec</a>, <a href="#robo277">cl_atomic_add</a>,
+       <a href="#robo282">cl_atomic_xchg</a>, <a href="#robo278">cl_atomic_comp_xchg</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo282">[Functions]<a name="Component20Library3a20Atomic20Operations2fcl5fatomic5fxchg">
+Component Library: Atomic Operations/cl_atomic_xchg</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_atomic_xchg</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_atomic_xchg</strong> function atomically sets a value of a
+       32-bit signed integer and returns the initial value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_atomic_xchg</strong>(
+        IN      atomic32_t* const       p_value,
+        IN      const int32_t           new_value );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_value
+               [in] Pointer to a 32-bit integer to exchange with new_value.
+
+       new_value
+               [in] Value to assign.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the initial value pointed to by p_value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The provided value is exchanged with new_value and its initial value
+       returned in one atomic operation.
+
+       <strong>cl_atomic_xchg</strong> maintains data consistency without requiring additional
+       synchronization mechanisms in multi-threaded environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Atomic Operations, <a href="#robo280">cl_atomic_inc</a>, <a href="#robo279">cl_atomic_dec</a>, <a href="#robo277">cl_atomic_add</a>,
+       <a href="#robo281">cl_atomic_sub</a>, <a href="#robo278">cl_atomic_comp_xchg</a>
+</pre>
+</span>
+</body>
+</html>

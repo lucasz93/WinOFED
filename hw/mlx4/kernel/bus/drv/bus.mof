@@ -1,0 +1,27 @@
+#PRAGMA AUTORECOVER
+
+[Dynamic, Provider("WMIProv"),
+ WMI,
+ Description("Mlx4 Bus driver information"),
+ guid("{3337968C-F117-4289-84C2-04EF74CBAD77}"),
+ locale("MS\\0x409")]
+class Mlx4BusInformation
+{
+    [key, read]
+     string InstanceName;
+    [read] boolean Active;
+
+    [WmiDataId(1),
+     read,
+     Description("The DebugPrintLevel property indicates the debug output level of MLX4_BUS device.")]
+     uint32   DebugPrintLevel;
+
+    [WmiDataId(2),
+     read,
+     write,
+     Description("The DebugPrintLevel property indicates the debug output flags of MLX4_BUS device.")]
+	 uint32 DebugPrintFlags;
+
+};
+
+

@@ -1,0 +1,59 @@
+TARGETNAME=ipoib
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+!if $(_NT_TOOLS_VERSION) != 0x700
+# WDK build only - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=netipoib
+INF_TARGET=..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+!endif
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+
+SOURCES= 	ipoib_log.mc \
+		ipoib.rc \
+		ipoib_driver.c \
+		ipoib_adapter.c \
+		ipoib_endpoint.c \
+		ipoib_port.c \
+		ipoib_ibat.c \
+		ipoib_xfr_mgr.c \
+		ipoib_stat.c
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;
+
+C_DEFINES=$(C_DEFINES) -DNDIS_MINIPORT_DRIVER -DNDIS_WDM=1 \
+	-DDEPRECATE_DDK_FUNCTIONS -DNDIS51_MINIPORT -DNEED_CL_OBJ -DBINARY_COMPATIBLE=0
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib \
+	$(DDK_LIB_PATH)\ndis.lib \
+	$(DDK_LIB_PATH)\ntstrsafe.lib \
+	$(DDK_LIB_PATH)\strsafe.lib
+
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+#
+# The driver is built in the Win2K build environment
+# - use the library version of safe strings 
+#
+#TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\ntstrsafe.lib
+!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:ipoib_debug.h \
+	-func:IPOIB_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:IPOIB_PRINT_EXIT(LEVEL,FLAGS,(MSG,...))
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

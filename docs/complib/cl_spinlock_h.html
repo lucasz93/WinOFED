@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_spinlock_h.html</title>
+<!-- Source: ./inc/complib/cl_spinlock.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_spinlock.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo26">[Modules]<a name="Component20Library2fSpinlock">
+Component Library/Spinlock</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Spinlock</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <strong>Spinlock</strong> provides synchronization between threads for exclusive access to
+       a resource.
+
+       The spinlock functions manipulate a cl_spinlock_t structure which should
+       be treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_spinlock_t
+
+       Initialization:
+               <a href="#robo631">cl_spinlock_construct</a>, <a href="#robo633">cl_spinlock_init</a>, <a href="#robo632">cl_spinlock_destroy</a>
+
+       Manipulation
+               <a href="#robo630">cl_spinlock_acquire</a>, <a href="#robo634">cl_spinlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo630">[Functions]<a name="Component20Library3a20Spinlock2fcl5fspinlock5facquire">
+Component Library: Spinlock/cl_spinlock_acquire</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_spinlock_acquire</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_spinlock_acquire</strong> function acquires a spin lock.
+       This version of lock does not prevent an interrupt from
+       occuring on the processor on which the code is being
+       executed.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_spinlock_acquire</strong>(
+        IN      cl_spinlock_t* const    p_spinlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_spinlock
+               [in] Pointer to a spin lock structure to acquire.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo26">Spinlock</a>, <a href="#robo634">cl_spinlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo631">[Functions]<a name="Component20Library3a20Spinlock2fcl5fspinlock5fconstruct">
+Component Library: Spinlock/cl_spinlock_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_spinlock_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_spinlock_construct</strong> function initializes the state of a
+       spin lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_spinlock_construct</strong>(
+        IN      cl_spinlock_t* const    p_spinlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_spinlock
+               [in] Pointer to a spin lock structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo632">cl_spinlock_destroy</a> without first calling
+       <a href="#robo633">cl_spinlock_init</a>.
+
+       Calling <strong>cl_spinlock_construct</strong> is a prerequisite to calling any other
+       spin lock function except <a href="#robo633">cl_spinlock_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo26">Spinlock</a>, <a href="#robo633">cl_spinlock_init</a>, <a href="#robo632">cl_spinlock_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo632">[Functions]<a name="Component20Library3a20Spinlock2fcl5fspinlock5fdestroy">
+Component Library: Spinlock/cl_spinlock_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_spinlock_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_spinlock_destroy</strong> function performs all necessary cleanup of a
+       spin lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_spinlock_destroy</strong>(
+        IN      cl_spinlock_t* const    p_spinlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_spinlock
+               [in] Pointer to a spin lock structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performs any necessary cleanup of a spin lock. This function must only
+       be called if either <a href="#robo631">cl_spinlock_construct</a> or <a href="#robo633">cl_spinlock_init</a> has been
+       called.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo26">Spinlock</a>, <a href="#robo631">cl_spinlock_construct</a>, <a href="#robo633">cl_spinlock_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo633">[Functions]<a name="Component20Library3a20Spinlock2fcl5fspinlock5finit">
+Component Library: Spinlock/cl_spinlock_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_spinlock_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_spinlock_init</strong> function initializes a spin lock for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_spinlock_init</strong>(
+        IN      cl_spinlock_t* const    p_spinlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_spinlock
+               [in] Pointer to a spin lock structure to initialize.
+
+ RETURN VALUES
+       CL_SUCCESS if initialization succeeded.
+
+       CL_ERROR if initialization failed. Callers should call
+       <a href="#robo632">cl_spinlock_destroy</a> to clean up any resources allocated during
+       initialization.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Initialize the spin lock structure. Allows calling cl_spinlock_aquire
+       and <a href="#robo634">cl_spinlock_release</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo26">Spinlock</a>, <a href="#robo631">cl_spinlock_construct</a>, <a href="#robo632">cl_spinlock_destroy</a>,
+       <a href="#robo630">cl_spinlock_acquire</a>, <a href="#robo634">cl_spinlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo634">[Functions]<a name="Component20Library3a20Spinlock2fcl5fspinlock5frelease">
+Component Library: Spinlock/cl_spinlock_release</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_spinlock_release</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_spinlock_release</strong> function releases a spin lock object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_spinlock_release</strong>(
+        IN      cl_spinlock_t* const    p_spinlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_spinlock
+               [in] Pointer to a spin lock structure to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Releases a spin lock after a call to <a href="#robo630">cl_spinlock_acquire</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo26">Spinlock</a>, <a href="#robo630">cl_spinlock_acquire</a>
+</pre>
+</span>
+</body>
+</html>

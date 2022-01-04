@@ -1,0 +1,24 @@
+TARGETNAME = dtestcm
+
+TARGETPATH = ..\..\..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+UMTYPE = console
+USE_MSVCRT = 1
+
+SOURCES = \
+	dtestcm.rc	\
+	dtestcm.c
+	
+INCLUDES = ..\..\..\..\dat\include;..\..\..\..\..\..\inc;\
+	   ..\..\..\..\..\..\inc\user;\
+	   ..\..\..\..\..\..\inc\user\linux;
+
+RCOPTIONS=/I..\..\..\..\..\..\inc;
+
+# Set defines particular to the driver.
+USER_C_FLAGS = $(USER_C_FLAGS) /DDAT_EXTENSIONS /DFD_SETSIZE=1024
+
+TARGETLIBS = $(TARGETPATH)\*\dat2.lib $(SDK_LIB_PATH)\ws2_32.lib
+
+# XXX do this ASAP - MSC_WARNING_LEVEL= /W3
+MSC_WARNING_LEVEL = /W1

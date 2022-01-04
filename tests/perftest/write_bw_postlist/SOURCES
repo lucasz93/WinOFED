@@ -1,0 +1,36 @@
+TARGETNAME = ibv_write_bw_postlist
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+
+NTTARGETFILES=Custom_target
+
+UMTYPE = console
+UMENTRY = main
+
+USE_MSVCRT = 1
+USE_STL = 1
+USE_NATIVE_EH = 1
+USE_IOSTREAM = 1
+
+SOURCES =					\
+	write_bw_postlist.rc	\
+	..\write_bw_postlist.c	\
+	..\perftest_resources.c ..\multicast_resources.c ..\perftest_parameters.c ..\perftest_communication.c 
+	
+INCLUDES = ..;..\..\..\ulp\libibverbs\include;..\..\..\inc;..\..\..\inc\user;..\..\..\ulp\libibumad\include;..\..\..\ulp\librdmacm\include\rdma;\
+	   ..\..\..\inc;..\..\..\inc\user;..\..\..\inc\user\linux;..\..\..\inc\complib;\
+           ..\..\..\hw\mlx4\user\hca;
+		   ..\..\..\ulp\libibverbs\src\$(O);\
+
+TARGETLIBS =						\
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\advapi32.lib	\
+	$(SDK_LIB_PATH)\user32.lib		\
+	$(SDK_LIB_PATH)\ole32.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(TARGETPATH)\*\libibverbs.lib		\
+	$(TARGETPATH)\*\libibumad.lib		\
+	$(TARGETPATH)\*\complib.lib		\
+	$(TARGETPATH)\*\librdmacm.lib		\
+
+

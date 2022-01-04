@@ -1,0 +1,13 @@
+TARGETNAME = ibat
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = LIBRARY
+
+SOURCES = ibat.cpp
+
+INCLUDES = ..\..\..\inc;..\..\..\inc\user;
+MSC_WARNING_LEVEL= /W4
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG=1
+!endif

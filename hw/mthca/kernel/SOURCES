@@ -1,0 +1,94 @@
+TRUNK=..\..\..
+
+TARGETNAME=mthca
+TARGETPATH=$(TRUNK)\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+KMDF_VERSION_MAJOR=1
+
+# WDK build only - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=$(TARGETNAME)
+INF_TARGET=$(TRUNK)\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES= \
+	mthca_log.mc		\
+  	hca.rc			\
+	mthca_log.c		\
+  					\
+	..\hca_utils.c		\
+	..\mt_utils.c		\
+					\
+	hca_data.c		\
+	hca_direct.c		\
+	hca_driver.c		\
+	hca_mcast.c		\
+	hca_memory.c	\
+	hca_pci.c			\
+	hca_pnp.c		\
+	hca_verbs.c		\
+					\
+	mt_cache.c		\
+	mt_device.c		\
+	mt_l2w.c			\
+	mt_memory.c		\
+	mt_packer.c		\
+	mt_reset_tavor.c	\
+	mt_ud_header.c	\
+	mt_uverbs.c		\
+	mt_verbs.c		\
+	mt_pa_cash.c		\
+					\
+	mthca_allocator.c	\
+	mthca_av.c		\
+	mthca_catas.c		\
+	mthca_cmd.c		\
+	mthca_cq.c		\
+	mthca_eq.c		\
+	mthca_mad.c		\
+	mthca_main.c		\
+	mthca_mcg.c		\
+	mthca_memfree.c	\
+	mthca_mr.c		\
+	mthca_pd.c		\
+	mthca_profile.c	\
+	mthca_provider.c	\
+	mthca_qp.c		\
+	mthca_srq.c		\
+	mthca_uar.c		\
+
+
+INCLUDES=\
+	..; \
+	$(TRUNK)\inc;	\
+	$(TRUNK)\inc\kernel;
+	
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN
+
+TARGETLIBS= \
+        $(DDK_LIB_PATH)\ntstrsafe.lib   \
+	$(TARGETPATH)\*\complib.lib	\
+	$(DDK_LIB_PATH)\wdmguid.lib
+
+
+#LINKER_FLAGS=/MAP 
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+RUN_WPP= $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:hca_debug.h \
+	-func:HCA_PRINT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+#	-func:HCA_PRINT_EV(LEVEL,FLAGS,(MSG,...)) \
+
+MSC_OPTIMIZATION=/Oi
+MSC_WARNING_LEVEL= /W4

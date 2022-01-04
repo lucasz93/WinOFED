@@ -1,0 +1,5 @@
+LIBRARY winmad.dll
+
+EXPORTS
+DllCanUnloadNow	PRIVATE
+

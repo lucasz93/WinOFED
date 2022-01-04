@@ -1,0 +1,1728 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_qlist_h.html</title>
+<!-- Source: ./inc/complib/cl_qlist.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_qlist.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo20">[Modules]<a name="Component20Library2fQuick20List">
+Component Library/Quick List</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick list implements a doubly linked that stores user provided
+       <a href="#robo536">cl_list_item_t</a> structures.
+       Quick list does not allocate any memory, and can therefore not fail any
+       operations.  Quick list can therefore be useful in minimizing the error
+       paths in code.
+
+       Quick list is not thread safe, and users must provide serialization when
+       adding and removing items from the list. Note that it is possible to
+       walk a quick list while simultaneously adding to it.
+
+       The Quick <a href="./cl_list_h.html#robo11">List</a> functions operate on a <a href="#robo566">cl_qlist_t</a> structure which should be
+       treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo566">cl_qlist_t</a>, <a href="#robo536">cl_list_item_t</a>, <a href="#robo537">cl_list_obj_t</a>
+
+       Callbacks:
+               <a href="#robo538">cl_pfn_qlist_apply_t</a>, <a href="#robo539">cl_pfn_qlist_find_t</a>
+
+       Item Manipulation:
+               <a href="#robo565">cl_qlist_set_obj</a>, <a href="#robo559">cl_qlist_obj</a>
+
+       Initialization:
+               <a href="#robo548">cl_qlist_init</a>
+
+       Iteration:
+               <a href="#robo558">cl_qlist_next</a>, <a href="#robo560">cl_qlist_prev</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo567">cl_qlist_tail</a>,
+               <a href="#robo542">cl_qlist_end</a>
+
+       Manipulation:
+               <a href="#robo551">cl_qlist_insert_head</a>, <a href="#robo556">cl_qlist_insert_tail</a>,
+               <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>,
+               <a href="#robo549">cl_qlist_insert_array_head</a>, <a href="#robo550">cl_qlist_insert_array_tail</a>,
+               <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>,
+               <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo564">cl_qlist_remove_tail</a>,
+               <a href="#robo563">cl_qlist_remove_item</a>, <a href="#robo561">cl_qlist_remove_all</a>
+
+       Search:
+               <a href="#robo534">cl_is_item_in_qlist</a>, <a href="#robo545">cl_qlist_find_next</a>, <a href="#robo546">cl_qlist_find_prev</a>,
+               <a href="#robo543">cl_qlist_find_from_head</a>, <a href="#robo544">cl_qlist_find_from_tail</a>
+               <a href="#robo540">cl_qlist_apply_func</a>, <a href="#robo557">cl_qlist_move_items</a>
+
+       Attributes:
+               <a href="#robo541">cl_qlist_count</a>, <a href="#robo535">cl_is_qlist_empty</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo534">[Functions]<a name="Component20Library3a20Quick20List2fcl5fis5fitem5fin5fqlist">
+Component Library: Quick List/cl_is_item_in_qlist</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_item_in_qlist</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_item_in_qlist</strong> function checks for the presence of a
+       list item in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT boolean_t CL_API
+<strong>cl_is_item_in_qlist</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const         p_list,
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+       p_list_item
+               [in] Pointer to the <a href="#robo536">cl_list_item_t</a> to find.
+
+ RETURN VALUES
+       TRUE if the list item was found in the quick list.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo563">cl_qlist_remove_item</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo535">[Functions]<a name="Component20Library3a20Quick20List2fcl5fis5fqlist5fempty">
+Component Library: Quick List/cl_is_qlist_empty</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_qlist_empty</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_qlist_empty</strong> function returns whether a quick list is empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_qlist_empty</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        return( !<a href="#robo541">cl_qlist_count</a>( p_list ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+ RETURN VALUES
+       TRUE if the specified quick list is empty.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo541">cl_qlist_count</a>, <a href="#robo561">cl_qlist_remove_all</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo536">[Structures]<a name="Component20Library3a20Quick20List2fcl5flist5fitem5ft">
+Component Library: Quick List/cl_list_item_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_list_item_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_list_item_t</strong> structure is used by lists to store objects.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_list_item
+{
+        struct _cl_list_item    *p_next;
+        struct _cl_list_item    *p_prev;
+#ifdef _DEBUG_
+        struct _cl_qlist                *p_list;
+#endif
+
+} <strong>cl_list_item_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       p_next
+               Used internally by the list. Users should not use this field.
+
+       p_prev
+               Used internally by the list. Users should not use this field.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo537">[Structures]<a name="Component20Library3a20Quick20List2fcl5flist5fobj5ft">
+Component Library: Quick List/cl_list_obj_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_list_obj_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_list_obj_t</strong> structure is used by lists to store objects.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _<a href="./cl_list_h.html#robo387">cl_list_obj</a>
+{
+        <a href="#robo536">cl_list_item_t</a>          list_item;
+        const void                      *p_object;              /* User's context */
+
+} <strong>cl_list_obj_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       list_item
+               Used internally by the list. Users should not use this field.
+
+       p_object
+               User defined context. Users should not access this field directly.
+               Use <a href="#robo565">cl_qlist_set_obj</a> and <a href="#robo559">cl_qlist_obj</a> to set and retrieve the value
+               of this field.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Users can use the <a href="#robo565">cl_qlist_set_obj</a> and <a href="#robo559">cl_qlist_obj</a> functions to store
+       and retrieve context information in the list item.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo565">cl_qlist_set_obj</a>, <a href="#robo559">cl_qlist_obj</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo538">[Definitions]<a name="Component20Library3a20Quick20List2fcl5fpfn5fqlist5fapply5ft">
+Component Library: Quick List/cl_pfn_qlist_apply_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_qlist_apply_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_qlist_apply_t</strong> function type defines the prototype for functions
+       used to iterate items in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_qlist_apply_t</strong>)(
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item,
+        IN      void*                                   context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure.
+
+       context
+               [in] Value passed to the callback function.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo540">cl_qlist_apply_func</a>
+       function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo540">cl_qlist_apply_func</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo539">[Definitions]<a name="Component20Library3a20Quick20List2fcl5fpfn5fqlist5ffind5ft">
+Component Library: Quick List/cl_pfn_qlist_find_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_qlist_find_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_qlist_find_t</strong> function type defines the prototype for functions
+       used to find items in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef <a href="./cl_types_h.html#robo308">cl_status_t</a>
+(CL_API *<strong>cl_pfn_qlist_find_t</strong>)(
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item,
+        IN      void*                                           context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a>.
+
+       context
+               [in] Value passed to the callback function.
+
+ RETURN VALUES
+       Return CL_SUCCESS if the desired item was found. This stops list iteration.
+
+       Return CL_NOT_FOUND to continue list iteration.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo543">cl_qlist_find_from_head</a>,
+       <a href="#robo544">cl_qlist_find_from_tail</a>, <a href="#robo545">cl_qlist_find_next</a>, and <a href="#robo546">cl_qlist_find_prev</a>
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo543">cl_qlist_find_from_head</a>, <a href="#robo544">cl_qlist_find_from_tail</a>,
+       <a href="#robo545">cl_qlist_find_next</a>, <a href="#robo546">cl_qlist_find_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo540">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fapply5ffunc">
+Component Library: Quick List/cl_qlist_apply_func</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_apply_func</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_apply_func</strong> function executes a specified function
+       for every list item stored in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_apply_func</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list,
+        IN      <a href="#robo538">cl_pfn_qlist_apply_t</a>    pfn_func,
+        IN      const void* const               context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+       pfn_func
+               [in] Function invoked for every item in the quick list.
+               See the <a href="#robo538">cl_pfn_qlist_apply_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The function provided must not perform any list operations, as these
+       would corrupt the quick list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo543">cl_qlist_find_from_head</a>, <a href="#robo544">cl_qlist_find_from_tail</a>,
+       <a href="#robo557">cl_qlist_move_items</a>, <a href="#robo538">cl_pfn_qlist_apply_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo541">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fcount">
+Component Library: Quick List/cl_qlist_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_count</strong> function returns the number of list items stored
+       in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_qlist_count</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        return( p_list-&gt;count );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Number of items in the list.  This function iterates though the quick
+       list to count the items.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo535">cl_is_qlist_empty</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo542">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fend">
+Component Library: Quick List/cl_qlist_end</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_end</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_end</strong> function returns the end of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE const <a href="#robo536">cl_list_item_t</a>* const CL_API
+<strong>cl_qlist_end</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        return( &amp;p_list-&gt;end );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the end of the list.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_end</strong> is useful for determining the validity of list items returned
+       by <a href="#robo547">cl_qlist_head</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo558">cl_qlist_next</a>, <a href="#robo560">cl_qlist_prev</a>, as well as
+       the cl_qlist_find functions.  If the list item pointer returned by any of
+       these functions compares to the end, the end of the list was encoutered.
+       When using <a href="#robo547">cl_qlist_head</a> or <a href="#robo567">cl_qlist_tail</a>, this condition indicates that
+       the list is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo558">cl_qlist_next</a>, <a href="#robo560">cl_qlist_prev</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo543">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5ffind5ffrom5fhead">
+Component Library: Quick List/cl_qlist_find_from_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_find_from_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_find_from_head</strong> function invokes a specified function to
+       search for an item, starting at the head of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_find_from_head</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list,
+        IN      <a href="#robo539">cl_pfn_qlist_find_t</a>             pfn_func,
+        IN      const void* const               context )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+        /* CL_ASSERT that a find function is provided. */
+        CL_ASSERT( pfn_func );
+
+        return( <a href="#robo545">cl_qlist_find_next</a>( p_list, <a href="#robo542">cl_qlist_end</a>( p_list ), pfn_func,
+                context ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+       pfn_func
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo539">cl_pfn_qlist_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context if a
+               callback function is provided, or value compared to the quick list's
+               list items.
+
+ Returns:
+       Pointer to the list item, if found.
+
+       Pointer to the list end otherwise
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_find_from_head</strong> does not remove list items from the list.
+       The list item is returned when the function specified by the pfn_func
+       parameter returns CL_SUCCESS.
+
+       The function provided by the pfn_func parameter must not perform any list
+       operations, as these would corrupt the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo544">cl_qlist_find_from_tail</a>, <a href="#robo545">cl_qlist_find_next</a>, <a href="#robo546">cl_qlist_find_prev</a>,
+       <a href="#robo542">cl_qlist_end</a>, <a href="#robo540">cl_qlist_apply_func</a>, <a href="#robo557">cl_qlist_move_items</a>, <a href="#robo536">cl_list_item_t</a>,
+       <a href="#robo539">cl_pfn_qlist_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo544">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5ffind5ffrom5ftail">
+Component Library: Quick List/cl_qlist_find_from_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_find_from_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_find_from_tail</strong> function invokes a specified function to
+       search for an item, starting at the tail of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_find_from_tail</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list,
+        IN      <a href="#robo539">cl_pfn_qlist_find_t</a>             pfn_func,
+        IN      const void* const               context )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+        /* CL_ASSERT that a find function is provided. */
+        CL_ASSERT( pfn_func );
+
+        return( <a href="#robo546">cl_qlist_find_prev</a>( p_list, <a href="#robo542">cl_qlist_end</a>( p_list ), pfn_func,
+                context ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+       pfn_func
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo539">cl_pfn_qlist_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context if a
+               callback function is provided, or value compared to the quick list's
+               list items.
+
+ Returns:
+       Pointer to the list item, if found.
+
+       Pointer to the list end otherwise
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_find_from_tail</strong> does not remove list items from the list.
+       The list item is returned when the function specified by the pfn_func
+       parameter returns CL_SUCCESS.
+
+       The function provided by the pfn_func parameter must not perform any list
+       operations, as these would corrupt the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo543">cl_qlist_find_from_head</a>, <a href="#robo545">cl_qlist_find_next</a>, <a href="#robo546">cl_qlist_find_prev</a>,
+       <a href="#robo540">cl_qlist_apply_func</a>, <a href="#robo542">cl_qlist_end</a>, <a href="#robo557">cl_qlist_move_items</a>, <a href="#robo536">cl_list_item_t</a>,
+       <a href="#robo539">cl_pfn_qlist_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo545">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5ffind5fnext">
+Component Library: Quick List/cl_qlist_find_next</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_find_next</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_find_next</strong> function invokes a specified function to
+       search for an item, starting from a given list item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_find_next</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const         p_list,
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item,
+        IN      <a href="#robo539">cl_pfn_qlist_find_t</a>                     pfn_func,
+        IN      const void* const                       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure in which to search.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure from which to start the search.
+
+       pfn_func
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo539">cl_pfn_qlist_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context if a
+               callback function is provided, or value compared to the quick list's
+               list items.
+
+ Returns:
+       Pointer to the list item, if found.
+
+       p_list_item if not found.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_find_next</strong> does not remove list items from the list.
+       The list item is returned when the function specified by the pfn_func
+       parameter returns CL_SUCCESS.  The list item from which the search starts is
+       excluded from the search.
+
+       The function provided by the pfn_func must not perform any list operations,
+       as these would corrupt the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo546">cl_qlist_find_prev</a>, <a href="#robo543">cl_qlist_find_from_head</a>,
+       <a href="#robo544">cl_qlist_find_from_tail</a>, <a href="#robo542">cl_qlist_end</a>, <a href="#robo540">cl_qlist_apply_func</a>,
+       <a href="#robo557">cl_qlist_move_items</a>, <a href="#robo536">cl_list_item_t</a>, <a href="#robo539">cl_pfn_qlist_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo546">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5ffind5fprev">
+Component Library: Quick List/cl_qlist_find_prev</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_find_prev</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_find_prev</strong> function invokes a specified function to
+       search backward for an item, starting from a given list item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_find_prev</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const         p_list,
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item,
+        IN      <a href="#robo539">cl_pfn_qlist_find_t</a>                     pfn_func,
+        IN      const void* const                       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure in which to search.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure from which to start the search.
+
+       pfn_func
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo539">cl_pfn_qlist_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context if a
+               callback function is provided, or value compared to the quick list's
+               list items.
+
+ Returns:
+       Pointer to the list item, if found.
+
+       p_list_item if not found.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_find_prev</strong> does not remove list items from the list.
+       The list item is returned when the function specified by the pfn_func
+       parameter returns CL_SUCCESS.  The list item from which the search starts is
+       excluded from the search.
+
+       The function provided by the pfn_func must not perform any list operations,
+       as these would corrupt the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo545">cl_qlist_find_next</a>, <a href="#robo543">cl_qlist_find_from_head</a>,
+       <a href="#robo544">cl_qlist_find_from_tail</a>, <a href="#robo542">cl_qlist_end</a>, <a href="#robo540">cl_qlist_apply_func</a>,
+       <a href="#robo557">cl_qlist_move_items</a>, <a href="#robo536">cl_list_item_t</a>, <a href="#robo539">cl_pfn_qlist_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo547">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fhead">
+Component Library: Quick List/cl_qlist_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_head</strong> function returns the list item at
+       the head of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_head</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        return( <a href="#robo558">cl_qlist_next</a>( &amp;p_list-&gt;end ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+ RETURN VALUES
+       Pointer to the list item at the head of the quick list.
+
+       Pointer to the list end if the list was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_head</strong> does not remove the item from the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo558">cl_qlist_next</a>, <a href="#robo560">cl_qlist_prev</a>, <a href="#robo542">cl_qlist_end</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo548">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finit">
+Component Library: Quick List/cl_qlist_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_init</strong> function initializes a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_init</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+
+        p_list-&gt;state = CL_INITIALIZED;
+
+        /* Reset the quick list data structure. */
+        __cl_qlist_reset( p_list );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure to initialize.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling quick list manipulation functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo551">cl_qlist_insert_head</a>, <a href="#robo556">cl_qlist_insert_tail</a>,
+       <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo564">cl_qlist_remove_tail</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo549">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5farray5fhead">
+Component Library: Quick List/cl_qlist_insert_array_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_array_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_array_head</strong> function inserts an array of list items
+       at the head of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_insert_array_head</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_array,
+        IN      size_t                                  item_count,
+        IN      const size_t                    item_size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to insert
+               the objects.
+
+       p_array
+               [in] Pointer to the first list item in an array of <a href="#robo536">cl_list_item_t</a>
+               structures.
+
+       item_count
+               [in] Number of <a href="#robo536">cl_list_item_t</a> structures in the array.
+
+       item_size
+               [in] Size of the items added to the list. This is the stride in the
+               array from one <a href="#robo536">cl_list_item_t</a> structure to the next.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts all the list items in the array specified by the p_array parameter
+       to the head of the quick list specified by the p_list parameter,
+       preserving ordering of the list items.
+
+       The array pointer passed into the function points to the <a href="#robo536">cl_list_item_t</a>
+       in the first element of the caller's element array.  There is no
+       restriction on where the element is stored in the parent structure.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>,
+       <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo550">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5farray5ftail">
+Component Library: Quick List/cl_qlist_insert_array_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_array_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_array_tail</strong> function inserts an array of list items
+       at the tail of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_insert_array_tail</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_array,
+        IN      size_t                                  item_count,
+        IN      const size_t                    item_size);
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to insert
+               the objects.
+
+       p_array
+               [in] Pointer to the first list item in an array of <a href="#robo536">cl_list_item_t</a>
+               structures.
+
+       item_count
+               [in] Number of <a href="#robo536">cl_list_item_t</a> structures in the array.
+
+       item_size
+               [in] Size of the items added to the list. This is the stride in the
+               array from one <a href="#robo536">cl_list_item_t</a> structure to the next.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts all the list items in the array specified by the p_array parameter
+       to the tail of the quick list specified by the p_list parameter,
+       preserving ordering of the list items.
+
+       The array pointer passed into the function points to the <a href="#robo536">cl_list_item_t</a>
+       in the first element of the caller's element array.  There is no
+       restriction on where the element is stored in the parent structure.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo549">cl_qlist_insert_array_head</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>,
+       <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo551">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5fhead">
+Component Library: Quick List/cl_qlist_insert_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_head</strong> function inserts a list item at the
+       head of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_insert_head</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        /*
+         * The list item must not already be part of the list.  Note that this
+         * assertion may fail if an uninitialized list item happens to have its
+         * list pointer equal to the specified list.  The chances of this
+         * happening are acceptable in light of the value of this check.
+         */
+        CL_ASSERT( p_list_item-&gt;p_list != p_list );
+
+#if defined( _DEBUG_ )
+        p_list_item-&gt;p_list = p_list;
+#endif
+
+        /* Insert before the head. */
+        __cl_primitive_insert( <a href="#robo547">cl_qlist_head</a>( p_list ), p_list_item );
+
+        p_list-&gt;count++;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to insert the object.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure to add.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       In debug builds, <strong>cl_qlist_insert_head</strong> asserts that the specified list item
+       is not already in the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo552">cl_qlist_insert_list_head</a>,
+       <a href="#robo553">cl_qlist_insert_list_tail</a>, <a href="#robo549">cl_qlist_insert_array_head</a>,
+       <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>,
+       <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo552">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5flist5fhead">
+Component Library: Quick List/cl_qlist_insert_list_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_list_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_list_head</strong> function merges two quick lists by
+       inserting one at the head of the other.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_insert_list_head</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_dest_list,
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_src_list );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest_list
+               [in] Pointer to destination quicklist object.
+
+       p_src_list
+               [in] Pointer to quicklist to add.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts all list items in the source list to the head of the
+       destination list. The ordering of the list items is preserved.
+
+       The list pointed to by the p_src_list parameter is empty when
+       the call returns.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo549">cl_qlist_insert_array_head</a>,
+       <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo553">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5flist5ftail">
+Component Library: Quick List/cl_qlist_insert_list_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_list_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_list_tail</strong> function merges two quick lists by
+       inserting one at the tail of the other.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_insert_list_tail</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_dest_list,
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_src_list );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest_list
+               [in] Pointer to destination quicklist object
+
+       p_src_list
+               [in] Pointer to quicklist to add
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts all list items in the source list to the tail of the
+       destination list. The ordering of the list items is preserved.
+
+       The list pointed to by the p_src_list parameter is empty when
+       the call returns.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo549">cl_qlist_insert_array_head</a>,
+       <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo554">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5fnext">
+Component Library: Quick List/cl_qlist_insert_next</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_next</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_next</strong> function inserts a list item after a specified
+       list item in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_insert_next</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_new_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_new_item );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        /*
+         * The list item must not already be part of the list.  Note that this
+         * assertion may fail if an uninitialized list item happens to have its
+         * list pointer equal to the specified list.  The chances of this
+         * happening are acceptable in light of the value of this check.
+         */
+        CL_ASSERT( p_new_item-&gt;p_list != p_list );
+
+#if defined( _DEBUG_ )
+        p_new_item-&gt;p_list = p_list;
+#endif
+
+        __cl_primitive_insert( <a href="#robo558">cl_qlist_next</a>( p_list_item ), p_new_item );
+
+        p_list-&gt;count++;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to add the new item.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure.
+
+       p_new_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure to add to the quick list.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts the new list item after the list item specified by p_list_item.
+       The list item specified by p_list_item must be in the quick list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>,
+       <a href="#robo549">cl_qlist_insert_array_head</a>, <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo555">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5fprev">
+Component Library: Quick List/cl_qlist_insert_prev</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_prev</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_prev</strong> function inserts a list item before a
+       specified list item in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_insert_prev</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_new_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_new_item );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        /*
+         * The list item must not already be part of the list.  Note that this
+         * assertion may fail if an uninitialized list item happens to have its
+         * list pointer equal to the specified list.  The chances of this
+         * happening are acceptable in light of the value of this check.
+         */
+        CL_ASSERT( p_new_item-&gt;p_list != p_list );
+
+#if defined( _DEBUG_ )
+        p_new_item-&gt;p_list = p_list;
+#endif
+
+        __cl_primitive_insert( p_list_item, p_new_item );
+
+        p_list-&gt;count++;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to add the new item.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure.
+
+       p_new_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure to add to the quick list.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Inserts the new list item before the list item specified by p_list_item.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo554">cl_qlist_insert_next</a>, <a href="#robo551">cl_qlist_insert_head</a>,
+       <a href="#robo556">cl_qlist_insert_tail</a>, <a href="#robo552">cl_qlist_insert_list_head</a>, <a href="#robo553">cl_qlist_insert_list_tail</a>,
+       <a href="#robo549">cl_qlist_insert_array_head</a>, <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo556">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5finsert5ftail">
+Component Library: Quick List/cl_qlist_insert_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_insert_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_insert_tail</strong> function inserts a list item at the tail
+       of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_insert_tail</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        /*
+         * The list item must not already be part of the list.  Note that this
+         * assertion may fail if an uninitialized list item happens to have its
+         * list pointer equal to the specified list.  The chances of this
+         * happening are acceptable in light of the value of this check.
+         */
+        CL_ASSERT( p_list_item-&gt;p_list != p_list );
+
+#if defined( _DEBUG_ )
+        p_list_item-&gt;p_list = p_list;
+#endif
+
+        /*
+         * Put the new element in front of the end which is the same
+         * as being at the tail
+         */
+        __cl_primitive_insert( &amp;p_list-&gt;end, p_list_item );
+
+        p_list-&gt;count++;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure into which to insert the object.
+
+       p_list_item
+               [in] Pointer to <a href="#robo536">cl_list_item_t</a> structure to add.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       In debug builds, <strong>cl_qlist_insert_tail</strong> asserts that the specified list item
+       is not already in the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo551">cl_qlist_insert_head</a>, <a href="#robo552">cl_qlist_insert_list_head</a>,
+       <a href="#robo553">cl_qlist_insert_list_tail</a>, <a href="#robo549">cl_qlist_insert_array_head</a>,
+       <a href="#robo550">cl_qlist_insert_array_tail</a>, <a href="#robo555">cl_qlist_insert_prev</a>, <a href="#robo554">cl_qlist_insert_next</a>,
+       <a href="#robo564">cl_qlist_remove_tail</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo557">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fmove5fitems">
+Component Library: Quick List/cl_qlist_move_items</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_move_items</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_move_items</strong> function moves list items from one list to
+       another based on the return value of a user supplied function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_qlist_move_items</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_src_list,
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_dest_list,
+        IN      <a href="#robo539">cl_pfn_qlist_find_t</a>     pfn_func,
+        IN      const void* const       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_src_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure from which
+               list items are removed.
+
+       p_dest_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure to which the source
+               list items are added.
+
+       pfn_func
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo539">cl_pfn_qlist_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       If the function specified by the pfn_func parameter returns CL_SUCCESS,
+       the related list item is removed from p_src_list and inserted at the tail
+       of the p_dest_list.
+
+       The <strong>cl_qlist_move_items</strong> function continues iterating through p_src_list
+       from the last item moved, allowing multiple items to be located and moved
+       in a single list iteration.
+
+       The function specified by pfn_func must not perform any list operations,
+       as these would corrupt the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo543">cl_qlist_find_from_head</a>, <a href="#robo544">cl_qlist_find_from_tail</a>,
+       <a href="#robo540">cl_qlist_apply_func</a>, <a href="#robo539">cl_pfn_qlist_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo558">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fnext">
+Component Library: Quick List/cl_qlist_next</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_next</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_next</strong> function returns a pointer to the list item following
+       a given list item in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_next</strong>(
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+
+        /* Return the next item. */
+        return( p_list_item-&gt;p_next );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_item
+               [in] Pointer to the <a href="#robo536">cl_list_item_t</a> whose successor to return.
+
+ Returns:
+       Pointer to the list item following the list item specified by
+       the p_list_item parameter in the quick list.
+
+       Pointer to the list end if p_list_item was at the tail of the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo560">cl_qlist_prev</a>, <a href="#robo542">cl_qlist_end</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo559">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fobj">
+Component Library: Quick List/cl_qlist_obj</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_obj</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <a href="#robo565">cl_qlist_set_obj</a> function returns the object stored in a list object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void* CL_API
+<strong>cl_qlist_obj</strong>(
+        IN      const <a href="#robo537">cl_list_obj_t</a>* const      p_list_obj )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_obj );
+
+        return( (void*)p_list_obj-&gt;p_object );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_obj
+               [in] Pointer to a <a href="#robo537">cl_list_obj_t</a> structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the value of the object pointer stored in the list object.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo565">cl_qlist_set_obj</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo560">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fprev">
+Component Library: Quick List/cl_qlist_prev</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_prev</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_prev</strong> function returns a poirter to the list item preceding
+       a given list item in a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_prev</strong>(
+        IN      const <a href="#robo536">cl_list_item_t</a>* const     p_list_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item );
+
+        /* Return the previous item. */
+        return( p_list_item-&gt;p_prev );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_item
+               [in] Pointer to the <a href="#robo536">cl_list_item_t</a> whose predecessor to return.
+
+ Returns:
+       Pointer to the list item preceding the list item specified by
+       the p_list_item parameter in the quick list.
+
+       Pointer to the list end if p_list_item was at the tail of the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo558">cl_qlist_next</a>, <a href="#robo542">cl_qlist_end</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo561">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fremove5fall">
+Component Library: Quick List/cl_qlist_remove_all</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_remove_all</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_remove_all</strong> function removes all items from a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_remove_all</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_list )
+{
+#if defined( _DEBUG_ )
+        <a href="#robo536">cl_list_item_t</a>  *p_list_item;
+
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+        p_list_item = <a href="#robo547">cl_qlist_head</a>( p_list );
+        while( p_list_item != <a href="#robo542">cl_qlist_end</a>( p_list ) )
+        {
+                p_list_item = <a href="#robo558">cl_qlist_next</a>( p_list_item );
+                <a href="#robo560">cl_qlist_prev</a>( p_list_item )-&gt;p_list = NULL;
+        }
+#endif
+
+        __cl_qlist_reset( p_list );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo564">cl_qlist_remove_tail</a>,
+       <a href="#robo563">cl_qlist_remove_item</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo562">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fremove5fhead">
+Component Library: Quick List/cl_qlist_remove_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_remove_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_remove_head</strong> function removes and returns the list item
+       at the head of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_remove_head</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_list )
+{
+        <a href="#robo536">cl_list_item_t</a>  *p_item;
+
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        p_item = <a href="#robo547">cl_qlist_head</a>( p_list );
+        /* CL_ASSERT that the list item is part of the list. */
+        CL_ASSERT( p_item-&gt;p_list == p_list );
+
+        if( p_item == <a href="#robo542">cl_qlist_end</a>( p_list ) )
+                return( p_item );
+
+#if defined( _DEBUG_ )
+        /* Clear the item's link to the list. */
+        p_item-&gt;p_list = NULL;
+#endif
+
+        __cl_primitive_remove( p_item );
+
+        p_list-&gt;count--;
+
+        return( p_item );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+ RETURN VALUES
+       Returns a pointer to the list item formerly at the head of the quick list.
+
+       Pointer to the list end if the list was empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo564">cl_qlist_remove_tail</a>, <a href="#robo561">cl_qlist_remove_all</a>, <a href="#robo563">cl_qlist_remove_item</a>,
+       <a href="#robo542">cl_qlist_end</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo563">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fremove5fitem">
+Component Library: Quick List/cl_qlist_remove_item</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_remove_item</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_remove_item</strong> function removes a specific list item from a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_remove_item</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const               p_list,
+        IN      <a href="#robo536">cl_list_item_t</a>* const   p_list_item )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_item  );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+        /* CL_ASSERT that the list item is part of the list. */
+        CL_ASSERT( p_list_item-&gt;p_list == p_list );
+
+        if( p_list_item == <a href="#robo542">cl_qlist_end</a>( p_list ) )
+                return;
+
+#if defined( _DEBUG_ )
+        /* Clear the item's link to the list. */
+        p_list_item-&gt;p_list = NULL;
+#endif
+
+        __cl_primitive_remove( p_list_item );
+
+        p_list-&gt;count--;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure from which to remove the item.
+
+       p_list_item
+               [in] Pointer to a <a href="#robo536">cl_list_item_t</a> structure to remove.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Removes the list item pointed to by the p_list_item parameter from
+       its list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo564">cl_qlist_remove_tail</a>, <a href="#robo561">cl_qlist_remove_all</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo564">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fremove5ftail">
+Component Library: Quick List/cl_qlist_remove_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_remove_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_remove_tail</strong> function removes and returns the list item
+       at the tail of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_remove_tail</strong>(
+        IN      <a href="#robo566">cl_qlist_t</a>* const       p_list )
+{
+        <a href="#robo536">cl_list_item_t</a>  *p_item;
+
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        p_item = <a href="#robo567">cl_qlist_tail</a>( p_list );
+        /* CL_ASSERT that the list item is part of the list. */
+        CL_ASSERT( p_item-&gt;p_list == p_list );
+
+        if( p_item == <a href="#robo542">cl_qlist_end</a>( p_list ) )
+                return( p_item );
+
+#if defined( _DEBUG_ )
+        /* Clear the item's link to the list. */
+        p_item-&gt;p_list = NULL;
+#endif
+
+        __cl_primitive_remove( p_item );
+
+        p_list-&gt;count--;
+
+        return( p_item );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+ RETURN VALUES
+       Returns a pointer to the list item formerly at the tail of the quick list.
+
+       Pointer to the list end if the list was empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo562">cl_qlist_remove_head</a>, <a href="#robo561">cl_qlist_remove_all</a>, <a href="#robo563">cl_qlist_remove_item</a>,
+       <a href="#robo542">cl_qlist_end</a>, <a href="#robo567">cl_qlist_tail</a>, <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo565">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5fset5fobj">
+Component Library: Quick List/cl_qlist_set_obj</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_set_obj</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_set_obj</strong> function sets the object stored in a list object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_qlist_set_obj</strong>(
+        IN      <a href="#robo537">cl_list_obj_t</a>* const    p_list_obj,
+        IN      const void* const               p_object )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list_obj );
+        p_list_obj-&gt;p_object = p_object;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list_obj
+               [in] Pointer to a <a href="#robo537">cl_list_obj_t</a> structure.
+
+       p_object
+               [in] User defined context.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo559">cl_qlist_obj</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo566">[Structures]<a name="Component20Library3a20Quick20List2fcl5fqlist5ft">
+Component Library: Quick List/cl_qlist_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick list structure.
+
+       The <strong>cl_qlist_t</strong> structure should be treated as opaque and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_qlist
+{
+        <a href="#robo536">cl_list_item_t</a>  end;
+        size_t                  count;
+        cl_state_t              state;
+
+} <strong>cl_qlist_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       end
+               <a href="./cl_list_h.html#robo11">List</a> item used to mark the end of the list.
+
+       count
+               Number of items in the list.
+
+       state
+               State of the quick list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo567">[Functions]<a name="Component20Library3a20Quick20List2fcl5fqlist5ftail">
+Component Library: Quick List/cl_qlist_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlist_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlist_tail</strong> function returns the list item at
+       the tail of a quick list.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo536">cl_list_item_t</a>* CL_API
+<strong>cl_qlist_tail</strong>(
+        IN      const <a href="#robo566">cl_qlist_t</a>* const p_list )
+{
+        /* CL_ASSERT that a non-null pointer is provided. */
+        CL_ASSERT( p_list );
+        /* CL_ASSERT that the list was initialized. */
+        CL_ASSERT( p_list-&gt;state == CL_INITIALIZED );
+
+        return( <a href="#robo560">cl_qlist_prev</a>( &amp;p_list-&gt;end ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_list
+               [in] Pointer to a <a href="#robo566">cl_qlist_t</a> structure.
+
+ RETURN VALUES
+       Pointer to the list item at the tail of the quick list.
+
+       Pointer to the list end if the list was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_qlist_tail</strong> does not remove the item from the list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick <a href="./cl_list_h.html#robo11">List</a>, <a href="#robo547">cl_qlist_head</a>, <a href="#robo558">cl_qlist_next</a>, <a href="#robo560">cl_qlist_prev</a>, <a href="#robo542">cl_qlist_end</a>,
+       <a href="#robo536">cl_list_item_t</a>
+</pre>
+</span>
+</body>
+</html>

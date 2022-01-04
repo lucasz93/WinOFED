@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_passivelock_h.html</title>
+<!-- Source: ./inc/complib/cl_passivelock.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_passivelock.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo15">[Modules]<a name="Component20Library2fPassive20Lock">
+Component Library/Passive Lock</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Passive Lock
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Passive Lock provides synchronization between multiple threads that
+       are sharing the lock with a single thread holding the lock exclusively.
+
+       Passive lock works exclusively between threads and cannot be used in
+       situations where the caller cannot be put into a waiting state.
+
+       The passive lock functions operate a <a href="#robo474">cl_plock_t</a> structure which should
+       be treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo474">cl_plock_t</a>
+
+       Initialization:
+               <a href="#robo469">cl_plock_construct</a>, <a href="#robo472">cl_plock_init</a>, <a href="#robo470">cl_plock_destroy</a>
+
+       Manipulation
+               <a href="#robo468">cl_plock_acquire</a>, <a href="#robo471">cl_plock_excl_acquire</a>, <a href="#robo473">cl_plock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo468">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5facquire">
+Component Library: Passive Lock/cl_plock_acquire</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_acquire</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_acquire</strong> function acquires a passive lock for
+       shared access.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_plock_acquire</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        <a href="./cl_types_h.html#robo308">cl_status_t</a>     status;
+
+        CL_ASSERT( p_lock );
+
+        status =
+                <a href="./cl_event_h.html#robo325">cl_event_wait_on</a>( &amp;p_lock-&gt;reader_event, EVENT_NO_TIMEOUT, FALSE );
+        CL_ASSERT( status == CL_SUCCESS );
+
+        /*
+         * Increment the reader count to block a thread trying for exclusive
+         * access.
+         */
+        <a href="./cl_atomic_h.html#robo280">cl_atomic_inc</a>( &amp;p_lock-&gt;reader_count );
+#ifdef DBG_PASSIVE_LOCKS
+        <a href="./cl_debug_h.html#robo311">cl_dbg_out</a>( "<strong>cl_plock_acquire</strong>: ReaderCount = %u\n",
+                p_lock-&gt;reader_count );
+#endif
+        /*
+         * Release the reader event to satisfy the wait of another reader
+         * or a writer.
+         */
+        <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;reader_event );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure to acquire.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo473">cl_plock_release</a>, <a href="#robo471">cl_plock_excl_acquire</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo469">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5fconstruct">
+Component Library: Passive Lock/cl_plock_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_construct</strong> function initializes the state of a
+       passive lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_plock_construct</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        CL_ASSERT( p_lock );
+
+        p_lock-&gt;reader_count = 0;
+        <a href="./cl_event_h.html#robo320">cl_event_construct</a>( &amp;p_lock-&gt;reader_event );
+        <a href="./cl_event_h.html#robo320">cl_event_construct</a>( &amp;p_lock-&gt;writer_event );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo470">cl_plock_destroy</a> without first calling <a href="#robo472">cl_plock_init</a>.
+
+       Calling <strong>cl_plock_construct</strong> is a prerequisite to calling any other
+       passive lock function except <a href="#robo472">cl_plock_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo472">cl_plock_init</a>, <a href="#robo470">cl_plock_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo470">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5fdestroy">
+Component Library: Passive Lock/cl_plock_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_destroy</strong> function performs any necessary cleanup
+       of a passive lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_plock_destroy</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        CL_ASSERT( p_lock );
+        CL_ASSERT( p_lock-&gt;reader_count == 0 );
+
+        <a href="./cl_event_h.html#robo321">cl_event_destroy</a>( &amp;p_lock-&gt;writer_event );
+        <a href="./cl_event_h.html#robo321">cl_event_destroy</a>( &amp;p_lock-&gt;reader_event );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_plock_destroy</strong> performs any necessary cleanup of the specified
+       passive lock.
+
+       This function must only be called if <a href="#robo469">cl_plock_construct</a> or
+       <a href="#robo472">cl_plock_init</a> has been called. The passive lock must not be held
+       when calling this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo469">cl_plock_construct</a>, <a href="#robo472">cl_plock_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo471">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5fexcl5facquire">
+Component Library: Passive Lock/cl_plock_excl_acquire</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_excl_acquire</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_excl_acquire</strong> function acquires exclusive access
+       to a passive lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_plock_excl_acquire</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        <a href="./cl_types_h.html#robo308">cl_status_t</a>     status;
+
+        CL_ASSERT( p_lock );
+
+        /* Acquire the reader event.  This will block new readers. */
+        status =
+                <a href="./cl_event_h.html#robo325">cl_event_wait_on</a>( &amp;p_lock-&gt;reader_event, EVENT_NO_TIMEOUT, FALSE );
+        CL_ASSERT( status == CL_SUCCESS );
+
+        /* Wait for the writer event until all readers have exited. */
+        while( p_lock-&gt;reader_count )
+        {
+#ifdef DBG_PASSIVE_LOCKS
+                <a href="./cl_debug_h.html#robo311">cl_dbg_out</a>( "<strong>cl_plock_excl_acquire</strong>: ReaderCount = %u\n",
+                        p_lock-&gt;reader_count );
+#endif
+                status =
+                        <a href="./cl_event_h.html#robo325">cl_event_wait_on</a>( &amp;p_lock-&gt;writer_event, EVENT_NO_TIMEOUT, FALSE );
+                CL_ASSERT( status == CL_SUCCESS );
+        }
+
+#ifdef DBG_PASSIVE_LOCKS
+        <a href="./cl_debug_h.html#robo311">cl_dbg_out</a>( "<strong>cl_plock_excl_acquire</strong>: Exit\n" );
+#endif
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure to acquire exclusively.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo473">cl_plock_release</a>, <a href="#robo468">cl_plock_acquire</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo472">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5finit">
+Component Library: Passive Lock/cl_plock_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_init</strong> function initializes a passive lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_plock_init</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        <a href="./cl_types_h.html#robo308">cl_status_t</a>     status;
+
+        CL_ASSERT( p_lock );
+
+        <a href="#robo469">cl_plock_construct</a>( p_lock );
+
+        status = <a href="./cl_event_h.html#robo322">cl_event_init</a>( &amp;p_lock-&gt;writer_event, FALSE );
+        if( status != CL_SUCCESS )
+        {
+                <a href="#robo470">cl_plock_destroy</a>( p_lock );
+                return( status );
+        }
+
+        status = <a href="./cl_event_h.html#robo322">cl_event_init</a>( &amp;p_lock-&gt;reader_event, FALSE );
+        if( status != CL_SUCCESS )
+        {
+                <a href="#robo470">cl_plock_destroy</a>( p_lock );
+                return( status );
+        }
+
+        /*
+         * Set the writer event to signalled so that the first
+         * wait operation succeeds.
+         */
+        status = <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;writer_event );
+        if( status != CL_SUCCESS )
+        {
+                <a href="#robo470">cl_plock_destroy</a>( p_lock );
+                return( status );
+        }
+
+        /*
+         * Set the reader event to signalled so that the first
+         * wait operation succeeds.
+         */
+        status = <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;reader_event );
+        if( status != CL_SUCCESS )
+        {
+                <a href="#robo470">cl_plock_destroy</a>( p_lock );
+                return( status );
+        }
+
+        return( CL_SUCCESS );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure to initialize.
+
+ RETURN VALUES
+       CL_SUCCESS if the passive lock was initialized successfully.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo468">cl_plock_acquire</a>, <a href="#robo473">cl_plock_release</a>,
+       <a href="#robo471">cl_plock_excl_acquire</a>, and cl_plock_excl_release.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo469">cl_plock_construct</a>, <a href="#robo470">cl_plock_destroy</a>,
+       <a href="#robo471">cl_plock_excl_acquire</a>, cl_plock_excl_release,
+       <a href="#robo468">cl_plock_acquire</a>, <a href="#robo473">cl_plock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo473">[Functions]<a name="Component20Library3a20Passive20Lock2fcl5fplock5frelease">
+Component Library: Passive Lock/cl_plock_release</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_release</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_plock_release</strong> function releases a passive lock from
+       shared or exclusive access.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_plock_release</strong>(
+        IN      <a href="#robo474">cl_plock_t</a>* const       p_lock )
+{
+        CL_ASSERT( p_lock );
+
+        if( p_lock-&gt;reader_count )
+        {
+
+                /*
+                 * Decrement the count to allow a thread waiting for exclusive
+                 * access to continue.
+                 */
+                <a href="./cl_atomic_h.html#robo279">cl_atomic_dec</a>( &amp;p_lock-&gt;reader_count );
+
+                #ifdef DBG_PASSIVE_LOCKS
+                        <a href="./cl_debug_h.html#robo311">cl_dbg_out</a>( "<strong>cl_plock_release</strong>: ReaderCount = %u\n",
+                                p_lock-&gt;reader_count );
+                #endif
+
+                /* Release a writer, if any. */
+                <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;writer_event );
+        }
+        else
+        {
+                /* Release threads waiting to acquire the lock. */
+                <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;reader_event );
+                <a href="./cl_event_h.html#robo324">cl_event_signal</a>( &amp;p_lock-&gt;writer_event );
+
+                #ifdef DBG_PASSIVE_LOCKS
+                        <a href="./cl_debug_h.html#robo311">cl_dbg_out</a>( "<strong>cl_plock_release</strong>: Exit\n" );
+                #endif
+        }
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_lock
+               [in] Pointer to a <a href="#robo474">cl_plock_t</a> structure to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock, <a href="#robo468">cl_plock_acquire</a>, <a href="#robo471">cl_plock_excl_acquire</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo474">[Structures]<a name="Component20Library3a20Passive20Lock2fcl5fplock5ft">
+Component Library: Passive Lock/cl_plock_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_plock_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Passive Lock structure.
+
+       The <strong>cl_plock_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_plock
+{
+        cl_event_t              reader_event;
+        cl_event_t              writer_event;
+        atomic32_t              reader_count;
+
+} <strong>cl_plock_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       reader_event
+               <a href="./cl_event_h.html#robo7">Event</a> used to synchronize shared access to the lock.
+
+       writer_event
+               <a href="./cl_event_h.html#robo7">Event</a> used to synchronize exclusive access to the lock.
+
+       reader_count
+               Number of threads holding the lock for shared access.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Passive Lock
+</pre>
+</span>
+</body>
+</html>

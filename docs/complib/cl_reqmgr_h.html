@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_reqmgr_h.html</title>
+<!-- Source: ./inc/complib/cl_reqmgr.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_reqmgr.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo25">[Modules]<a name="Component20Library2fRequest20Manager">
+Component Library/Request Manager</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Request Manager
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Request Manager manages synchronous as well as asynchronous
+       requests for objects.
+
+       Request manager does not supply the objects, but merely returns whether
+       objects are available to satisfy requests. This allows users to use
+       various sources for objects.
+
+       While the request manager manages synchronous and asynchronous requests
+       for objects, it does not itself operate asynchronously. Instead, the
+       <a href="#robo627">cl_req_mgr_resume</a> function returns information for resuming asynchronous
+       requests. If a call to <a href="#robo627">cl_req_mgr_resume</a> returns CL_SUCCESS, additional
+       requests may be able to resume. It is recommended that users flush
+       pending requests by calling <a href="#robo627">cl_req_mgr_resume</a> while CL_SUCCESS is returned.
+
+       The request manager functions operates on a <a href="#robo628">cl_req_mgr_t</a> structure which
+       should be treated as opaque and should be manipulated only through the
+       provided functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Types:
+               <a href="#robo629">cl_req_type_t</a>
+
+       Structures:
+               <a href="#robo628">cl_req_mgr_t</a>
+
+       Callbacks:
+               <a href="#robo621">cl_pfn_req_cb_t</a>, <a href="#robo622">cl_pfn_reqmgr_get_count_t</a>
+
+       Initialization/Destruction:
+               <a href="#robo623">cl_req_mgr_construct</a>, <a href="#robo626">cl_req_mgr_init</a>, <a href="#robo624">cl_req_mgr_destroy</a>
+
+       Manipulation:
+               <a href="#robo625">cl_req_mgr_get</a>, <a href="#robo627">cl_req_mgr_resume</a>
+
+       Attributes:
+               cl_is_req_mgr_inited, cl_req_mgr_count
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo621">[Definitions]<a name="Component20Library3a20Request20Manager2fcl5fpfn5freq5fcb5ft">
+Component Library: Request Manager/cl_pfn_req_cb_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_req_cb_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_req_cb_t</strong> function type defines the prototype for functions
+       used to store a function pointer to a user defined function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_req_cb_t</strong>)( void );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       This function does not take parameters.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Function pointers specified by this parameter do not have to match the
+       defined syntax, as these callbacks are never invoked directly by the
+       request manager.  When specifying a function with a different prototype,
+       cast the function pointer to this type.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo625">cl_req_mgr_get</a>, <a href="#robo627">cl_req_mgr_resume</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo622">[Definitions]<a name="Component20Library3a20Request20Manager2fcl5fpfn5freqmgr5fget5fcount5ft">
+Component Library: Request Manager/cl_pfn_reqmgr_get_count_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_reqmgr_get_count_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_reqmgr_get_count_t</strong> function type defines the prototype for
+       functions used to retrieve the number of available objects in a pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef size_t
+(CL_API *<strong>cl_pfn_reqmgr_get_count_t</strong>)(
+        IN      void*   context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       Context
+               [in] Context provided in a call to <a href="#robo626">cl_req_mgr_init</a> by
+               the get_context parameter.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the number of objects available in an object pool for which
+       requests are managed by a request manager.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function passed into <a href="#robo626">cl_req_mgr_init</a>. This function is invoked by the
+       request manager when trying to fulfill requests for resources, either
+       through a call to <a href="#robo625">cl_req_mgr_get</a> or <a href="#robo627">cl_req_mgr_resume</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo626">cl_req_mgr_init</a>, <a href="#robo625">cl_req_mgr_get</a>, <a href="#robo627">cl_req_mgr_resume</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo623">[Functions]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5fconstruct">
+Component Library: Request Manager/cl_req_mgr_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_mgr_construct</strong> function constructs a request manager.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_req_mgr_construct</strong>(
+        IN      <a href="#robo628">cl_req_mgr_t</a>* const     p_req_mgr );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_req_mgr
+               [in] Pointer to a <a href="#robo628">cl_req_mgr_t</a> structure to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_req_mgr_construct</strong> allows calling <a href="#robo624">cl_req_mgr_destroy</a> without first
+       calling <a href="#robo626">cl_req_mgr_init</a>.
+
+       Calling <strong>cl_req_mgr_construct</strong> is a prerequisite to calling any other
+       request manager function except <a href="#robo626">cl_req_mgr_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo626">cl_req_mgr_init</a>, <a href="#robo624">cl_req_mgr_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo624">[Functions]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5fdestroy">
+Component Library: Request Manager/cl_req_mgr_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_mgr_destroy</strong> function destroys a request manager.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_req_mgr_destroy</strong>(
+        IN      <a href="#robo628">cl_req_mgr_t</a>* const     p_req_mgr );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_req_mgr
+               [in] Pointer to a <a href="#robo628">cl_req_mgr_t</a> structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_req_mgr_destroy</strong> frees all memory allocated by the request manager.
+       Further operations on the request manager should not be attempted.
+
+       This function should only be called after a call to <a href="#robo623">cl_req_mgr_construct</a>
+       or <a href="#robo626">cl_req_mgr_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo623">cl_req_mgr_construct</a>, <a href="#robo626">cl_req_mgr_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo625">[Functions]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5fget">
+Component Library: Request Manager/cl_req_mgr_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_mgr_get</strong> function handles synchronous and asynchronous
+       requests for objects.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_req_mgr_get</strong>(
+        IN              <a href="#robo628">cl_req_mgr_t</a>* const     p_req_mgr,
+        IN OUT  size_t* const           p_count,
+        IN              const <a href="#robo629">cl_req_type_t</a>     req_type,
+        IN              <a href="#robo621">cl_pfn_req_cb_t</a>         pfn_callback,
+        IN              const void* const       context1,
+        IN              const void* const       context2 );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_req_mgr
+               [in] Pointer to a <a href="#robo628">cl_req_mgr_t</a> structure from which to check
+               for resources.
+
+       p_count
+               [in/out] On input, contains the number of objects requested.
+               On output, contains the number of objects available.
+
+       req_type
+               [in] Enumerated type describing the type of request. Valid values are:
+                       ReqGetSync
+                               Synchronous request.
+                       ReqGetAsync
+                               Asynchronous requests for which all objects are required at
+                               once.
+                       ReqGetAsyncPartialOk
+                               Asynchronous requests that may be broken into multiple smaller
+                               requests.
+
+       pfn_callback
+               [in] Pointer to a callback function for use by the caller. This
+               callback function is never invoked by the request manager.
+
+       context1
+               [in] First of two contexts for a resource request.
+
+       context2
+               [in] Second of two contexts for a resource request.
+
+ RETURN VALUES
+       CL_SUCCESS if all objects requested are available.
+
+       CL_PENDING if the request could not be completed in its entirety.
+       The p_count parameter contains the number of objects immediately available.
+
+       CL_INSUFFICIENT_RESOURCES if the request could not be completed due to
+       insufficient objects being available.
+
+       CL_INSUFFICIENT_MEMORY if the request failed due to a lack of system memory.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Upon successful completion of this function, the p_count parameter contains
+       the number of objects available.
+
+       Synchronous requests fail if there are any asynchronous requests pending,
+       or if there are not enough resources to immediately satisfy the request in
+       its entirety .
+
+       Asynchronous requests fail if there is insufficient system memory to
+       queue them.
+
+       Once an asynchronous request is queued, use <a href="#robo627">cl_req_mgr_resume</a> to retrieve
+       information for resuming queued requests.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo627">cl_req_mgr_resume</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo626">[Functions]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5finit">
+Component Library: Request Manager/cl_req_mgr_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_mgr_init</strong> function initializes a request manager for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_req_mgr_init</strong>(
+        IN      <a href="#robo628">cl_req_mgr_t</a>* const                     p_req_mgr,
+        IN      <a href="#robo622">cl_pfn_reqmgr_get_count_t</a>       pfn_get_count,
+        IN      const void* const                       get_context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_req_mgr
+               [in] Pointer to a <a href="#robo628">cl_req_mgr_t</a> structure to initialize.
+
+       pfn_get_count
+               [in] Callback function invoked by the request manager to get the
+               number of objects available in a pool of objects for which the
+               request manager is managing requests.
+               See the cl_pfn_req_mgr_get_count_t function type declaration for
+               details about the callback function.
+
+       get_context
+               [in] Context to pass into the function specified by the
+               pfn_get_count parameter.
+
+ RETURN VALUES
+       CL_SUCCESS if the request manager was successfully initialized.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to initialize
+       the request manager.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo623">cl_req_mgr_construct</a>, <a href="#robo624">cl_req_mgr_destroy</a>, <a href="#robo625">cl_req_mgr_get</a>,
+       <a href="#robo627">cl_req_mgr_resume</a>, cl_pfn_req_mgr_get_count_t
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo627">[Functions]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5fresume">
+Component Library: Request Manager/cl_req_mgr_resume</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_resume</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_mgr_resume</strong> function attempts to resume queued requests.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_req_mgr_resume</strong>(
+        IN      <a href="#robo628">cl_req_mgr_t</a>* const             p_req_mgr,
+        OUT     size_t* const                   p_count,
+        OUT     <a href="#robo621">cl_pfn_req_cb_t</a>* const  ppfn_callback,
+        OUT     const void** const              p_context1,
+        OUT     const void** const              p_context2 );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_req_mgr
+               [in] Pointer to a <a href="#robo628">cl_req_mgr_t</a> structure from which to resume requests.
+
+       p_count
+               [out] Contains the number of objects available for a resuming request.
+
+       ppfn_callback
+               [out] Contains the pfn_callback value for the resuming request, as
+               provided to the call to the <a href="#robo625">cl_req_mgr_get</a> function.
+
+       p_context1
+               [out] Contains the context1 value for the resuming request, as provided
+               to the call to the <a href="#robo625">cl_req_mgr_get</a> function.
+
+       p_context2
+               [out] Contains the context2 value for the resuming request, as provided
+               to the call to the <a href="#robo625">cl_req_mgr_get</a> function.
+
+ RETURN VALUES
+       CL_SUCCESS if a request was completed.
+
+       CL_PENDING if a request was continued, but not completed.
+
+       CL_INSUFFICIENT_RESOURCES if a request could not be continued due to
+       a lack of resources.
+
+       CL_NOT_DONE if there were no pending requests.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_req_mgr_resume</strong> resumes at most one request. Further requests may be
+       able to be resumed if this call returns CL_SUCCESS.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo625">cl_req_mgr_get</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo628">[Structures]<a name="Component20Library3a20Request20Manager2fcl5freq5fmgr5ft">
+Component Library: Request Manager/cl_req_mgr_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_mgr_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick composite pool structure.
+
+       The <strong>cl_req_mgr_t</strong> structure should be treated as opaque and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_req_mgr
+{
+        <a href="#robo622">cl_pfn_reqmgr_get_count_t</a>       pfn_get_count;
+        const void                                      *get_context;
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                                      request_queue;
+        <a href="./cl_qpool_h.html#robo608">cl_qpool_t</a>                                      request_pool;
+
+} <strong>cl_req_mgr_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pfn_get_count
+               Pointer to the count callback function.
+
+       get_context
+               Context to pass as single parameter to count callback.
+
+       request_queue
+               Pending requests for elements.
+
+       request_pool
+               <a href="./cl_pool_h.html#robo18">Pool</a> of request structures for storing requests in the request queue.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo629">[Definitions]<a name="Component20Library3a20Request20Manager2fcl5freq5ftype5ft">
+Component Library: Request Manager/cl_req_type_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_req_type_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_req_type_t</strong> enumerated type describes the type of request.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef enum _cl_req_type
+{
+        REQ_GET_SYNC,
+        REQ_GET_ASYNC,
+        REQ_GET_PARTIAL_OK
+
+} <strong>cl_req_type_t</strong>;
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       REQ_GET_SYNC
+               Synchronous request.
+
+       REQ_GET_ASYNC
+               Asynchronous requests for which all objects are required at once.
+
+       REQ_GET_PARTIAL_OK
+               Asynchronous requests that may be broken into multiple smaller requests.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Request Manager, <a href="#robo625">cl_req_mgr_get</a>
+</pre>
+</span>
+</body>
+</html>

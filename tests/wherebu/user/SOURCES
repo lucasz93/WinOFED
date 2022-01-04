@@ -1,0 +1,26 @@
+TARGETNAME=wherebu
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=\
+	wherebu.cpp
+
+TARGETLIBS=\
+	$(TARGETPATH)\*\ibat.lib \
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\Iphlpapi.lib
+
+MSC_WARNING_LEVEL= /W4
+
+INCLUDES=$(SDK_INC_PATH);\
+	..\..\..\inc;\
+	..\..\..\inc\user;\
+	..\..\..\ulp\libibmad\src\$(O);
+
+!if $(_NT_TARGET_VERSION) < 0x602
+INCLUDES=$(INCLUDES) \
+         $(PLATFORM_SDK_PATH)\include;
+!endif
+

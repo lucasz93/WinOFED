@@ -1,0 +1,29 @@
+TARGETNAME=ndinstall
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+NTTARGETFILES=Custom_target
+
+INCLUDES=..\..\..\inc;\
+	..\..\..\inc\user;
+
+SOURCES= \
+	installsp.rc \
+	installsp.c
+
+USER_C_FLAGS=$(USER_C_FLAGS) 
+#-DPERFMON_ENABLED
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\LoadPerf.lib 
+
+MSC_WARNING_LEVEL= /W3
+
+LINKER_FLAGS=$(LINKER_FLAGS)
+
+SXS_APPLICATION_MANIFEST=ndinstall.exe.manifest
+SXS_ASSEMBLY_VERSION=1.0
+SXS_ASSEMBLY_NAME=ndinstall.exe
+SXS_ASSEMBLY_LANGUAGE=0000

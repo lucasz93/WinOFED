@@ -1,0 +1,30 @@
+TARGETNAME=rsinstall
+TARGETPATH=..\..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+INCLUDES=..\..\..\..\..\inc;\
+	..\..\..\..\..\inc\user;\
+	..\..\..\include;\
+	$(PLATFORM_SDK_PATH)\include;
+
+SOURCES= \
+	rsinstall.rc \
+	rsinstall.c
+
+USER_C_FLAGS=$(USER_C_FLAGS)
+# -DPERFMON_ENABLED
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\LoadPerf.lib 
+
+MSC_WARNING_LEVEL= /W3
+
+LINKER_FLAGS=$(LINKER_FLAGS)
+
+SXS_APPLICATION_MANIFEST=rsinstall.exe.manifest
+SXS_ASSEMBLY_VERSION=1.0
+SXS_ASSEMBLY_NAME=rsinstall.exe
+SXS_ASSEMBLY_LANGUAGE=0000

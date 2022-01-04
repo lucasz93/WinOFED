@@ -1,0 +1,16 @@
+TARGETNAME=qlgcvnic_config
+TARGETPATH=..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES= qlgcvnic_config.rc \
+	vnic_child_config.c
+
+INCLUDES=..\..\inc;..\..\inc\user;..\..\core\al
+TARGETLIBS= \
+			$(TARGETPATH)\*\complib.lib \
+
+RCOPTIONS=/I..\..\win\include
+
+MSC_WARNING_LEVEL= /W3

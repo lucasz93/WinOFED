@@ -1,0 +1,33 @@
+TARGETNAME = wvnd2prov
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\nd_export.def
+
+DLLENTRY = DllMain
+USE_NTDLL = 1
+
+SOURCES =			\
+	nd_main.cpp		\
+	nd_base.cpp		\
+	nd_provider.cpp \
+	nd_adapter.cpp	\
+	nd_listen.cpp	\
+	nd_connect.cpp	\
+	nd_qp.cpp		\
+	nd_ep.cpp		\
+	nd_mw.cpp		\
+	nd_cq.cpp		\
+	nd_srq.cpp
+
+INCLUDES = ..\..\..\inc;..\..\..\inc\user;\
+		   ..\..\..\inc\user\linux;$(ND2_SDK_PATH)\include;
+
+TARGETLIBS =						\
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(SDK_LIB_PATH)\iphlpapi.lib	\
+	$(TARGETPATH)\*\ibat.lib		\
+	$(TARGETPATH)\*\winverbs.lib

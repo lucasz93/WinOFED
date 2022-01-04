@@ -1,0 +1,55 @@
+TARGETNAME=mlx4_hca
+TARGETPATH=..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES= \
+	av.c			\
+	ca.c			\
+	cq.c			\
+	data.c			\
+	direct.c		\
+	drv.c			\
+	fw.c			\
+	mcast.c 		\
+	mr.c			\
+	pd.c			\
+	qp.c			\
+	srq.c			\
+	hverbs.c		\
+	vp.c			\
+
+INCLUDES=..;..\inc;..\..\inc;..\bus\inc;..\bus\ib;..\bus\core\$O;..\..\..\..\inc;..\..\..\..\inc\kernel;$(ND_SDK_PATH)\include;
+
+PRECOMPILED_INCLUDE=precomp.h
+
+KMDF_VERSION_MAJOR=1
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN
+#-DUSE_WDM_FRAMEWORK 
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib	\
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+
+#LINKER_FLAGS=/MAP 
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:debug.h \
+	-func:HCA_PRINT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+#	-func:HCA_PRINT_EV(LEVEL,FLAGS,(MSG,...)) \
+
+#MSC_OPTIMIZATION=/Oi
+MSC_WARNING_LEVEL= /W4

@@ -1,0 +1,19 @@
+ib-diags/ibping: thread callback must be __cdecl for windows
+
+The WDK build environment builds using stdcall, but the thread callback must be __cdecl.
+This is a windows specific build issue with the ported ib-diags.
+
+Signed-off-by: Sean Hefty <sean.hefty@intel.com>
+---
+diff -up -r -I '\$Id:' infiniband-diags.git/src/ibping.c infiniband-diags/src/ibping.c
+--- infiniband-diags.git/src/ibping.c	2009-05-27 12:50:36.676250000 -0700
++++ infiniband-diags/src/ibping.c	2009-05-27 12:31:12.443931500 -0700
+@@ -141,7 +141,7 @@ static uint64_t minrtt = ~0ull, maxrtt, 
+ static uint64_t start, total_time, replied, lost, ntrans;
+ static ib_portid_t portid = {0};
+ 
+-void report(int sig)
++void __cdecl report(int sig)
+ {
+ 	total_time = cl_get_time_stamp() - start;
+ 

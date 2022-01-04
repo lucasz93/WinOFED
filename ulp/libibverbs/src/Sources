@@ -1,0 +1,28 @@
+TARGETNAME = libibverbs
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\ibv_exports.def
+
+DLLENTRY = DllMain
+USE_MSVCRT = 1
+NTTARGETFILES=Custom_target
+
+SOURCES = \
+	ibverbs.rc		\
+	ibv_main.cpp	\
+	verbs.cpp		\
+	device.cpp		\
+	enum_strs.cpp
+
+INCLUDES = ..\include;..\..\..\inc;..\..\..\inc\user;..\..\..\inc\user\linux;\
+			..\..\..\core\winverbs\user\$(O);
+
+USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_IBV_SYMBOLS
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(TARGETPATH)\*\winverbs.lib

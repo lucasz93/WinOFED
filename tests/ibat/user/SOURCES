@@ -1,0 +1,21 @@
+TARGETNAME=PrintIP
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=\
+	PrintIp.c
+
+TARGETLIBS=\
+	$(TARGETPATH)\*\ibat_ex.lib \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\ibal.lib \
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\Iphlpapi.lib
+
+MSC_WARNING_LEVEL= /W4
+
+INCLUDES=..\..\..\inc;\
+	..\..\..\inc\user;\
+	$(PLATFORM_SDK_PATH)\include;

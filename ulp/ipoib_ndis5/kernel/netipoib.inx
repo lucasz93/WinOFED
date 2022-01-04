@@ -1,0 +1,286 @@
+; OpenFabrics Alliance Internet Protocol over InfiniBand Adapter
+; Copyright 2005 SilverStorm Technologies all Rights Reserved.
+; Copyright 2006 Mellanox Technologies all Rights Reserved.
+
+[Version]
+Signature   = "$Windows NT$"
+Class       = Net
+ClassGUID   = {4d36e972-e325-11ce-bfc1-08002be10318}
+Provider    = %OPENIB%
+DriverVer=06/11/2008,1.0.0000.1207
+CatalogFile=ipoib.cat
+
+[Manufacturer]
+%OPENIB%       = OPENIB,ntx86,ntamd64,ntia64
+
+[ControlFlags]
+ExcludeFromSelect = IBA\IPoIB
+
+[OPENIB]
+; empty since we don't support W9x/Me
+
+[OPENIB.ntx86]
+%IpoibDesc%      = Ipoib.DDInstall,    IBA\IPoIB   ; Internet Protocol over InfiniBand Adapter
+%IpoibDescP%     = Ipoib.DDInstall,    IBA\IPoIBP  ; Internet Protocol over InfiniBand Adapter with partition key
+
+[OPENIB.ntamd64]
+%IpoibDesc%      = Ipoib.DDInstall,    IBA\IPoIB   ; Internet Protocol over InfiniBand Adapter
+%IpoibDescP%     = Ipoib.DDInstall,    IBA\IPoIBP  ; Internet Protocol over InfiniBand Adapter with partition key
+
+[OPENIB.ntia64]
+%IpoibDesc%      = Ipoib.DDInstall,    IBA\IPoIB   ; Internet Protocol over InfiniBand Adapter
+%IpoibDescP%     = Ipoib.DDInstall,    IBA\IPoIBP  ; Internet Protocol over InfiniBand Adapter with partition key
+
+[Ipoib.DDInstall.ntx86]
+Characteristics = 0x81 ; NCF_HAS_UI | NCF_VIRTUAL
+AddReg          = IpoibAddReg
+CopyFiles       = IpoibCopyFiles
+CopyFiles       = WsdCopyFiles
+CopyFiles       = NdCopyFiles
+
+[Ipoib.DDInstall.ntamd64]
+Characteristics = 0x81 ; NCF_HAS_UI | NCF_VIRTUAL
+AddReg          = IpoibAddReg
+CopyFiles       = IpoibCopyFiles
+CopyFiles       = WsdCopyFiles
+CopyFiles       = NdCopyFiles
+CopyFiles       = WOW64CopyFiles
+
+[Ipoib.DDInstall.ntia64]
+Characteristics = 0x81 ; NCF_HAS_UI | NCF_VIRTUAL
+AddReg          = IpoibAddReg
+CopyFiles       = IpoibCopyFiles
+CopyFiles       = WsdCopyFiles
+CopyFiles       = NdWvCopyFiles
+CopyFiles       = WOW64IA64CopyFiles
+
+[Ipoib.DDInstall.ntx86.Services]
+AddService = ipoib, 2, IpoibService, IpoibEventLog
+
+[Ipoib.DDInstall.ntamd64.Services]
+AddService = ipoib, 2, IpoibService, IpoibEventLog
+
+[Ipoib.DDInstall.ntia64.Services]
+AddService = ipoib, 2, IpoibService, IpoibEventLog
+
+[IpoibAddReg]
+HKR, ,RDMACapable, %REG_DWORD%, 1
+HKR, Ndi,                       Service,    0, "ipoib"
+HKR, Ndi\Interfaces,            UpperRange, 0, "ndis5"
+HKR, Ndi\Interfaces,            LowerRange, 0, "ethernet"
+
+HKR, Ndi\Params\RqDepth,		ParamDesc,	0, %RQ_DEPTH_STR%
+HKR, Ndi\Params\RqDepth,		Type,		0, "dword"
+HKR, Ndi\Params\RqDepth,		Default,	0, "512"
+HKR, Ndi\Params\RqDepth,		Optional,	0, "0"
+HKR, Ndi\Params\RqDepth,		Min,		0, "128"
+HKR, Ndi\Params\RqDepth,		Max,		0, "1024"
+HKR, Ndi\Params\RqDepth,		Step,		0, "128"
+
+HKR, Ndi\Params\RqLowWatermark,	ParamDesc,	0, %RQ_WATERMARK_STR%
+HKR, Ndi\Params\RqLowWatermark,	Type,		0, "dword"
+HKR, Ndi\Params\RqLowWatermark,	Default,	0, "4"
+HKR, Ndi\Params\RqLowWatermark,	Optional,	0, "0"
+HKR, Ndi\Params\RqLowWatermark,	Min,		0, "2"
+HKR, Ndi\Params\RqLowWatermark,	Max,		0, "8"
+HKR, Ndi\Params\RqLowWatermark,	Step,		0, "1"
+
+HKR, Ndi\Params\SqDepth,		ParamDesc,	0, %SQ_DEPTH_STR%
+HKR, Ndi\Params\SqDepth,		Type,		0, "dword"
+HKR, Ndi\Params\SqDepth,		Default,	0, "512"
+HKR, Ndi\Params\SqDepth,		Optional,	0, "0"
+HKR, Ndi\Params\SqDepth,		Min,		0, "128"
+HKR, Ndi\Params\SqDepth,		Max,		0, "1024"
+HKR, Ndi\Params\SqDepth,		Step,		0, "128"
+
+HKR, Ndi\Params\SendChksum,		ParamDesc,	0, %SQ_CSUM_STR%
+HKR, Ndi\Params\SendChksum,		Type,		0, "enum"
+HKR, Ndi\Params\SendChksum,		Default,	0, "1"
+HKR, Ndi\Params\SendChksum,		Optional,	0, "0"
+HKR, Ndi\Params\SendChksum\enum,	"0",	0, %DISABLED_STR%
+HKR, Ndi\Params\SendChksum\enum,	"1",	0, %ENABLED_IF_STR%
+HKR, Ndi\Params\SendChksum\enum,	"2",	0, %BYPASS_STR%
+
+HKR, Ndi\Params\RecvChksum,		ParamDesc,	0, %RQ_CSUM_STR%
+HKR, Ndi\Params\RecvChksum,		Type,		0, "enum"
+HKR, Ndi\Params\RecvChksum,		Default,	0, "1"
+HKR, Ndi\Params\RecvChksum,		Optional,	0, "0"
+HKR, Ndi\Params\RecvChksum\enum,	"0",	0, %DISABLED_STR%
+HKR, Ndi\Params\RecvChksum\enum,	"1",	0, %ENABLED_IF_STR%
+HKR, Ndi\Params\RecvChksum\enum,	"2",	0, %BYPASS_STR%
+
+HKR, Ndi\Params\lso,		ParamDesc,	0, %LSO_STR%
+HKR, Ndi\Params\lso,		Type,		0, "enum"
+HKR, Ndi\Params\lso,		Default,	0, "0"
+HKR, Ndi\Params\lso,		Optional,	0, "0"
+HKR, Ndi\Params\lso\enum,	"0",	0, %DISABLED_STR%
+HKR, Ndi\Params\lso\enum,	"1",	0, %ENABLED_STR%
+
+
+HKR, Ndi\Params\SaTimeout,		ParamDesc,	0, %SA_QUERY_TO_STR%
+HKR, Ndi\Params\SaTimeout,		Type,		0, "dword"
+HKR, Ndi\Params\SaTimeout,		Default,	0, "1000"
+HKR, Ndi\Params\SaTimeout,		Optional,	0, "0"
+HKR, Ndi\Params\SaTimeout,		Min,		0, "500"
+HKR, Ndi\Params\SaTimeout,		Step,		0, "250"
+
+HKR, Ndi\Params\SaRetries,		ParamDesc,	0, %SA_QUERY_RETRY_STR%
+HKR, Ndi\Params\SaRetries,		Type,		0, "dword"
+HKR, Ndi\Params\SaRetries,		Default,	0, "10"
+HKR, Ndi\Params\SaRetries,		Optional,	0, "0"
+HKR, Ndi\Params\SaRetries,		Min,		0, "1"
+
+HKR, Ndi\Params\RecvRatio,		ParamDesc,	0, %RECV_RATIO_STR%
+HKR, Ndi\Params\RecvRatio,		Type,		0, "dword"
+HKR, Ndi\Params\RecvRatio,		Default,	0, "1"
+HKR, Ndi\Params\RecvRatio,		Optional,	0, "0"
+HKR, Ndi\Params\RecvRatio,		Min,		0, "1"
+HKR, Ndi\Params\RecvRatio,		Max,		0, "10"
+
+HKR, Ndi\Params\PayloadMtu,		ParamDesc,	0, %MTU_STR%
+HKR, Ndi\Params\PayloadMtu,		Type,		0, "dword"
+HKR, Ndi\Params\PayloadMtu,		Default,	0, "2044"
+HKR, Ndi\Params\PayloadMtu,		Min,		0, "512"
+HKR, Ndi\Params\PayloadMtu,		Max,		0, "4092"
+
+HKR, Ndi\Params\MCLeaveRescan,		ParamDesc,	0, %MC_RESCAN_STR%
+HKR, Ndi\Params\MCLeaveRescan,		Type,		0, "dword"
+HKR, Ndi\Params\MCLeaveRescan,		Default,	0, "260"
+HKR, Ndi\Params\MCLeaveRescan,		Optional,	0, "0"
+HKR, Ndi\Params\MCLeaveRescan,		Min,		0, "1"
+HKR, Ndi\Params\MCLeaveRescan,		Max,		0, "3600"
+
+HKR, Ndi\Params\GUIDMask,		ParamDesc,	0, %GUID_MASK_STR%
+HKR, Ndi\Params\GUIDMask,		Type,		0, "dword"
+HKR, Ndi\Params\GUIDMask,		Default,	0, "0"
+HKR, Ndi\Params\GUIDMask,		Optional,	0, "0"
+HKR, Ndi\Params\GUIDMask,		Min,		0, "0"
+HKR, Ndi\Params\GUIDMask,		Max,		0, "252"
+
+HKR, Ndi\Params\BCJoinRetry,		ParamDesc,	0, %BC_JOIN_RETRY_STR%
+HKR, Ndi\Params\BCJoinRetry,		Type,		0, "dword"
+HKR, Ndi\Params\BCJoinRetry,		Default,	0, "50"
+HKR, Ndi\Params\BCJoinRetry,		Optional,	0, "0"
+HKR, Ndi\Params\BCJoinRetry,		Min,		0, "0"
+HKR, Ndi\Params\BCJoinRetry,		Max,		0, "1000"
+
+
+[IpoibService]
+DisplayName     = %IpoibServiceDispName%
+ServiceType     = 1 ;%SERVICE_KERNEL_DRIVER%
+StartType       = 3 ;%SERVICE_DEMAND_START%
+ErrorControl    = 1 ;%SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ipoib.sys
+LoadOrderGroup  = NDIS
+AddReg          = Ipoib.ParamsReg
+
+[Ipoib.ParamsReg]
+HKR,"Parameters","DebugLevel",%REG_DWORD_NO_CLOBBER%,0x00000002
+HKR,"Parameters","DebugFlags",%REG_DWORD_NO_CLOBBER%,0x00000fff
+HKR,"Parameters","bypass_check_bcast_rate",%REG_DWORD_NO_CLOBBER%,0x00000000
+
+[IpoibEventLog]
+AddReg = IpoibAddEventLogReg
+
+[IpoibAddEventLogReg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\netevent.dll;%%SystemRoot%%\System32\drivers\ipoib.sys"
+HKR, , TypesSupported,   0x00010001, 7
+
+
+[IpoibCopyFiles]
+ipoib.sys,,,2
+
+[WsdCopyFiles]
+ibwsd.dll,,,0x00000002
+
+[NdCopyFiles]
+ibndprov.dll,,,0x00000002
+wvndprov.dll,,,0x00000002
+ndinstall.exe,,,0x00000002
+
+[NdWvCopyFiles]
+wvndprov.dll,,,0x00000002
+ndinstall.exe,,,0x00000002
+
+[WOW64CopyFiles]
+ibwsd.dll,ibwsd32.dll,,0x00000002
+ibndprov.dll,ibndprov32.dll,,0x00000002
+wvndprov.dll,wvndprov32.dll,,0x00000002
+
+[WOW64IA64CopyFiles]
+ibwsd.dll,ibwsd32.dll,,0x00000002
+wvndprov.dll,wvndprov32.dll,,0x00000002
+
+[SourceDisksNames.x86]
+1 = %IcsDisk1%,,,""
+
+[SourceDisksNames.amd64]
+1 = %IcsDisk1%,,,""
+
+[SourceDisksNames.ia64]
+1 = %IcsDisk1%,,,""
+
+[SourceDisksFiles.x86]
+ipoib.sys = 1
+ibwsd.dll = 1
+ibndprov.dll = 1
+wvndprov.dll = 1
+ndinstall.exe = 1
+
+[SourceDisksFiles.amd64]
+ipoib.sys = 1
+ibwsd.dll = 1
+ibwsd32.dll = 1
+ibndprov.dll = 1
+ibndprov32.dll = 1
+wvndprov.dll = 1
+wvndprov32.dll = 1
+ndinstall.exe = 1
+
+[SourceDisksFiles.ia64]
+ipoib.sys = 1
+ibwsd.dll = 1
+ibwsd32.dll = 1
+wvndprov.dll = 1
+wvndprov32.dll = 1
+ndinstall.exe = 1
+
+[DestinationDirs]
+IpoibCopyFiles    = %DIRID_DRIVERS%
+WsdCopyFiles      = %DIRID_SYSTEM%
+NdCopyFiles       = %DIRID_SYSTEM%
+NdWvCopyFiles     = %DIRID_SYSTEM%
+WOW64CopyFiles    = %DIRID_SYSTEM_X86%
+WOW64IA64CopyFiles = %DIRID_SYSTEM_X86%
+DefaultDestDir    = %DIRID_SYSTEM%
+
+[Strings]
+OPENIB               = "OpenFabrics Alliance"
+IpoibDesc            = "OpenFabrics IPoIB Adapter"
+IpoibDescP           = "OpenFabrics IPoIB Adapter Partition"
+IpoibServiceDispName = "IPoIB"
+IcsDisk1             = "OpenFabrics IPoIB Disk #1"
+DIRID_SYSTEM         = 11
+DIRID_DRIVERS        = 12
+DIRID_SYSTEM_X86     = 16425
+REG_DWORD            = 0x00010001
+REG_DWORD_NO_CLOBBER = 0x00010003
+
+RQ_DEPTH_STR		= "Receive Queue depth"
+RQ_WATERMARK_STR	= "Receive Queue Low Watermark"
+SQ_DEPTH_STR		= "Send Queue Depth"
+SQ_CSUM_STR		= "Send Checksum Offload"
+RQ_CSUM_STR		= "Recv Checksum Offload"
+LSO_STR			= "Large Send Offload"
+SA_QUERY_TO_STR		= "SA Query Timeout (ms)"
+SA_QUERY_RETRY_STR	= "SA Query Retry Count"
+RECV_RATIO_STR		= "Receive Pool Ratio"
+MTU_STR			= "Payload Mtu size"
+MC_RESCAN_STR		= "MC leave rescan (sec)"
+GUID_MASK_STR		= "GUID bitwise mask"
+BC_JOIN_RETRY_STR   = "Number of retries connecting to bc"
+
+ENABLED_IF_STR		= "Enabled (if supported by HW)"
+ENABLED_STR		= "Enabled"
+DISABLED_STR		= "Disabled"
+BYPASS_STR		= "Bypass"

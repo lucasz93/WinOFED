@@ -1,0 +1,6 @@
+DIRS=\
+	hw		\
+	core	\
+	ulp		\
+	tools	\
+	tests

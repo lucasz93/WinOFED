@@ -1,0 +1,34 @@
+#if DBG
+LIBRARY osmv_openibd.lib
+#else
+LIBRARY osmv_openib.lib
+#endif
+
+
+EXPORTS
+osm_vendor_set_debug
+cl_disp_init
+cl_disp_destroy
+cl_disp_shutdown
+cl_event_wheel_init
+cl_event_wheel_destroy
+cl_event_wheel_construct
+cl_event_wheel_reg
+cl_event_wheel_num_regs
+umad_receiver
+osm_vendor_init
+osm_vendor_new
+osm_vendor_delete
+osm_vendor_get_all_port_attr
+osm_vendor_bind
+osm_vendor_unbind
+osm_vendor_get
+osm_vendor_put
+osm_vendor_send
+osm_vendor_local_lid_change
+osm_vendor_set_sm
+osm_vendor_set_debug
+osmv_bind_sa
+osmv_query_sa
+osm_vendor_get_guid_ca_and_port
+GetOsmcachePath

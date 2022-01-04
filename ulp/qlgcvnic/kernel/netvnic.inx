@@ -1,0 +1,198 @@
+; QLogic Corporation Ethernet over Infiniband NIC.
+; Copyright (c) QLogic Corporation all Rights Reserved.
+
+[Version]
+Signature="$Windows NT$"
+Class=Net
+ClassGUID={4d36e972-e325-11ce-bfc1-08002be10318}
+Provider=%Inf_Provider%
+DriverVer=01/21/2008,1.0.0000.927
+CatalogFile=netvnic.cat
+
+[ControlFlags]
+ExcludeFromSelect = IBA\V00066aP00000030
+
+; ================= Device Install section =====================
+
+[DestinationDirs]
+DefaultDestDir=12
+
+[SourceDisksNames.x86]
+1=%DiskId%,,,""
+
+[SourceDisksNames.amd64]
+1=%DiskId%,,,""
+
+[SourceDisksNames.ia64]
+1=%DiskId%,,,""
+
+[SourceDisksFiles]
+qlgcvnic.sys=1
+
+[Manufacturer]
+%Inf_Provider% = vnic.DeviceSection,ntx86,ntamd64,ntia64
+
+[vnic.DeviceSection]
+; empty since we don't support W9x/Me
+
+[vnic.DeviceSection.ntx86]
+%vnic.DeviceDesc% = VNIC.DDInstall,IBA\qlgcvnic
+
+[vnic.DeviceSection.ntamd64]
+%vnic.DeviceDesc% = VNIC.DDInstall,IBA\qlgcvnic
+
+[vnic.DeviceSection.ntia64]
+%vnic.DeviceDesc% = VNIC.DDInstall,IBA\qlgcvnic
+
+[vnic.DDInstall.ntx86]
+Characteristics = %CHARACTERISTICS%
+AddReg = vnic.AddReg
+CopyFiles = vnic.CopyFiles
+
+[vnic.DDInstall.ntamd64]
+Characteristics = %CHARACTERISTICS%
+AddReg = vnic.AddReg
+CopyFiles = vnic.CopyFiles
+
+[vnic.DDInstall.ntia64]
+Characteristics = %CHARACTERISTICS%
+AddReg = vnic.AddReg
+CopyFiles = vnic.CopyFiles
+
+[vnic.DDInstall.ntx86.Services]
+AddService = qlgcvnic,%SPSVCINST_ASSOCSERVICE%,vnic.ServiceInstall,vnic.EventLogInstall
+
+[vnic.DDInstall.ntamd64.Services]
+AddService = qlgcvnic,%SPSVCINST_ASSOCSERVICE%,vnic.ServiceInstall,vnic.EventLogInstall
+
+[vnic.DDInstall.ntia64.Services]
+AddService = qlgcvnic,%SPSVCINST_ASSOCSERVICE%,vnic.ServiceInstall,vnic.EventLogInstall
+
+[vnic.CopyFiles]
+qlgcvnic.sys,,,2
+
+[vnic.AddReg]
+HKR, Ndi,                       Service,    0, "qlgcvnic"
+HKR, Ndi\Interfaces,            UpperRange, 0, "ndis5"
+HKR, Ndi\Interfaces,            LowerRange, 0, "ethernet"
+
+HKR, Ndi\params\VlanId,     ParamDesc,     0, "802.1q VlanId"
+HKR, Ndi\params\VlanId,     Type,          0, "dword"
+HKR, Ndi\params\VlanId,     Optional,      0, "1"
+HKR, Ndi\params\VlanId,     Default,       0, "1"
+HKR, Ndi\params\VlanId,     Min,           0, "1"
+HKR, Ndi\params\VlanId,     Max,           0, "4094"
+HKR, Ndi\params\VlanId,     Step,          0, "1"
+HKR, Ndi\params\VlanId,     Base,          0, "10"
+
+HKR, Ndi\params\UserPriority,     ParamDesc,     0, "802.1p Priority"
+HKR, Ndi\params\UserPriority,     Type,          0, "dword"
+HKR, Ndi\Params\UserPriority,     Optional,      0, "1"
+HKR, Ndi\params\UserPriority,     Default,       0, "0"
+HKR, Ndi\params\UserPriority,     Min,           0, "0"
+HKR, Ndi\params\UserPriority,     Max,           0, "7"
+HKR, Ndi\params\UserPriority,     Step,          0, "1"
+
+HKR, Ndi\Params\PayloadMtu,       ParamDesc,      0, "Payload Mtu size"
+HKR, Ndi\Params\PayloadMtu,       Type,           0, "dword"
+HKR, Ndi\Params\PayloadMtu,       Default,        0, "1500"
+HKR, Ndi\Params\PayloadMtu,       Min,            0, "1500"
+HKR, Ndi\Params\PayloadMtu,       Max,            0, "9500"
+HKR, Ndi\Params\PayloadMtu,       Step,           0, "100"
+HKR, Ndi\Params\PayloadMtu,       Base,           0, "10"
+
+HKR, Ndi\Params\UseTxCsum,        ParamDesc,      0, "Send Chksum Offload"
+HKR, Ndi\Params\UseTxCsum,        Type,           0, "enum"
+HKR, Ndi\Params\UseTxCsum,        Default,        0, "1"
+HKR, Ndi\Params\UseTxCsum,        Optional,       0, "0"
+HKR, Ndi\Params\UseTxCsum\enum,  "0",             0, "Disabled"
+HKR, Ndi\Params\UseTxCsum\enum,  "1",             0, "Enabled"
+
+HKR, Ndi\Params\UseRxCsum,ParamDesc,    0, "Recv Chksum Offload"
+HKR, Ndi\Params\UseRxCsum,Type,	        0, "enum"
+HKR, Ndi\Params\UseRxCsum,Default,      0, "1"
+HKR, Ndi\Params\UseRxCsum,Optional,     0, "0"
+HKR, Ndi\Params\UseRxCsum\enum, "0",    0, "Disabled"
+HKR, Ndi\Params\UseRxCsum\enum, "1",    0, "Enabled"
+
+HKR, Ndi\Params\SecondaryPath,       ParamDesc,      0, "Secondary path"
+HKR, Ndi\Params\SecondaryPath,       Type,           0, "enum"
+HKR, Ndi\Params\SecondaryPath,       Default,        0, "0"
+HKR, Ndi\Params\SecondaryPath,       Optional,       0, "0"
+HKR, Ndi\Params\SecondaryPath\enum, "0",             0, "Disabled"
+HKR, Ndi\Params\SecondaryPath\enum, "1",             0, "Enabled"
+
+HKR, Ndi\Params\Heartbeat,       ParamDesc,      0, "Heartbeat interval (ms)"
+HKR, Ndi\Params\Heartbeat,       Type,           0, "dword"
+HKR, Ndi\Params\Heartbeat,       Default,        0, "2000"
+HKR, Ndi\Params\Heartbeat,       Min,            0, "0"
+HKR, Ndi\Params\Heartbeat,       Max,            0, "10000"
+HKR, Ndi\Params\Heartbeat,       Step,           0, "1000"
+HKR, Ndi\Params\Heartbeat,       Base,           0, "10"
+
+HKR, Ndi\Params\BundleId,       ParamDesc,      0, "LBFO Bundle Id"
+HKR, Ndi\Params\BundleId,       Type,           0, "enum"
+HKR, Ndi\Params\BundleId,       Default,        0, "1"
+HKR, Ndi\Params\BundleId,       Optional,       0, "1"
+HKR, Ndi\Params\BundleId\enum,  "1",            0, "Bundle 1"
+HKR, Ndi\Params\BundleId\enum,  "2",            0, "Bundle 2"
+HKR, Ndi\Params\BundleId\enum,  "3",            0, "Bundle 3"
+HKR, Ndi\Params\BundleId\enum,  "4",            0, "Bundle 4"
+;
+;
+; ============= Service Install section ==============
+;
+
+[vnic.ServiceInstall]
+DisplayName     = %vnic.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\qlgcvnic.sys
+LoadOrderGroup  = NDIS
+AddReg          = vnic.ParamsReg
+
+[vnic.ParamsReg]
+
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x00000003
+
+HKR,"Parameters","MinHostPoolSz",%REG_DWORD%,256
+HKR, "Parameters","HostRecvPoolEntries",%REG_DWORD%,512
+HKR, "Parameters","MinEiocPoolSz",%REG_DWORD%,256
+HKR, "Parameters","MaxEiocPoolSz",%REG_DWORD%,512
+HKR, "Parameters","MinHostKickTimeout",%REG_DWORD%,50
+HKR, "Parameters","MaxHostKickTimeout",%REG_DWORD%,100
+HKR, "Parameters","MinHostKickEntries",%REG_DWORD%,1
+HKR, "Parameters","MaxHostKickEntries",%REG_DWORD%,64
+HKR, "Parameters","MinHostKickBytes",%REG_DWORD%,0
+HKR, "Parameters","MaxHostKickBytes",%REG_DWORD%,5000
+HKR, "Parameters","MinHostUpdateSz",%REG_DWORD%,8
+HKR, "Parameters","MaxHostUpdateSz",%REG_DWORD%,32
+HKR, "Parameters","MinEiocUpdateSz",%REG_DWORD%,8
+HKR, "Parameters","MaxEiocUpdateSz",%REG_DWORD%,32
+HKR, "Parameters","HeartbeatTimeout",%REG_DWORD%,40000
+
+[vnic.EventLogInstall]
+AddReg = vnic.EventLogAddReg
+
+[vnic.EventLogAddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\netevent.dll"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+[Strings]
+NetClassGuid="{4d36e972-e325-11ce-bfc1-08002be10318}"
+Inf_Provider="QLogic Corporation"
+vnic.DeviceDesc="Ethernet over InfiniBand Virtual NIC"
+vnic.ServiceDesc="Virtual NIC"
+DiskId="QLogic Ethernet over InfiniBand Disk"
+InternalBus=0
+PNPBus=15
+SPSVCINST_NULL=0x0
+SPSVCINST_ASSOCSERVICE=0x00000002
+SERVICE_KERNEL_DRIVER=1
+SERVICE_DEMAND_START=3
+SERVICE_ERROR_NORMAL=1
+REG_DWORD=0x00010001
+REG_DWORD_NO_CLOBBER=0x00010003
+REG_EXPAND_SZ=0x00020000
+CHARACTERISTICS=0x81; NCF_VIRTUAL | NCF_HAS_UI

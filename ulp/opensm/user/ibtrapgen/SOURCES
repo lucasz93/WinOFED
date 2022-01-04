@@ -1,0 +1,60 @@
+TARGETNAME=ibtrapgen
+
+!if !defined(WINIBHOME)
+WINIBHOME=..\..\..\..
+!endif
+
+LIBPATH=$(WINIBHOME)\bin\user\obj$(BUILD_ALT_DIR)
+
+!if defined(OSM_TARGET)
+TARGETPATH=$(OSM_TARGET)\bin\user\obj$(BUILD_ALT_DIR)
+!else
+TARGETPATH=$(WINIBHOME)\bin\user\obj$(BUILD_ALT_DIR)
+!endif
+
+!INCLUDE ..\mad-vendor.inc
+
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+OVR_DIR=..\addon
+
+
+SOURCES=\
+	main.c \
+	ibtrapgen.c \
+	osm_files.c
+
+
+OSM_HOME=..
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\kernel32.lib \
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(VENDOR_LIBS) \
+	$(LIBPATH)\*\ibal.lib \
+	$(LIBPATH)\*\complib.lib
+
+INCLUDES= \
+	$(WINIBHOME)\inc; \
+	$(WINIBHOME)\inc\user; \
+	$(WINIBHOME)\inc\user\linux; \
+	$(VENDOR_INC); \
+	$(OSM_HOME); \
+	$(OSM_HOME)\include;
+
+# Could be any special flag needed for this project 
+USER_C_FLAGS=$(USER_C_FLAGS) /MD
+
+#Add preproccessor definitions
+C_DEFINES=$(C_DEFINES) -D__WIN__ -D$(VENDOR_IF) -DHAVE_CONFIG_H
+
+!if !$(FREEBUILD)
+#C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+C_DEFINES=$(C_DEFINES) 
+!endif
+
+LINKER_FLAGS= $(LINKER_FLAGS)
+
+MSC_WARNING_LEVEL= /W3 /wd4090
+

@@ -1,0 +1,29 @@
+TARGETNAME=NDlist
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+NTTARGETFILES=Custom_target
+
+INCLUDES=..\..\..\inc;\
+	..\..\..\inc\user;\
+	$(ND_SDK_PATH)\include;
+
+SOURCES= \
+	NDlist.c \
+	NDlist.rc \
+	NDhelper.cpp
+
+USER_C_FLAGS=$(USER_C_FLAGS) 
+
+TARGETLIBS= \
+	$(SDK_LIB_PATH)\kernel32.lib \
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\Uuid.lib
+
+
+#MSC_WARNING_LEVEL = /W1 /wd4113
+#MSC_WARNING_LEVEL= /W3
+
+LINKER_FLAGS=$(LINKER_FLAGS)
+

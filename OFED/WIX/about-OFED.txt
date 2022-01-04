@@ -1,0 +1,20 @@
+OpenFabrics Enterprise Distribution for Windows
+
+    winOFED version 3.2 (GA)
+       -----------
+       NetworkDirect v2
+       Rsockets 1.0
+       librdmacm 1.0.8
+       libibverbs 1.1.4
+       libmad 1.3.7
+       libumad 1.3.7
+       DAPL 2.0.35
+       OpenSM 3.3.13
+       IB diags 1.5.9
+       libnetdisc 1.5.9
+       IPoIB (UD or CM)
+
+
+    Copyright (C) 2013 OpenFabrics Alliance, All rights reserved.
+
+    Release built from SVN 3635 on Tue 06/25/2013 @ 03:55 PM 

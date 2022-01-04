@@ -1,0 +1,116 @@
+OpenSM for Windows(3.3.13): updated [4-12-12]
+--------------------------------------------------
+
+Current OpenSM for Windows (3.3.13)
+
+Last OpenSM for Windows (3.3.11) @ svn commit #3395
+
+OpenSM provides a user-mode implementation for an InfiniBand Subnet Manager and
+Administrator. Such a software entity is required to run in order to initialize
+the InfiniBand hardware (at least one SM per each InfiniBand subnet).
+
+The full list of OpenSM features is described in the user manual
+provided in the doc/ directory.
+
+For new features see doc\opensm_release_notes-3.3
+
+The installation of OpenSM includes:
+
+%ProgramFiles%\OFED\
+   opensm.exe - the SM/SA executable
+   osmtest.exe - a test program for the SM/SA
+
+The standard OFED installation creates an OpenSM Windows Service which is
+inactive by default. If one chooses the install feature 'Start OpenSM' then
+the OpenSM Windows Service is reset to start automatically at System boot.
+Multiple OpenSM instances within a fabric are supported; the frist OpenSM
+invocation will be the MASTER opensm, while others will detect the 1st OpeSM
+and drop into STANDBY mode awaiting the demise of the MASTER opensm instance.
+
+
+Building opensm.exe, osmtest.exe from the SVN tree with MSFT WDK 7600.16385.1 
+-----------------------------------------------------------------------------
+  cd trunk\ulp\opensm
+  build /wg
+
+Note the file trunk\ulp\opensm\mad-vendor.inc controls which vendor
+(IBAL or UMAD) is built with. Currently both vendors have been tested and
+pass all osm tests (osmtest, saquery PR) along with configuring a 52 node
+Windows HPC Edition cluster. 
+The preferred vendor is UMAD as this is the vendor which is utilized by the
+OFED for Linux opensm build; therefore the UMAD vendor has seen the largest
+number of nodes and operational hours.
+
+
+OpenSM 3.3.13 status
+-------------
+
+openSM 3.3.13 [vendor-UMAD] configured a 32 node HPC fabric runing Intel MPI
+regression tests.
+All osmtests pass successfully; see 'opensm\user\scripts\osm-regress.bat'.
+
+The openSM as a service is functioning correctly; the OpenSM log file resides in
+%windir%\temp\osm.log when run as a service or command-line or console.
+Additionally %windir%\osm.syslog exists as a high level record of OpenSM events;
+where osm.log contains more detailed information which controlled by opensm.exe -V
+and/or -D command line switches.
+
+The log path is now static in definition as the usage output changed which no
+longer allowed calls to GetTempPath(). In order to work around this fopen()
+is actually a macro which redirects to Fopen(). The difference being Fopen()
+will strdup_expand() the filename argument and then call the Windows version
+of fopen(). This approach allows filenames like '%windir%\osm.log' to be properly
+expanded and opened without excessive code changes to filenames.
+
+The osm vendor is 'UMAD'
+The include file user\mad-vendor.inc defines which osm vendor is being built/used.
+Make sure all SOURCES files are using the same vendor!
+
+
+
+OpenSM Code Base
+----------------
+
+OpenSM src is based on the OFED opensm sources for the 3.3.13 release.
+
+Based-on implies the following build processes:
+
+  If you use the [ANNOUNCE]'d opensm tarballs, the lex/yacc and config files are
+  already constructed:
+   see http://www.openfabrics.org/downloads/management/
+    (listed in http://www.openfabrics.org/downloads/management/latest.txt)
+
+  otherwise
+
+  From the OFED management maintainers git repository on a Linux system
+    1) git clone git://git.openfabrics.org/~alexnetes/opensm
+    2) cd opensm; ./autogen.sh && ./configure && make
+    3) remove *.o *.po *.lo .deps/ .libs/
+    4) tar zcf ofed-opensm.tgz opensm
+    5) Move the ofed-opensm.tgz tarball to a Windows system where current 
+       Windows opensm src resides.
+    6) unzip tar ball
+    7) diff trunk\ulp\opensm\user opensm
+
+    8) Carefully apply/reject changes.
+         There are a few (<30) differing files which the OFED community
+         declined to accept due to Windows orientation; an ongoing story...sigh.
+         The bigger change blocks are found in the following files:
+           opensm\main.c OpenSM as a Windows service support.
+           opensm\console.c Windows console support without poll().
+           libvendor\osm_vendor_al.c
+         Makefile(s) are Windows specific; leave'em be.
+
+    9) Due to the usage of Linux only tools AutoTools, lex & yacc, the
+        following files are static in the windows src. Static in the sense the
+        files are configured in the Linux environment with the resultant .c .h
+        files moved into the Windows opensm src tree.
+        Watch out for differing versions of yacc/bison/lex. The .y & .l files
+        are modified in the Windows src to emphasize changes required in the
+        .c & .h files; basically minor changes.
+
+        a) management/opensm/opensm/osm_qow_parser_y.y
+        b) management/opensm/opensm/osm_qos_parser_l.l
+        c) management/opensm/opensm/configure.h
+        d) management/opensm/include/opensm/osm_version.h 
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="('$(BUILD_PASS)'=='PASS2') Or ('$(BUILD_PASS)'=='ALL')" />
+  </Choose>
+  <PropertyGroup>
+    <ImportFilePath_B84562E2035F4DCD9964DA50340975E1 Condition="'$(OVERRIDE_ImportFilePath_B84562E2035F4DCD9964DA50340975E1)'!='true'">..\..\..\inc\mod_ver.def.props</ImportFilePath_B84562E2035F4DCD9964DA50340975E1>
+    <ImportFilePath_B84562E2035F4DCD9964DA50340975E1 Condition="(!$([System.IO.Path]::IsPathRooted('..\..\..\inc\mod_ver.def.props'))) And ('$(OVERRIDE_ImportFilePath_B84562E2035F4DCD9964DA50340975E1)'!='true')">$([System.IO.Path]::Combine($(MSBuildProjectDirectory),'..\..\..\inc\mod_ver.def.props'))</ImportFilePath_B84562E2035F4DCD9964DA50340975E1>
+    <AlternateImportFilePath_A4D138DA3D9944549BF0525F4FCFD996 Condition="'$(OVERRIDE_AlternateImportFilePath_A4D138DA3D9944549BF0525F4FCFD996)'!='true'">$([System.IO.Path]::Combine($(MSBuildThisFileDirectory),'..\..\..\inc\mod_ver.def.props'))</AlternateImportFilePath_A4D138DA3D9944549BF0525F4FCFD996>
+  </PropertyGroup>
+  <Import Project="$(ImportFilePath_B84562E2035F4DCD9964DA50340975E1)" Condition="Exists($(ImportFilePath_B84562E2035F4DCD9964DA50340975E1))" />
+  <Import Project="$(AlternateImportFilePath_A4D138DA3D9944549BF0525F4FCFD996)" Condition="!Exists($(ImportFilePath_B84562E2035F4DCD9964DA50340975E1))" />
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

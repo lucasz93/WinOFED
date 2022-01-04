@@ -1,0 +1,55 @@
+TARGETNAME=genutils
+TARGETTYPE=DRIVER_LIBRARY
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1 
+!endif
+
+
+!IFNDEF BUILD_ALT_DIR
+BINARIES_DIR=..\..\bin
+!ELSE
+BINARIES_DIR=..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+!ENDIF
+
+TARGETPATH=$(BINARIES_DIR)
+
+
+SOURCES= \
+	gu_timer.cpp	\
+	gu_utils.cpp	\
+	gu_dbg.cpp	\
+	gu_address_translation.cpp \
+	gu_affinity.cpp
+
+INCLUDES=..\..\..\..\inc;                     \
+         ..\..\..\..\inc\kernel;              \
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -DIOCTL_INTERFACE=1 -DNDIS52
+
+!IF DEFINED(_NT_TARGET_VERSION)
+!  IF $(_NT_TARGET_VERSION) >= $(_NT_TARGET_VERSION_VISTA)
+C_DEFINES=$(C_DEFINES) -DNDIS60 
+! ELSE
+INCLUDES=$(INCLUDES) ..\..\..\..\etc\ndis5.2;
+!  ENDIF
+!ENDIF
+
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -km -dll -ext: .c .cpp .h .C .CPP .H\
+	-preserveext:.cpp .h\
+	-scan:gu_wpptrace.h\
+	-func:GU_PRINT(LEVEL,FLAGS,MSG,...) 
+!ENDIF
+
+MC_SOURCEDIR=.  
+
+MSC_WARNING_LEVEL= /W4
+
+PRECOMPILED_INCLUDE=gu_precomp.h
+PRECOMPILED_PCH=gu_precomp.pch
+PRECOMPILED_CXX=1

@@ -1,0 +1,148 @@
+; OpenIB InfiniBand SRP Miniport.
+; Copyright 2005 SilverStorm Technologies all Rights Reserved.
+
+[Version]
+Signature="$Windows NT$"
+Class=SCSIAdapter
+ClassGUID={4D36E97B-E325-11CE-BFC1-08002BE10318}
+Provider=%OPENIB%
+DriverVer=06/13/2008,1.0.0000.1207
+CatalogFile=ibsrp.cat
+
+
+; ================= Device Install section =====================
+
+[DestinationDirs]
+DefaultDestDir=12
+
+[SourceDisksNames.x86]
+1=%DiskId%,,,""
+
+[SourceDisksNames.amd64]
+1=%DiskId%,,,""
+
+[SourceDisksNames.ia64]
+1=%DiskId%,,,""
+
+[SourceDisksFiles]
+ibsrp.sys=1
+
+[Manufacturer]
+%OPENIB% = SRP.DeviceSection,ntx86...0x1,ntx86,ntamd64,ntia64
+%SST% = VFx.DeviceSection,ntx86...0x1,ntx86,ntamd64,ntia64
+
+[SRP.DeviceSection]
+; empty since we don't support W9x/Me
+
+[SRP.DeviceSection.ntx86...0x1]
+; empty since we don't yet support XP.
+
+[SRP.DeviceSection.ntx86]
+%SRP.DeviceDesc% = SRP.DDInstall,IBA\C0100c609ep0108r0001, \
+								IBA\Cff00c609ep0108r0001, \
+								IBA\C0100c609ep0108, \
+								IBA\Cff00c609ep0108, \
+								IBA\C0100c690ep0108r0001, \
+								IBA\Cff00c690ep0108r0001, \
+ 								IBA\C0100c690ep0108, \
+ 								IBA\Cff00c690ep0108
+
+[SRP.DeviceSection.ntamd64]
+%SRP.DeviceDesc% = SRP.DDInstall,IBA\C0100c609ep0108r0001, \
+								IBA\Cff00c609ep0108r0001, \
+								IBA\C0100c609ep0108, \
+								IBA\Cff00c609ep0108, \
+								IBA\C0100c690ep0108r0001, \
+								IBA\Cff00c690ep0108r0001, \
+ 								IBA\C0100c690ep0108, \
+ 								IBA\Cff00c690ep0108
+
+[SRP.DeviceSection.ntia64]
+%SRP.DeviceDesc% = SRP.DDInstall,IBA\C0100c609ep0108r0001, \
+								IBA\Cff00c609ep0108r0001, \
+								IBA\C0100c609ep0108, \
+								IBA\Cff00c609ep0108, \
+								IBA\C0100c690ep0108r0001, \
+								IBA\Cff00c690ep0108r0001, \
+ 								IBA\C0100c690ep0108, \
+ 								IBA\Cff00c690ep0108
+
+[VFx.DeviceSection]
+; empty since we don't support W9x/Me
+
+[VFx.DeviceSection.ntx86...0x1]
+; empty since we don't yet support XP.
+
+[VFx.DeviceSection.ntx86]
+%VFx.DeviceDesc% = SRP.DDInstall,IBA\V00066aP00000038S00066as00000038v0001, \
+								IBA\V00066aP00000038S00066as00000038, \
+								IBA\V00066aP00000038v0001, \
+								IBA\V00066aP00000038
+
+[VFx.DeviceSection.ntamd64]
+%VFx.DeviceDesc% = SRP.DDInstall,IBA\V00066aP00000038S00066as00000038v0001, \
+								IBA\V00066aP00000038S00066as00000038, \
+								IBA\V00066aP00000038v0001, \
+								IBA\V00066aP00000038
+
+[VFx.DeviceSection.ntia64]
+%VFx.DeviceDesc% = SRP.DDInstall,IBA\V00066aP00000038S00066as00000038v0001, \
+								IBA\V00066aP00000038S00066as00000038, \
+								IBA\V00066aP00000038v0001, \
+								IBA\V00066aP00000038
+
+[SRP.DDInstall.nt]
+CopyFiles = SRP.CopyFiles
+
+[SRP.DDInstall.nt.Services]
+AddService = ibsrp,%SPSVCINST_ASSOCSERVICE%,SRP.ServiceInstall,SRP.EventLogInstall
+
+[SRP.CopyFiles]
+ibsrp.sys
+
+;
+; ============= Service Install section ==============
+;
+
+[SRP.ServiceInstall]
+DisplayName     = %SRP.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ibsrp.sys
+LoadOrderGroup  = SCSI Miniport
+AddReg          = SRP.ParamsReg
+
+[SRP.ParamsReg]
+HKR,"Parameters\PnpInterface",%InternalBus%,%REG_DWORD%,1
+HKR,"Parameters\PnpInterface",%PNPBus%,%REG_DWORD%,1
+HKR,"Parameters","DebugLevel",%REG_DWORD%,2
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x00ffffff
+HKR,"Parameters","ModeFlags",%REG_DWORD%,0
+
+;
+; == The NT EventLog entries are the same for all SCSI miniports. ==
+;
+[SRP.EventLogInstall]
+AddReg = SRP.EventLogAddReg
+
+[SRP.EventLogAddReg]
+HKR,,EventMessageFile,0x00020000,"%%SystemRoot%%\System32\IoLogMsg.dll"
+HKR,,TypesSupported,0x00010001,7
+
+[Strings]
+OPENIB = "OpenIB Alliance"
+SST = "SilverStorm Technologies"
+SRP.DeviceDesc = "InfiniBand SRP Miniport"
+VFx.DeviceDesc = "SilverStorm VFx I/O Controller"
+SRP.ServiceDesc = "OpenIB InfiniBand SRP Miniport"
+DiskId = "OpenIB InfiniBand SRP installation disk"
+InternalBus = 0
+PNPBus = 15
+SPSVCINST_NULL = 0x0
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+REG_DWORD              = 0x00010001
+REG_DWORD_NO_CLOBBER   = 0x00010003

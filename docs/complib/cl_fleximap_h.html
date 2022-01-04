@@ -1,0 +1,948 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_fleximap_h.html</title>
+<!-- Source: ./inc/complib/cl_fleximap.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_fleximap.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo8">[Modules]<a name="Component20Library2fFlexi20Map">
+Component Library/Flexi Map</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Flexi map implements a binary tree that stores user provided <a href="#robo335">cl_fmap_item_t</a>
+       structures.  Each item stored in a flexi map has a unique user defined key
+       (duplicates are not allowed).  Flexi map provides the ability to
+       efficiently search for an item given a key.  Flexi map allows user defined
+       keys of any size.  Storage for keys and a comparisson function are provided
+       by users to allow flexi map to store items with arbitrary key values.
+
+       Flexi map does not allocate any memory, and can therefore not fail
+       any operations due to insufficient memory.  Flexi map can thus be useful
+       in minimizing the error paths in code.
+
+       Flexi map is not thread safe, and users must provide serialization when
+       adding and removing items from the map.
+
+       The flexi map functions operate on a <a href="#robo343">cl_fmap_t</a> structure which should
+       be treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo343">cl_fmap_t</a>, <a href="#robo335">cl_fmap_item_t</a>
+
+       Callbacks:
+               <a href="#robo346">cl_pfn_fmap_apply_t</a>
+
+       Item Manipulation:
+               <a href="#robo336">cl_fmap_key</a>
+
+       Initialization:
+               <a href="#robo333">cl_fmap_init</a>
+
+       Iteration:
+               <a href="#robo330">cl_fmap_end</a>, <a href="#robo332">cl_fmap_head</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo338">cl_fmap_next</a>, <a href="#robo339">cl_fmap_prev</a>
+
+       Manipulation:
+               <a href="#robo334">cl_fmap_insert</a>, <a href="#robo331">cl_fmap_get</a>, <a href="#robo342">cl_fmap_remove_item</a>, <a href="#robo340">cl_fmap_remove</a>,
+               <a href="#robo341">cl_fmap_remove_all</a>, <a href="#robo337">cl_fmap_merge</a>, <a href="#robo329">cl_fmap_delta</a>
+
+       Search:
+               <a href="#robo327">cl_fmap_apply_func</a>
+
+       Attributes:
+               <a href="#robo328">cl_fmap_count</a>, <a href="#robo345">cl_is_fmap_empty</a>,
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo327">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fapply5ffunc">
+Component Library: Flexi Map/cl_fmap_apply_func</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_apply_func</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_apply_func</strong> function executes a specified function
+       for every item stored in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_fmap_apply_func</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map,
+        IN      <a href="#robo346">cl_pfn_fmap_apply_t</a>             pfn_func,
+        IN      const void* const               context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure.
+
+       pfn_func
+               [in] Function invoked for every item in the flexi map.
+               See the <a href="#robo346">cl_pfn_fmap_apply_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The function provided must not perform any map operations, as these
+       would corrupt the flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo346">cl_pfn_fmap_apply_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo328">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fcount">
+Component Library: Flexi Map/cl_fmap_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_count</strong> function returns the number of items stored
+       in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_fmap_count</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        return( p_map-&gt;count );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure whose item count to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the number of items stored in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo345">cl_is_fmap_empty</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo329">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fdelta">
+Component Library: Flexi Map/cl_fmap_delta</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_delta</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_delta</strong> function computes the differences between two maps.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_fmap_delta</strong>(
+        IN OUT  <a href="#robo343">cl_fmap_t</a>* const        p_map1,
+        IN OUT  <a href="#robo343">cl_fmap_t</a>* const        p_map2,
+        OUT             <a href="#robo343">cl_fmap_t</a>* const        p_new,
+        OUT             <a href="#robo343">cl_fmap_t</a>* const        p_old );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map1
+               [in/out] Pointer to the first of two <a href="#robo343">cl_fmap_t</a> structures whose
+               differences to compute.
+
+       p_map2
+               [in/out] Pointer to the second of two <a href="#robo343">cl_fmap_t</a> structures whose
+               differences to compute.
+
+       p_new
+               [out] Pointer to an empty <a href="#robo343">cl_fmap_t</a> structure that contains the items
+               unique to p_map2 upon return from the function.
+
+       p_old
+               [out] Pointer to an empty <a href="#robo343">cl_fmap_t</a> structure that contains the items
+               unique to p_map1 upon return from the function.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Items are evaluated based on their keys.  Items that exist in both
+       p_map1 and p_map2 remain in their respective maps.  Items that
+       exist only p_map1 are moved to p_old.  Likewise, items that exist only
+       in p_map2 are moved to p_new.  This function can be usefull in evaluating
+       changes between two maps.
+
+       Both maps pointed to by p_new and p_old must be empty on input.  This
+       requirement removes the possibility of failures.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo337">cl_fmap_merge</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo330">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fend">
+Component Library: Flexi Map/cl_fmap_end</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_end</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_end</strong> function returns the end of a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE const <a href="#robo335">cl_fmap_item_t</a>* const CL_API
+<strong>cl_fmap_end</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        /* Nil is the end of the map. */
+        return( &amp;p_map-&gt;nil );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure whose end to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the end of the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_fmap_end</strong> is useful for determining the validity of map items returned
+       by <a href="#robo332">cl_fmap_head</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo338">cl_fmap_next</a>, or <a href="#robo339">cl_fmap_prev</a>.  If the map
+       item pointer returned by any of these functions compares to the end, the
+       end of the map was encoutered.
+       When using <a href="#robo332">cl_fmap_head</a> or <a href="#robo344">cl_fmap_tail</a>, this condition indicates that
+       the map is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo332">cl_fmap_head</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo338">cl_fmap_next</a>, <a href="#robo339">cl_fmap_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo331">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fget">
+Component Library: Flexi Map/cl_fmap_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_get</strong> function returns the map item associated with a key.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_get</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map,
+        IN      const void* const               p_key );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure from which to retrieve the
+               item with the specified key.
+
+       p_key
+               [in] Pointer to a key value used to search for the desired map item.
+
+ RETURN VALUES
+       Pointer to the map item with the desired key value.
+
+       Pointer to the map end if there was no item with the desired key value
+       stored in the flexi map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_fmap_get</strong> does not remove the item from the flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo340">cl_fmap_remove</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo332">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fhead">
+Component Library: Flexi Map/cl_fmap_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_head</strong> function returns the map item with the lowest key
+       value stored in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_head</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        return( (<a href="#robo335">cl_fmap_item_t</a>*)p_map-&gt;nil.pool_item.list_item.p_next );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure whose item with the lowest key
+               is returned.
+
+ RETURN VALUES
+       Pointer to the map item with the lowest key in the flexi map.
+
+       Pointer to the map end if the flexi map was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_fmap_head</strong> does not remove the item from the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo338">cl_fmap_next</a>, <a href="#robo339">cl_fmap_prev</a>, <a href="#robo330">cl_fmap_end</a>,
+       <a href="#robo335">cl_fmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo333">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5finit">
+Component Library: Flexi Map/cl_fmap_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_init</strong> function initialized a flexi map for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_fmap_init</strong>(
+        IN      <a href="#robo343">cl_fmap_t</a>* const        p_map,
+        IN      <a href="#robo347">cl_pfn_fmap_cmp_t</a>       pfn_compare );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure to initialize.
+
+       pfn_compare
+               [in] Pointer to the compare function used to compare keys.
+               See the <a href="#robo347">cl_pfn_fmap_cmp_t</a> function type declaration for details
+               about the callback function.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling flexi map manipulation functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo334">cl_fmap_insert</a>, <a href="#robo340">cl_fmap_remove</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo334">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5finsert">
+Component Library: Flexi Map/cl_fmap_insert</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_insert</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_insert</strong> function inserts a map item into a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_insert</strong>(
+        IN      <a href="#robo343">cl_fmap_t</a>* const                p_map,
+        IN      const void* const               p_key,
+        IN      <a href="#robo335">cl_fmap_item_t</a>* const   p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure into which to add the item.
+
+       p_key
+               [in] Pointer to the key value to assign to the item.  Storage for
+               the key must be persistant, as only the pointer is stored.  Users
+               are responsible for maintaining the validity of key pointers while
+               they are in use.
+
+       p_item
+               [in] Pointer to a <a href="#robo335">cl_fmap_item_t</a> stucture to insert into the flexi map.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the item in the map with the specified key.  If insertion
+       was successful, this is the pointer to the item.  If an item with the
+       specified key already exists in the map, the pointer to that item is
+       returned.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Insertion operations may cause the flexi map to rebalance.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo340">cl_fmap_remove</a>, <a href="#robo335">cl_fmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo335">[Structures]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fitem5ft">
+Component Library: Flexi Map/cl_fmap_item_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_item_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_item_t</strong> structure is used by maps to store objects.
+
+       The <strong>cl_fmap_item_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_fmap_item
+{
+        /* Must be first to allow casting. */
+        <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>                  pool_item;
+        struct _cl_fmap_item    *p_left;
+        struct _cl_fmap_item    *p_right;
+        struct _cl_fmap_item    *p_up;
+        cl_map_color_t                  color;
+ TO_LONG_PTR(       const void* ,             p_key) ; 
+#ifdef _DEBUG_
+        struct _cl_fmap                 *p_map;
+#endif
+
+} <strong>cl_fmap_item_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pool_item
+               Used to store the item in a doubly linked list, allowing more
+               efficient map traversal.
+
+       p_left
+               Pointer to the map item that is a child to the left of the node.
+
+       p_right
+               Pointer to the map item that is a child to the right of the node.
+
+       p_up
+               Pointer to the map item that is the parent of the node.
+
+       p_nil
+               Pointer to the map's NIL item, used as a terminator for leaves.
+               The NIL sentinel is in the <a href="#robo343">cl_fmap_t</a> structure.
+
+       color
+               Indicates whether a node is red or black in the map.
+
+       p_key
+               Pointer to the value that uniquely represents a node in a map.  This
+               pointer is set by calling <a href="#robo334">cl_fmap_insert</a> and can be retrieved by
+               calling <a href="#robo336">cl_fmap_key</a>.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       None of the fields of this structure should be manipulated by users, as
+       they are crititcal to the proper operation of the map in which they
+       are stored.
+
+       To allow storing items in either a quick list, a quick pool, or a flexi
+       map, the map implementation guarantees that the map item can be safely
+       cast to a pool item used for storing an object in a quick pool, or cast to
+       a list item used for storing an object in a quick list.  This removes the
+       need to embed a flexi map item, a list item, and a pool item in objects
+       that need to be stored in a quick list, a quick pool, and a flexi map.
+
+       The flexi map item is defined to be identical in layout as a map item.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo334">cl_fmap_insert</a>, <a href="#robo336">cl_fmap_key</a>, <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>, <a href="./cl_qlist_h.html#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo336">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fkey">
+Component Library: Flexi Map/cl_fmap_key</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_key</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_key</strong> function retrieves the key value of a map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>#pragma warning (push)
+#pragma warning (disable :4244)
+CL_INLINE const void* CL_API
+<strong>cl_fmap_key</strong>(
+        IN      const <a href="#robo335">cl_fmap_item_t</a>* const     p_item )
+{
+        CL_ASSERT( p_item );
+        return( p_item-&gt;p_key );
+}
+#pragma warning (pop )
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item whose key value to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the a pointer to the key value for the specified map item.
+       The key value should not be modified to insure proper flexi map operation.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The key value is set in a call to <a href="#robo334">cl_fmap_insert</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo334">cl_fmap_insert</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo337">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fmerge">
+Component Library: Flexi Map/cl_fmap_merge</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_merge</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_merge</strong> function moves all items from one map to another,
+       excluding duplicates.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_fmap_merge</strong>(
+        OUT             <a href="#robo343">cl_fmap_t</a>* const        p_dest_map,
+        IN OUT  <a href="#robo343">cl_fmap_t</a>* const        p_src_map );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest_map
+               [out] Pointer to a <a href="#robo343">cl_fmap_t</a> structure to which items should be added.
+
+       p_src_map
+               [in/out] Pointer to a <a href="#robo343">cl_fmap_t</a> structure whose items to add
+               to p_dest_map.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Items are evaluated based on their keys only.
+
+       Upon return from <strong>cl_fmap_merge</strong>, the flexi map referenced by p_src_map
+       contains all duplicate items.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo329">cl_fmap_delta</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo338">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fnext">
+Component Library: Flexi Map/cl_fmap_next</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_next</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_next</strong> function returns the map item with the next higher
+       key value than a specified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_next</strong>(
+        IN      const <a href="#robo335">cl_fmap_item_t</a>* const     p_item )
+{
+        CL_ASSERT( p_item );
+        return( (<a href="#robo335">cl_fmap_item_t</a>*)p_item-&gt;pool_item.list_item.p_next );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item whose successor to return.
+
+ RETURN VALUES
+       Pointer to the map item with the next higher key value in a flexi map.
+
+       Pointer to the map end if the specified item was the last item in
+       the flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo332">cl_fmap_head</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo339">cl_fmap_prev</a>, <a href="#robo330">cl_fmap_end</a>,
+       <a href="#robo335">cl_fmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo339">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fprev">
+Component Library: Flexi Map/cl_fmap_prev</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_prev</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_prev</strong> function returns the map item with the next lower
+       key value than a precified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_prev</strong>(
+        IN      const <a href="#robo335">cl_fmap_item_t</a>* const     p_item )
+{
+        CL_ASSERT( p_item );
+        return( (<a href="#robo335">cl_fmap_item_t</a>*)p_item-&gt;pool_item.list_item.p_prev );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item whose predecessor to return.
+
+ RETURN VALUES
+       Pointer to the map item with the next lower key value in a flexi map.
+
+       Pointer to the map end if the specifid item was the first item in
+       the flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo332">cl_fmap_head</a>, <a href="#robo344">cl_fmap_tail</a>, <a href="#robo338">cl_fmap_next</a>, <a href="#robo330">cl_fmap_end</a>,
+       <a href="#robo335">cl_fmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo340">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fremove">
+Component Library: Flexi Map/cl_fmap_remove</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_remove</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_remove</strong> function removes the map item with the specified key
+       from a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_remove</strong>(
+        IN      <a href="#robo343">cl_fmap_t</a>* const        p_map,
+        IN      const void* const       p_key );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure from which to remove the item
+               with the specified key.
+
+       p_key
+               [in] Pointer to the key value used to search for the map item
+               to remove.
+
+ RETURN VALUES
+       Pointer to the removed map item if it was found.
+
+       Pointer to the map end if no item with the specified key exists in the
+       flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo342">cl_fmap_remove_item</a>, <a href="#robo341">cl_fmap_remove_all</a>, <a href="#robo334">cl_fmap_insert</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo341">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fremove5fall">
+Component Library: Flexi Map/cl_fmap_remove_all</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_remove_all</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_remove_all</strong> function removes all items in a flexi map,
+       leaving it empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_fmap_remove_all</strong>(
+        IN      <a href="#robo343">cl_fmap_t</a>* const        p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+
+        p_map-&gt;root.p_left = &amp;p_map-&gt;nil;
+        p_map-&gt;nil.pool_item.list_item.p_next = &amp;p_map-&gt;nil.pool_item.list_item;
+        p_map-&gt;nil.pool_item.list_item.p_prev = &amp;p_map-&gt;nil.pool_item.list_item;
+        p_map-&gt;count = 0;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure to empty.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo340">cl_fmap_remove</a>, <a href="#robo342">cl_fmap_remove_item</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo342">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5fremove5fitem">
+Component Library: Flexi Map/cl_fmap_remove_item</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_remove_item</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_remove_item</strong> function removes the specified map item
+       from a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_fmap_remove_item</strong>(
+        IN      <a href="#robo343">cl_fmap_t</a>* const                p_map,
+        IN      <a href="#robo335">cl_fmap_item_t</a>* const   p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item to remove from its flexi map.
+
+ RETURN VALUES
+       This function does not return a value.
+
+       In a debug build, <strong>cl_fmap_remove_item</strong> asserts that the item being removed
+       is in the specified map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Removes the map item pointed to by p_item from its flexi map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo340">cl_fmap_remove</a>, <a href="#robo341">cl_fmap_remove_all</a>, <a href="#robo334">cl_fmap_insert</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo343">[Structures]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5ft">
+Component Library: Flexi Map/cl_fmap_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Flexi map structure.
+
+       The <strong>cl_fmap_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_fmap
+{
+        <a href="#robo335">cl_fmap_item_t</a>          root;
+        <a href="#robo335">cl_fmap_item_t</a>          nil;
+        cl_state_t                      state;
+        size_t                          count;
+        <a href="#robo347">cl_pfn_fmap_cmp_t</a>       pfn_compare;
+
+} <strong>cl_fmap_t</strong>;
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       root
+               <a href="./cl_map_h.html#robo13">Map</a> item that serves as root of the map.  The root is set up to
+               always have itself as parent.  The left pointer is set to point to
+               the item at the root.
+
+       nil
+               <a href="./cl_map_h.html#robo13">Map</a> item that serves as terminator for all leaves, as well as providing
+               the list item used as quick list for storing map items in a list for
+               faster traversal.
+
+       state
+               State of the map, used to verify that operations are permitted.
+
+       count
+               Number of items in the map.
+
+       pfn_compare
+               Pointer to a compare function to invoke to compare the keys of
+               items in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo347">cl_pfn_fmap_cmp_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo344">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5ffmap5ftail">
+Component Library: Flexi Map/cl_fmap_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_fmap_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_fmap_tail</strong> function returns the map item with the highest key
+       value stored in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo335">cl_fmap_item_t</a>* CL_API
+<strong>cl_fmap_tail</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        return( (<a href="#robo335">cl_fmap_item_t</a>*)p_map-&gt;nil.pool_item.list_item.p_prev );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure whose item with the highest key
+               is returned.
+
+ RETURN VALUES
+       Pointer to the map item with the highest key in the flexi map.
+
+       Pointer to the map end if the flexi map was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <a href="#robo330">cl_fmap_end</a> does not remove the item from the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo332">cl_fmap_head</a>, <a href="#robo338">cl_fmap_next</a>, <a href="#robo339">cl_fmap_prev</a>, <a href="#robo330">cl_fmap_end</a>,
+       <a href="#robo335">cl_fmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo345">[Functions]<a name="Component20Library3a20Flexi20Map2fcl5fis5ffmap5fempty">
+Component Library: Flexi Map/cl_is_fmap_empty</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_fmap_empty</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_fmap_empty</strong> function returns whether a flexi map is empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_fmap_empty</strong>(
+        IN      const <a href="#robo343">cl_fmap_t</a>* const  p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+
+        return( p_map-&gt;count == 0 );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo343">cl_fmap_t</a> structure to test for emptiness.
+
+ RETURN VALUES
+       TRUE if the flexi map is empty.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo328">cl_fmap_count</a>, <a href="#robo341">cl_fmap_remove_all</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo346">[Definitions]<a name="Component20Library3a20Flexi20Map2fcl5fpfn5ffmap5fapply5ft">
+Component Library: Flexi Map/cl_pfn_fmap_apply_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_fmap_apply_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_fmap_apply_t</strong> function type defines the prototype for functions
+       used to iterate items in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_fmap_apply_t</strong>)(
+        IN      <a href="#robo335">cl_fmap_item_t</a>* const   p_map_item,
+        IN      void*                                   context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map_item
+               [in] Pointer to a <a href="#robo335">cl_fmap_item_t</a> structure.
+
+       context
+               [in] Value passed to the callback function.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo327">cl_fmap_apply_func</a>
+       function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo327">cl_fmap_apply_func</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo347">[Definitions]<a name="Component20Library3a20Flexi20Map2fcl5fpfn5ffmap5fcmp5ft">
+Component Library: Flexi Map/cl_pfn_fmap_cmp_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_fmap_cmp_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_fmap_cmp_t</strong> function type defines the prototype for functions
+       used to compare item keys in a flexi map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef intn_t
+(CL_API *<strong>cl_pfn_fmap_cmp_t</strong>)(
+        IN      const void* const               p_key1,
+        IN      const void*     const           p_key2 );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_key1
+               [in] Pointer to the first of two keys to compare.
+
+       p_key2
+               [in] Pointer to the second of two keys to compare.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns 0 if the keys match.
+       Returns less than 0 if p_key1 is less than p_key2.
+       Returns greater than 0 if p_key1 is greater than p_key2.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo333">cl_fmap_init</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Flexi <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo333">cl_fmap_init</a>
+</pre>
+</span>
+</body>
+</html>

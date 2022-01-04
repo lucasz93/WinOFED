@@ -1,0 +1,58 @@
+TARGETNAME=ibwsd
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+DLLENTRY=DllMain
+DLLDEF=ibspdll.def
+USE_NTDLL=1
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1 
+!endif
+NTTARGETFILES=Custom_target
+
+SOURCES=\
+	ibspdll.rc		\
+	extensions.c	\
+	ib_cm.c			\
+	ibsp_iblow.c	\
+	ibsp_ip.c		\
+	ibsp_mem.c		\
+	ibsp_pnp.c		\
+	ibspdebug.c		\
+	ibspdll.c		\
+	misc.c			\
+	sockinfo.c		\
+	ibsp_duplicate.c \
+	ibsp_perfmon.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\user;$(DDK_INC_PATH);
+
+USER_C_FLAGS=$(USER_C_FLAGS) -DCL_NO_TRACK_MEM -DPERFMON_ENABLED -DWPP_OLDCC
+
+
+TARGETLIBS=\
+			$(SDK_LIB_PATH)\kernel32.lib \
+			$(SDK_LIB_PATH)\Advapi32.lib \
+			$(SDK_LIB_PATH)\ws2_32.lib \
+			$(SDK_LIB_PATH)\iphlpapi.lib \
+			$(SDK_LIB_PATH)\rpcrt4.lib \
+			$(SDK_LIB_PATH)\LoadPerf.lib \
+			$(TARGETPATH)\*\ibat.lib \
+            $(TARGETPATH)\*\complib.lib \
+            $(TARGETPATH)\*\ibal.lib
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -ext: .c .h -dll  \
+	-scan:ibspdebug.h\
+	-func:IBSP_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:IBSP_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) \
+	-func:IBSP_ERROR{LEVEL=TRACE_LEVEL_ERROR,FLAGS=IBSP_DBG_ERROR}((MSG,...)) \
+	-func:IBSP_ERROR_EXIT{LEVEL=TRACE_LEVEL_ERROR,FLAGS=IBSP_DBG_ERROR}((MSG,...))
+  
+!ENDIF
+
+
+MSC_WARNING_LEVEL= /W4

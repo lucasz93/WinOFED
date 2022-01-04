@@ -1,0 +1,80 @@
+TRUNK=..\..\..
+
+TARGETNAME=mthcau
+
+TARGETPATH=$(TRUNK)\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+
+DLLDEF=$(OBJ_PATH)\$O\mlnx_uvp.def
+
+#USE_NTDLL=1
+USE_MSVCRT=1
+DLLENTRY=DllMain
+NTTARGETFILES=Custom_target
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES= \
+  					\
+	..\mt_utils.c		\
+  					\
+	mlnx_uvp.rc \
+	mlnx_ual_av.c \
+	mlnx_ual_ca.c \
+	mlnx_ual_cq.c \
+	mlnx_ual_main.c \
+	mlnx_ual_mcast.c \
+	mlnx_ual_mrw.c \
+	mlnx_ual_osbypass.c \
+	mlnx_ual_pd.c \
+	mlnx_ual_qp.c	 \
+	mlnx_ual_srq.c \
+				\
+	mlnx_uvp_debug.c \
+	mlnx_uvp.c \
+	mlnx_uvp_ah.c \
+	mlnx_uvp_cq.c \
+	mlnx_uvp_memfree.c \
+	mlnx_uvp_qp.c \
+	mlnx_uvp_srq.c \
+	mlnx_uvp_verbs.c 
+
+INCLUDES= \
+	..; \
+	$(TRUNK)\inc\user; \
+	$(TRUNK)\inc\complib; \
+	$(TRUNK)\inc\user\complib; \
+	$(TRUNK)\inc;	\
+
+USER_C_FLAGS=$(USER_C_FLAGS) /DCL_NO_TRACK_MEM 
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\user32.lib \
+	$(SDK_LIB_PATH)\kernel32.lib \
+	$(SDK_LIB_PATH)\Advapi32.lib \
+    $(TARGETPATH)\*\complib.lib \
+    $(TARGETPATH)\*\ibal.lib
+
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG=1
+!endif
+
+#LINKER_FLAGS=/MAP /MAPINFO:LINES
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING  -DWPP_OLDCC
+
+
+RUN_WPP= $(SOURCES) -ext:.c.h -dll\
+	-scan:mlnx_uvp_debug.h \
+	-func:UVP_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:UVP_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+MSC_WARNING_LEVEL= /W3

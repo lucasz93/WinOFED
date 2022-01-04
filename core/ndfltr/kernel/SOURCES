@@ -1,0 +1,39 @@
+TARGETNAME = ndfltr
+TARGETPATH = ..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DRIVER
+
+KMDF_VERSION_MAJOR = 1
+TARGETLIBS = $(TARGETLIBS) \
+             $(DDK_LIB_PATH)\wdmsec.lib \
+             $(DDK_LIB_PATH)\msnetioid.lib \
+
+TARGET_DESTINATION=$(RELDIR)\mlx4_bus
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_CXX=1
+USECXX_FLAG=1
+
+SOURCES = \
+    ndfltr.rc \
+    nd_driver.cpp \
+    nd_partition.cpp \
+    nd_provider.cpp \
+    nd_adapter.cpp \
+    nd_pd.cpp \
+    nd_cq.cpp \
+    nd_mr.cpp \
+    nd_mw.cpp \
+    nd_srq.cpp \
+    nd_qp.cpp \
+    nd_ep.cpp \
+
+INCLUDES = \
+    ..;..\..\..\inc; \
+    ..\..\..\inc\kernel; \
+    ..\..\..\inc\user; \
+    ..\..\..\etc\kernel; \
+    $(ND_SDK_PATH)\include \
+
+C_DEFINES = $(C_DEFINES) -DIOCTL_INTERFACE=1
+
+MSC_WARNING_LEVEL = /W4

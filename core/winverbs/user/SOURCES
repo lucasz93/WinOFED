@@ -1,0 +1,41 @@
+TARGETNAME = winverbs
+
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\wv_exports.def
+
+NTTARGETFILES=Custom_target
+
+DLLENTRY = DllMain
+USE_NTDLL = 1
+
+SOURCES = \
+	winverbs.rc		\
+	wv_main.cpp		\
+	wv_base.cpp		\
+	wv_cq.cpp		\
+	wv_device.cpp	\
+	wv_ep.cpp		\
+	wv_pd.cpp		\
+	wv_provider.cpp	\
+	wv_qp.cpp		\
+	wv_srq.cpp		\
+	wv_uverbs.cpp
+
+INCLUDES = ..;..\..\..\inc;..\..\..\inc\user;..\..\complib\user\$(O);..\..\al\user\$(O);
+
+USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_WV_SYMBOLS
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+!endif
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib      \
+	$(SDK_LIB_PATH)\iphlpapi.lib 	\
+    $(TARGETPATH)\*\ibal.lib		\
+    $(TARGETPATH)\*\complib.lib

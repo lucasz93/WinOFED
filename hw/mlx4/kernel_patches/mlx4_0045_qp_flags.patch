@@ -1,0 +1,76 @@
+mlx4: Add creation flags to mlx4 QPs
+
+The core passes creation flags and mlx4 saves them for later
+reference.
+
+rev 2: 
+changed flags field to int
+moved setting flags to qp_create_common.
+
+Signed-off-by: Eli Cohen <eli@mellanox.co.il>
+Signed-off-by: Jack Morgenstein <jackm@dev.mellanox.co.il>
+
+---
+
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/mlx4_ib.h
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/mlx4_ib.h	2008-01-23 13:15:31.282457000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/mlx4_ib.h	2008-01-23 15:58:48.546092000 +0200
+@@ -110,6 +110,10 @@ struct mlx4_ib_wq {
+ 	unsigned		tail;
+ };
+ 
++enum qp_flags {
++	MLX4_QP_LSO = 1 << 0
++};
++
+ struct mlx4_ib_qp {
+ 	struct ib_qp		ibqp;
+ 	struct mlx4_qp		mqp;
+@@ -133,6 +137,7 @@ struct mlx4_ib_qp {
+ 	u8			resp_depth;
+ 	u8			sq_no_prefetch;
+ 	u8			state;
++	int			flags;
+ };
+ 
+ struct mlx4_ib_srq {
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/qp.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/qp.c	2008-01-23 13:15:31.287456000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/qp.c	2008-01-23 16:00:38.734097000 +0200
+@@ -238,9 +238,13 @@ static int set_rq_size(struct mlx4_ib_de
+ 	return 0;
+ }
+ 
+-static int set_kernel_sq_size(struct mlx4_ib_dev *dev, struct ib_qp_cap *cap,
+-			      enum ib_qp_type type, struct mlx4_ib_qp *qp)
++static int set_kernel_sq_size(struct mlx4_ib_dev *dev,
++			      struct ib_qp_init_attr *init_attr,
++			      struct mlx4_ib_qp *qp)
+ {
++	struct ib_qp_cap *cap = &init_attr->cap;
++	enum ib_qp_type type = init_attr->qp_type;
++
+ 	/* Sanity check SQ size before proceeding */
+ 	if (cap->max_send_wr	 > dev->dev->caps.max_wqes  ||
+ 	    cap->max_send_sge	 > dev->dev->caps.max_sq_sg ||
+@@ -328,6 +332,9 @@ static int create_qp_common(struct mlx4_
+ 	qp->sq.head	    = 0;
+ 	qp->sq.tail	    = 0;
+ 
++	if (init_attr->create_flags & QP_CREATE_LSO)
++		qp->flags |= MLX4_QP_LSO;
++
+ 	err = set_rq_size(dev, &init_attr->cap, !!pd->uobject, !!init_attr->srq, qp);
+ 	if (err)
+ 		goto err;
+@@ -371,7 +378,7 @@ static int create_qp_common(struct mlx4_
+ 	} else {
+ 		qp->sq_no_prefetch = 0;
+ 
+-		err = set_kernel_sq_size(dev, &init_attr->cap, init_attr->qp_type, qp);
++		err = set_kernel_sq_size(dev, init_attr, qp);
+ 		if (err)
+ 			goto err;
+ 

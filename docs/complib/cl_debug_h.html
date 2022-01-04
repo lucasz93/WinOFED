@@ -1,0 +1,534 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_debug_h.html</title>
+<!-- Source: ./inc/complib/cl_debug.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_debug.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo6">[Modules]<a name="Component20Library2fDebug20Output">
+Component Library/Debug Output</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Debug Output
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The debug output functions and macros send debug messages to the current
+       debug target.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo309">[Definitions]<a name="Component20Library3a20Debug20Output2f642dbit20Print20Format">
+Component Library: Debug Output/64-bit Print Format</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       64-bit Print Format
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The 64-bit print keywords allow users to use 64-bit values in debug or
+       console output.
+
+       Different platforms define 64-bit print formats differently. The 64-bit
+       print formats exposed by the component library are supported in all
+       platforms.
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       PRId64
+               Print a 64-bit integer in signed decimal format.
+       PRIx64
+               Print a 64-bit integer in hexadecimal format.
+       PRIo64
+               Print a 64-bit integer in octal format.
+       PRIu64
+               Print a 64-bit integer in unsigned decimal format.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       uint64 MyVal = 2;
+       // Print a 64-bit integer in hexadecimal format.
+       <a href="#robo311">cl_dbg_out</a>( "MyVal: 0x%" PRIx64 "\n", MyVal );
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Standard print flags to specify padding and precision can still be used
+       following the '%' sign in the string preceding the 64-bit print keyword.
+
+       The above keywords are strings and make use of compilers' string
+       concatenation ability.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo310">[Functions]<a name="Component20Library3a20Debug20Output2fcl5fbreak">
+Component Library: Debug Output/cl_break</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_break</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_break</strong> function halts execution.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       void
+*       <strong>cl_break</strong>();
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       In a release build, <strong>cl_break</strong> has no effect.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo311">[Functions]<a name="Component20Library3a20Debug20Output2fcl5fdbg5fout">
+Component Library: Debug Output/cl_dbg_out</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_dbg_out</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_dbg_out</strong> function sends a debug message to the debug target in
+       debug builds only.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void
+<strong>cl_dbg_out</strong>(
+        IN      const char* const       debug_message,
+        IN      ... );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       debug_message
+               [in] ANSI string formatted identically as for a call to the standard C
+               function printf.
+
+       ...
+               [in] Extra parameters for string formatting, as defined for the
+               standard C function printf.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       In a release build, <strong>cl_dbg_out</strong> has no effect.
+
+       The formatting of the debug_message string is the same as for printf
+
+       <strong>cl_dbg_out</strong> sends the debug message to the current debug target.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, <a href="#robo314">cl_msg_out</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo312">[Definitions]<a name="Component20Library3a20Debug20Output2fCL5fENTER">
+Component Library: Debug Output/CL_ENTER</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_ENTER</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_ENTER</strong> macro marks the entrance into a function by sending a
+       string to the current debug target if the requested debug level matches
+       the current debug level.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_ENTER</strong>( DBG_LVL, CHK_LVL );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       DBG_LVL
+               [in] Debug level for the string to output
+
+       CHK_LVL
+               [in] Current debug level against which to check DBG_LVL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This macro does not return a value.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       #define __MODULE__      "my_module"
+       #define MY_FUNC_DBG_LVL 1
+
+       uint32_t        my_dbg_lvl = CL_DBG_ALL;
+
+       void
+       my_func()
+       {
+               <strong>CL_ENTER</strong>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+               <a href="#robo313">CL_EXIT</a>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+       }
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       my_module:my_func() [
+       my_module:my_func() ]
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The function entrance notification is printed only if all bits set
+       in DBG_LVL are also set in CHK_LVL.  CHK_LVL may have additional bits set.
+
+       If the __MODULE__ preprocessor keyword is defined, that keyword will be
+       prepended to the function name, separated with a colon.
+
+       In multi-processor environments where the current processor can be
+       determined, the zero-based number of the processor on which the output
+       is generated is prepended to the output.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, Debug Levels, <a href="#robo315">CL_PRINT</a>, <a href="#robo313">CL_EXIT</a>, <a href="#robo316">CL_TRACE</a>, <a href="#robo317">CL_TRACE_EXIT</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo313">[Definitions]<a name="Component20Library3a20Debug20Output2fCL5fEXIT">
+Component Library: Debug Output/CL_EXIT</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_EXIT</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_EXIT</strong> macro marks the exit from a function by sending a string
+       to the current debug target if the requested debug level matches the
+       current debug level.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_EXIT</strong>( DBG_LVL, CHK_LVL );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       DBG_LVL
+               [in] Debug level for the string to output
+
+       CHK_LVL
+               [in] Current debug level against which to check DBG_LVL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This macro does not return a value.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       #define __MODULE__      "my_module"
+       #define MY_FUNC_DBG_LVL 1
+
+       uint32_t        my_dbg_lvl = CL_DBG_ALL;
+
+       void
+       my_func()
+       {
+               <a href="#robo312">CL_ENTER</a>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+               <strong>CL_EXIT</strong>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+       }
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       my_module:my_func() [
+       my_module:my_func() ]
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The exit notification is printed only if all bits set in DBG_LVL are also
+       set in CHK_LVL.  CHK_LVL may have additional bits set.
+
+       The <strong>CL_EXIT</strong> macro must only be used after the CL_ENTRY macro as it
+       depends on that macro's implementation.
+
+       If the __MODULE__ preprocessor keyword is defined, that keyword will be
+       prepended to the function name, separated with a colon.
+
+       In multi-processor environments where the current processor can be
+       determined, the zero-based number of the processor on which the output
+       is generated is prepended to the output.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, Debug Levels, <a href="#robo315">CL_PRINT</a>, <a href="#robo312">CL_ENTER</a>, <a href="#robo316">CL_TRACE</a>, <a href="#robo317">CL_TRACE_EXIT</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo314">[Functions]<a name="Component20Library3a20Debug20Output2fcl5fmsg5fout">
+Component Library: Debug Output/cl_msg_out</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_msg_out</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_msg_out</strong> function sends a debug message to the message log target.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void
+<strong>cl_msg_out</strong>(
+        IN      const char* const       message,
+        IN      ... );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       message
+               [in] ANSI string formatted identically as for a call to the standard C
+               function printf.
+
+       ...
+               [in] Extra parameters for string formatting, as defined for the
+               standard C function printf.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_msg_out</strong> is available in both debug and release builds.
+
+       The formatting of the message string is the same as for printf
+
+       <strong>cl_msg_out</strong> sends the message to the current message logging target.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, <a href="#robo311">cl_dbg_out</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo315">[Definitions]<a name="Component20Library3a20Debug20Output2fCL5fPRINT">
+Component Library: Debug Output/CL_PRINT</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_PRINT</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_PRINT</strong> macro sends a string to the current debug target if
+       the requested debug level matches the current debug level.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_PRINT</strong>( DBG_LVL, CHK_LVL, STRING );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       DBG_LVL
+               [in] Debug level for the string to output
+
+       CHK_LVL
+               [in] Current debug level against which to check DBG_LVL
+
+       STRING
+               [in] String to send to the current debug target.  The string includes
+               parentheses in order to allow additional parameters.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This macro does not return a value.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       #define MY_FUNC_DBG_LVL 1
+
+       uint32_t        my_dbg_lvl = CL_DBG_ALL;
+
+       void
+       my_func()
+       {
+               <strong>CL_PRINT</strong>( MY_FUNC_DBG_LVL, my_dbg_lvl, ("Hello %s!\n", "world") );
+       }
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Hello world!
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The requested string is printed only if all bits set in DBG_LVL are also
+       set in CHK_LVL unless the most significant bit is set (indicating an
+       error), in which case the lower bits are ignored.  CHK_LVL may have
+       additional bits set.
+
+       In multi-processor environments where the current processor can be
+       determined, the zero-based number of the processor on which the output
+       is generated is prepended to the output.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, Debug Levels, <a href="#robo312">CL_ENTER</a>, <a href="#robo313">CL_EXIT</a>, <a href="#robo316">CL_TRACE</a>, <a href="#robo317">CL_TRACE_EXIT</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo316">[Definitions]<a name="Component20Library3a20Debug20Output2fCL5fTRACE">
+Component Library: Debug Output/CL_TRACE</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_TRACE</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_TRACE</strong> macro sends a string to the current debug target if
+       the requested debug level matches the current debug level.  The
+       output is prepended with the function name and, depending on the
+       debug level requested, an indication of the severity of the message.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_TRACE</strong>( DBG_LVL, CHK_LVL, STRING );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       DBG_LVL
+               [in] Debug level for the string to output
+
+       CHK_LVL
+               [in] Current debug level against which to check DBG_LVL
+
+       STRING
+               [in] String to send to the current debug target.  The string includes
+               parentheses in order to allow additional parameters.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This macro does not return a value.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       #define __MODULE__      "my_module"
+       #define MY_FUNC_DBG_LVL 1
+
+       uint32_t        my_dbg_lvl = CL_DBG_ALL;
+
+       void
+       my_func()
+       {
+               <a href="#robo312">CL_ENTER</a>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+               <strong>CL_TRACE</strong>( MY_FUNC_DBG_LVL, my_dbg_lvl, ("Hello %s!\n", "world") );
+               <a href="#robo313">CL_EXIT</a>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+       }
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       my_module:my_func() [
+       my_module:my_func(): Hello world!
+       my_module:my_func() ]
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The requested string is printed only if all bits set in DBG_LVL are also
+       set in CHK_LVL.  CHK_LVL may have additional bits set.
+
+       The <strong>CL_TRACE</strong> macro must only be used after the CL_ENTRY macro as it
+       depends on that macro's implementation.
+
+       If the DBG_LVL has the upper bit set, the output will contain
+       an "!ERROR!" statement between the function name and STRING.
+
+       If the __MODULE__ preprocessor keyword is defined, that keyword will be
+       prepended to the function name, separated with a colon.
+
+       In multi-processor environments where the current processor can be
+       determined, the zero-based number of the processor on which the output
+       is generated is prepended to the output.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, Debug Levels, <a href="#robo315">CL_PRINT</a>, <a href="#robo312">CL_ENTER</a>, <a href="#robo313">CL_EXIT</a>, <a href="#robo317">CL_TRACE_EXIT</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo317">[Definitions]<a name="Component20Library3a20Debug20Output2fCL5fTRACE5fEXIT">
+Component Library: Debug Output/CL_TRACE_EXIT</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_TRACE_EXIT</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_TRACE_EXIT</strong> macro combines the functionality of the <a href="#robo316">CL_TRACE</a> and
+       <a href="#robo313">CL_EXIT</a> macros, in that order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_TRACE_EXIT</strong>(  DBG_LVL, CHK_LVL, STRING );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       DBG_LVL
+               [in] Debug level for the string to output
+
+       CHK_LVL
+               [in] Current debug level against which to check DBG_LVL
+
+       STRING
+               [in] String to send to the current debug target.  The string includes
+               parentheses in order to allow additional parameters.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This macro does not return a value.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       #define __MODULE__      "my_module"
+       #define MY_FUNC_DBG_LVL 1
+
+       uint32_t        my_dbg_lvl = CL_DBG_ALL;
+
+       void
+       my_func()
+       {
+               <a href="#robo312">CL_ENTER</a>( MY_FUNC_DBG_LVL, my_dbg_lvl );
+               <strong>CL_TRACE_EXIT</strong>( MY_FUNC_DBG_LVL, my_dbg_lvl, ("Hello %s!\n", "world") );
+       }
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       my_module:my_func() [
+       my_module:my_func(): Hello world!
+       my_module:my_func() ]
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The requested string is printed only if all bits set in DBG_LVL are also
+       set in CHK_LVL.  CHK_LVL may have additional bits set.
+
+       The <strong>CL_TRACE_EXIT</strong> macro must only be used after the CL_ENTRY macro as it
+       depends on that macro's implementation.
+
+       If the DBG_LVL has the upper bit set, the output will contain
+       an "!ERROR!" statement between the function name and STRING.
+
+       If the __MODULE__ preprocessor keyword is defined, that keyword will be
+       prepended to the function name, separated with a colon.
+
+       In multi-processor environments where the current processor can be
+       determined, the zero-based number of the processor on which the output
+       is generated is prepended to the output.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, Debug Levels, <a href="#robo315">CL_PRINT</a>, <a href="#robo312">CL_ENTER</a>, <a href="#robo313">CL_EXIT</a>, <a href="#robo316">CL_TRACE</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo318">[Definitions]<a name="Component20Library3a20Debug20Output2fDebug20Levels">
+Component Library: Debug Output/Debug Levels</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Debug Levels
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The debug output macros reserve the upper bit of the debug level to
+       convey an error.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>#define CL_DBG_DISABLE          0
+#define CL_DBG_ERROR            0x80000000
+#define CL_DBG_ALL                      0xFFFFFFFF
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       CL_DBG_DISABLE
+               Disable all debug output, including errors.
+
+       CL_DBG_ERROR
+               Enable error debug output.
+
+       CL_DBG_ALL
+               Enbale all debug output.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Users can define custom debug levels using the lower 31 bits of their
+       debug level to control non-error debug output.  Error messages are
+       always displayed, regardless of the lower bit definition.
+
+       When specifying the debug output desired for non-error messages
+       (the CHK_LVL parameter in the debug output macros), users must define
+       all bits whose output they are interested in.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Debug Output, <a href="#robo315">CL_PRINT</a>, <a href="#robo312">CL_ENTER</a>, <a href="#robo313">CL_EXIT</a>, <a href="#robo316">CL_TRACE</a>, <a href="#robo317">CL_TRACE_EXIT</a>
+</pre>
+</span>
+</body>
+</html>

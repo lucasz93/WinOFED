@@ -1,0 +1,116 @@
+CURRENT_PROBLEMS
+================
+	- qp_test. SEBIT fails
+	Reproduce (from qp_test, with opensm on sw269):
+sw269: objchk_wnet_AMD64\amd64\qp_test.exe --daemon -p=1 --tcp_port=19017 --seed=1353948926
+sw270: objchk_wnet_AMD64\amd64\qp_test.exe --ip=10.4.12.69 -p=1 --ts=RC --tcp_port=19017 --seed=1353948926 --mtu=2048 --qp=5  -i=5 --poll=sebit CLIENT RR 4 7642
+	
+	- srq_test: i've excluded XRC part in poll_one, which is starnge. It seems like unbalanced change with kernel.
+	For some reson QP is qualified like XRC, which cause poll error.
+
+	- qp_test --ts=UD fails with pkt_size > 1024. Has to work with <=2048
+		qp_test.exe --ip=10.4.12.70 --ts=UD --mtu=256 --qp=1 --thread=1 --poll=block --oust=1 -i=2 [--grh] CLIENT SRI 1 1100
+
+	- qp_test atomic operations fails
+		qp_test.exe --ip=10.4.12.70 --ts=RC --mtu=256 --qp=1 --thread=1 --poll=block --oust=1 -i=10  CLIENT CS 1 8
+			mlx4: local QP operation err (QPN 26004a, WQE index 0, vendor syndrome 70, opcode = 5e)
+			\data_operation.c ,  55  DATA_ERR       : thread 0: wr_id: 0x064x
+	   		\data_operation.c ,  56  DATA_ERR       : thread 0: status: IB_WCS_LOCAL_OP_ERR
+
+	- qp_test with several threads fails (not the very simple run)
+		qp_test.exe --ip=10.4.12.70 --ts=RC --mtu=1024 --qp=5 --thread=5 --poll=block --oust=12 -i=10000  CLIENT SRI 4 32048 SERVER RW 8
+		on daemon side:
+			   \data_operation.c ,  55  DATA_ERR       : thread 3: wr_id: 0x7014064x
+			   \data_operation.c ,  56  DATA_ERR       : thread 3: status: IB_WCS_WR_FLUSHED_ERR
+		     \data_operation.c , 275  MISC_ERR       : thread 3: failed to read completions: IB_ERROR
+	         \qp_test.c ,  70  HCA_ERR        : Got QP async event. Type: IB_AE_SQ_ERROR(0x1), vendor_specific: 0x064x
+
+	- WSD freezes on long sends (packets lost ???). Do several times. (Tried with free version.)
+		SdpConnect.exe client 11.4.12.70 2222 0 1 0 2 2 1 40000 2000 
+		SdpConnect.exe pingpong 11.4.12.70 2223 2000 4  
+	
+	- DDR: opensm can't do the work: active side is left in ARMED state, passive - in INITIALIZED.
+		(maybe, out of debug messages on the passive side)
+
+	- crash on destroy_cq
+
+		mlx4_bus!mlx4_ib_db_free+0xad
+		mlx4_bus!mlx4_ib_destroy_cq+0x1c2
+		mlx4_hca!ib_destroy_cq+0x46
+		mlx4_hca!mlnx_destroy_cq+0x1d
+		ibbus!cleanup_cq+0x1d
+		ibbus!async_destroy_cb+0xb3
+		ibbus!__cl_async_proc_worker+0x61
+		ibbus!__cl_thread_pool_routine+0x41
+		ibbus!__thread_callback+0x28
+
+	- Driver unload on the passive side, while opensm is running, gets stuck !
+	Seems like because of the not released MADs:
+		[AL]print_al_obj() !ERROR!: AL object fffffade6c23b900(AL_OBJ_TYPE_H_MAD_SVC), parent: fffffade6cb4bd10 ref_cnt: 8
+	Maybe, it is an old problem !! Check with MTHCA.
+
+	- Crash on MAD send completion callback at driver download.
+	Check it by download driver while mad sending.
+
+	mlxburn -d mt25408_pci_cr0 -fw c:\tmp\mlx4\FW\966\fw-25408-rel.mlx -conf c:\tmp\mlx4\fw\MHGH28-XTC_A1.ini
+
+Solved Problems:
+===============
+	- inverted LID in QP1 trafic of IBAL;
+	- ib_send_bw.exe -a -c UC
+		Couldn't create QP
+	- ib_read_bw gets stuck
+		mlx4: local QP operation err (QPN 0a004a, WQE index 0, vendor syndrome 70, opcode = 5e)
+		Completion wth error at client:
+		Failed status 2: wr_id 3 syndrom 0x70		
+	- crash on query_qp after create qp failed.
+	Seams like an IBAL problem - it calls mlnx_query_qp with h_qp = 0
+	reproduce:
+		qp_test.exe --daemon
+		qp_test.exe --ip=10.4.12.70 [--ts=UC] --mtu=256 --qp=1 --thread=1 --poll=block --oust=1 -i=2 [--grh] CLIENT SRI 1 256
+	create_qp for some reason failes with invalid_max_sge ??!
+
+SERIOUS BUGS:
+============
+1. ALIGN_PAGE in Linux means aliign to the next page, in Windows - to the previous;
+2. IBAL uses modify_av to change SA_SVC AV slid. When not used, it sends SA requests with LID = 1 in host order, as it put it to itself by default.
+3. There is no way to convey CQ completion event to user space. So mlx4_cq_event, incrementing arm_sn, can't be called.
+One needs to add an arrangement to make kernel code increment this variable.
+
+
+BEFORE DEBUGGING
+================
++0. add support for livefish.
+1. review eq.c - all interrupt handling stuff;
++2. remove all //rmv
+3. look through all the // TODO
+4. Check all the MACROS: whether there are more ones, that have different meaning in Windows and Linux;
+
+NOT IMPLEMENTED
+===============
+0. Add propagation of vendor_specific error code to IBAL callbacks like in MTHCA
+1. MSI-X support.
+2. Work with DMA addresses and not with physical ones (a very serious change!);
+
+
+KNOWN PROBLEMS
+==============
+1. Performance
+	1.1 Command go-bit timeout is set to CMD_WAIT_USECS. Not clear the influence.
+	1.2 Radix tree is implemented via COMPLIB calls, that seems like none used. It can be slow and even buggy.
+	1.3 Different things can be done in built_in assempbler (e.g., bit operations like fls()).
+
+2. WPP support disabled. Problems:
+	- at compilation phase;
+	- Linux prints in MLX4_BUS are not supported by WPP (mlx4_err, mlx4_dbg, dev_err, dev_info ...);
+	- check WPP guids - both in MLX4_BUS and MLX4_HCA - are redefined and not copyed from the previous code.
+
+3. (General) Several places are marked with '// TODO:'. They have to be reviewed from time to time, especially - upon problems.
+
+PORTING PROBLEMS:
+================
+1. PAGE_ALIGN has different meaning in Linux and Windows;
+2. There is no way to convey CQ completion event to user space. So mlx4_cq_event, incrementing arm_sn, can't be called.
+One needs to add an arrangement to make kernel code increment this variable.
+3. IBAL uses modify_av to change SA_SVC AV slid, set by default to LITTLE_ENDIAN 1. The problem is seen as inverted LID on the sniffer.
+The solution - implement modify_av.

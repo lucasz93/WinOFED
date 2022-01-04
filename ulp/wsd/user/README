@@ -1,0 +1,38 @@
+TODO
+====
+
+- use pd_handle or pd, but be consistent.
+
+- try to inline FindSocketContext and more.
+
+- use more than one wqc with ib_poll_cq.
+
+- I think WSPRecv can be called before the connection is
+established. Therefore the check of the state of the socket is
+incorrect.
+
+- protect the socket state transition. Use a function to check for
+valid transitions?
+
+- finish to fillup ibsp_pnp.c to manage dynamic IP addresses.
+
+- ib_cm_rep can be sent synchronously. Should solve the accept dilema.
+
+- some error paths are leaking ressources, esp IBSPAccept
+
+- socket_info_list is not protected
+
+- it might be possible to not get a completion event when the event bit is not set -> optimization. Disable sollicitation bit in that case.
+
+- duplicating listen socket is not implemented. Is that possible? Will the switch do it?
+
+- replace listen.mutex by mutex?
+
+- maybe create a pool of created qps to speedup connections? Or keep existing QPs in a pool after the are moved to RESET.
+
+- is it a good idea to hold socket_info->mutex while calling CM?
+
+- do something about socket_info->port->hca
+
+
+

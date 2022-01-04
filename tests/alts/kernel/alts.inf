@@ -1,0 +1,169 @@
+;/*++
+;
+;Copyright 2004 InfiniCon Systems, Inc. All Rights Reserved.
+;
+;Module Name:
+;
+;  infinihost.inf
+;
+;Abstract:
+;
+;  INF file for installing the InfiniCon InfiniBand HCAs.
+;
+;Author:
+;
+;  InfiniCon Systems, Inc
+;
+;REVISION:
+;
+;  $Revision$
+;
+;--*/
+
+[Version]
+Signature="$Windows NT$"
+Class=InfiniBandHca
+ClassGUID=%HcaClassGuid%
+Provider=%Vendor%
+CatalogFile=infiniserv.cat
+DriverVer=03/08/2006,1.0.0000.614
+
+; ================= Destination directory section =====================
+
+[DestinationDirs]
+DefaultDestDir=12
+ClassCopyFiles=11
+;MT23108UMCopyFiles=11
+; add additional HCA user-mode section names here.
+
+; ================= Class Install section =====================
+
+[ClassInstall32]
+CopyFiles=ClassCopyFiles
+AddReg=ClassAddReg
+
+[ClassCopyFiles]
+IbInstaller.dll
+
+[ClassAddReg]
+HKR,,,,"InfiniBand Host Channel Adapters"
+HKR,,Icon,,-5
+HKLM,"System\CurrentControlSet\Control\CoDeviceInstallers", \
+ %HcaClassGuid%,%REG_MULTI_SZ_APPEND%, "IbInstaller.dll,IbCoInstaller"
+
+; ================= Device Install section =====================
+
+[SourceDisksNames]
+1=%DiskId%
+
+[SourceDisksFiles.x86]
+IbInstaller.dll=1
+complib.sys=1
+ibal.sys=1
+mt23108.sys=1
+thca.sys=1
+alts.sys=1
+
+[Manufacturer]
+%Vendor% = INFINICON_SYS,nt
+
+[INFINICON_SYS]
+; empty since we don't support W9x/Me
+
+[INFINICON_SYS.nt]
+%MT23108.DeviceDesc% = MT23108.Install.nt,PCI\VEN_15B3&DEV_5A44
+; add additional devices here.
+
+[MT23108.Install.nt]
+CopyFiles = MT23108.CopyFiles
+
+[MT23108.Install.nt.HW]
+AddReg = MT23108.FiltersReg
+
+[MT23108.Install.nt.Services]
+AddService = thca,%SPSVCINST_NULL%,THCA.ServiceInstall
+AddService = alts,%SPSVCINST_NULL%,ALTS.ServiceInstall
+AddService = mt23108,%SPSVCINST_ASSOCSERVICE%,MT23108.ServiceInstall
+AddService = ibal,%SPSVCINST_NULL%,Ibal.ServiceInstall
+
+[MT23108.CopyFiles]
+complib.sys
+ibal.sys
+mt23108.sys
+thca.sys
+alts.sys
+
+;
+; ============= Service Install section ==============
+;
+
+[MT23108.ServiceInstall]
+DisplayName     = %MT23108.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\mt23108.sys
+LoadOrderGroup  = extended base
+AddReg          = MT23108.ParamsReg
+
+[THCA.ServiceInstall]
+DisplayName     = %THCA.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\thca.sys
+LoadOrderGroup  = extended base
+AddReg          = THCA.ParamsReg
+
+[ALTS.ServiceInstall]
+DisplayName     = %ALTS.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\alts.sys
+LoadOrderGroup  = extended base
+
+[Ibal.ServiceInstall]
+DisplayName     = %Ibal.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ibal.sys
+AddReg          = Ibal.ParamsReg
+
+[MT23108.FiltersReg]
+HKR,,"UpperFilters", 0x00010000,"thca","alts"
+
+[MT23108.ParamsReg]
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0xFFFFFFFF
+HKR,"Parameters","ConfAddr",%REG_DWORD%,88
+HKR,"Parameters","ConfData",%REG_DWORD%,92
+HKR,"Parameters","DdrMapOffset",%REG_DWORD%,0x100000
+HKR,"Parameters","DdrMapSize",%REG_DWORD%,0x1600000
+HKR,"Parameters","UseIbMgt",%REG_DWORD%,1
+HKR,"Parameters","ThhLegacySqp",%REG_DWORD%,0
+HKR,"Parameters","ResetCard",%REG_DWORD%,0
+
+[THCA.ParamsReg]
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x80000000
+
+[Ibal.ParamsReg]
+HKR,"Parameters","DebugFlags",%REG_DWORD_NO_CLOBBER%,0x80000000
+
+[Strings]
+HcaClassGuid = "{58517E00-D3CF-40c9-A679-CEE5752F4491}"
+Vendor = "InfiniCon Systems, Inc."
+MT23108.DeviceDesc = "InfiniCon MT23108 InfiniBand HCA Test"
+MT23108.ServiceDesc = "InfiniCon MT23108 InfiniBand HCA Driver"
+THCA.ServiceDesc = "InfiniCon MT23108 HCA VPD for IBAL"
+ALTS.ServiceDesc = "InfiniCon Access Layer Test Suite Driver"
+Ibal.ServiceDesc = "InfiniCon InfiniBand Access Layer"
+DiskId = "InfiniCon InfiniBand HCA installation disk"
+SPSVCINST_NULL = 0x0
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+REG_DWORD              = 0x00010001
+REG_DWORD_NO_CLOBBER   = 0x00010003
+REG_MULTI_SZ_APPEND    = 0x00010008

@@ -1,0 +1,16 @@
+TARGETNAME=cmtest
+TARGETPATH=obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+_LIBS=C:\OFED_SDK\Lib
+
+SOURCES=cmtest.c cmtest.rc
+
+INCLUDES=C:\OFED_SDK\Inc;
+
+TARGETLIBS= \
+			$(_LIBS)\complib.lib \
+			$(_LIBS)\ibal.lib
+
+MSC_WARNING_LEVEL= /W3

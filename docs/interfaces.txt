@@ -1,0 +1,40 @@
+WinOF provides several userspace interfaces.  The main application
+interfaces are given below, along with a brief description of each.
+
+
+libibverbs
+OFA interface available on windows and linux
+	This is the only linux verbs interface, which was ported to
+	windows to support portability.  This sits over winverbs.
+	It provides low abstraction to the hardware, but does not
+	expose windows specific	features, like overlapped operations
+	for asynchronous control.  This is a good choice for low-level
+	access, with portability between windows and linux.
+
+WinVerbs
+OFA windows interface
+	Lowest level windows verbs interface for applications.  Most
+	of the other interfaces sit over this interface.  This provides
+	the lowest abstraction to the hardware, while also exposing
+	windows specific features.  This is a good choice for
+	low-level access on windows.
+
+DAPL (Direct Access Programming Library)
+Industry standard RDMA interface for multiple OS's
+	Hardware providers may support this interface, even if not
+	part of OFA.  This sits over libibverbs and ibal.  This provides a
+	higher level of abstraction, but provides the most portability.
+
+Network Direct (ND)
+Microsoft defined interface for windows
+	Hardware providers may support this interface, even if not
+	part of OFA.  This sits over winverbs and ibal.  This provides
+	a higher level of abstraction, but may provide access to the
+	most hardware on Windows platforms.
+
+IBAL (InfiniBand Access Layer)
+OFA windows interface
+	Older windows interface.  This is currently a peer to winverbs,
+	with a longer term goal of moving it over winverbs.  The
+	interface will be supported going forward.  This provides low
+	level abstraction, but does not expose windows specific features.

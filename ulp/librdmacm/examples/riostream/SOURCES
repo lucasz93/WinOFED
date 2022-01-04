@@ -1,0 +1,25 @@
+TARGETNAME=riostream
+TARGETPATH=..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+NTTARGETFILES=Custom_target
+
+C_DEFINES=$(C_DEFINES) /D__WIN__ 
+
+SOURCES=riostream.rc \
+	riostream.c
+
+INCLUDES=	..; \
+			..\..\..\..\inc; \
+			..\..\..\..\inc\user; \
+			..\..\..\..\inc\user\linux; \
+			..\..\include; \
+			..\..\..\libibverbs\include; \
+			..\..\..\..\etc\user;
+
+RCOPTIONS=/I..\..\win\include
+
+TARGETLIBS= $(DDK_LIB_PATH)\Ws2_32.lib 
+
+MSC_WARNING_LEVEL= /W3

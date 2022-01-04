@@ -1,0 +1,39 @@
+#include <oib_ver.h>
+
+#define VER_FILETYPE                VFT_DRV
+#define VER_FILESUBTYPE             VFT2_UNKNOWN
+#define VER_INTERNALNAME_STR        "mlx4_bus.sys"
+#define VER_ORIGINALFILENAME_STR    "mlx4_bus.sys"
+
+#ifndef HP_PROD
+
+#if DBG
+#define VER_FILEDESCRIPTION_STR     "MLX4 Bus Driver (checked)"
+#else
+#define VER_FILEDESCRIPTION_STR     "MLX4 Bus Driver"
+#endif
+
+#else
+
+#ifdef VER_LEGALCOPYRIGHT_STR
+#undef VER_LEGALCOPYRIGHT_STR
+#endif
+#define VER_LEGALCOPYRIGHT_STR	"Copyright\xa9 2009 Hewlett-Packard Development Company, L.P"
+
+#ifdef VER_COMPANYNAME_STR
+#undef VER_COMPANYNAME_STR
+#endif
+#define VER_COMPANYNAME_STR		"Hewlett-Packard"
+
+#if DBG
+#define VER_FILEDESCRIPTION_STR     "HP Bus Driver (checked)"
+#else
+#define VER_FILEDESCRIPTION_STR     "HP Bus Driver"
+#endif
+
+#endif
+
+#include <common.ver>
+
+#include "ev_log.rc"
+

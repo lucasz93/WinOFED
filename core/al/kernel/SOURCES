@@ -1,0 +1,83 @@
+TARGETNAME=ibal
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+NTTARGETFILES=Custom_target
+
+
+SOURCES= ibal.rc			\
+	al_ci_ca.c				\
+	al_cm.c					\
+	al_cm_cep.c				\
+	al_dev.c				\
+    al_ibat.cpp             \
+	al_ioc_pnp.c			\
+	al_mad_pool.c			\
+	al_fmr_pool.c			\
+	al_mgr.c				\
+	al_mr.c					\
+	al_pnp.c				\
+	al_proxy.c				\
+	al_proxy_cep.c			\
+	al_proxy_ioc.c			\
+	al_proxy_subnet.c		\
+	al_proxy_verbs.c		\
+	al_proxy_ndi.c			\
+	al_ndi_cq.c				\
+	al_ndi_cm.c				\
+	al_sa_req.c				\
+	al_smi.c				\
+	al_mcast_mgr.c			\
+	..\al.c					\
+	..\al_av.c				\
+	..\al_ca.c				\
+	..\al_ci_ca_shared.c	\
+	..\al_cm_qp.c			\
+	..\al_common.c			\
+	..\al_ref_trace.c			\
+	..\al_cq.c				\
+	..\al_dm.c				\
+	..\al_init.c			\
+	..\al_mad.c				\
+	..\al_mcast.c			\
+	..\al_mgr_shared.c		\
+	..\al_mr_shared.c		\
+	..\al_mw.c				\
+	..\al_pd.c				\
+	..\al_qp.c				\
+	..\al_query.c			\
+	..\al_reg_svc.c			\
+	..\al_res_mgr.c			\
+	..\al_srq.c				\
+	..\al_sub.c				\
+	..\ib_common.c			\
+	..\ib_statustext.c
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;..\..\bus\kernel;..\..\complib\kernel\$(O);
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS \
+	-DEXPORT_AL_SYMBOLS
+
+TARGETLIBS= \
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+	$(TARGETPATH)\*\complib.lib
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:..\al_debug.h \
+	-func:AL_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:AL_PRINT_EXIT(LEVEL,FLAGS,(MSG,...))
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

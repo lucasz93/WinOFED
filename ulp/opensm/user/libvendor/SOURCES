@@ -1,0 +1,62 @@
+# Build the 'vendor' library for linking opensm.exe
+
+!if !defined(WINIBHOME)
+WINIBHOME=..\..\..\..
+!endif
+
+LIBPATH=$(WINIBHOME)\bin\user\obj$(BUILD_ALT_DIR)
+
+!if defined(OSM_TARGET)
+TARGETPATH=$(OSM_TARGET)\bin\user\obj$(BUILD_ALT_DIR)
+!else
+TARGETPATH=$(LIBPATH)
+!endif
+
+!INCLUDE ..\mad-vendor.inc
+
+TARGETNAME=$(VENDOR_LIB)
+TARGETTYPE=LIBRARY
+
+USE_NTDLL=1
+USE_NATIVE_EH=1
+OVR_DIR=..\addon
+
+
+SOURCES= complib_files.c \
+	winosm_common.c \
+	$(VENDOR_SRC)
+
+
+OSM_HOME=..
+
+TARGETLIBS=\
+	$(LIBPATH)\*\complib.lib 
+
+INCLUDES= \
+	$(WINIBHOME)\inc; \
+	$(WINIBHOME)\inc\user; \
+	$(WINIBHOME)\inc\user\complib; \
+	$(WINIBHOME)\inc\user\linux; \
+	$(VENDOR_INC) \
+	$(OSM_HOME); \
+	$(OSM_HOME)\include;
+
+# Could be any special flag needed for this project 
+USER_C_FLAGS=$(USER_C_FLAGS) 
+
+#Add preproccessor definitions
+C_DEFINES=$(C_DEFINES) -D__WIN__ -DHAVE_CONFIG_H -D$(VENDOR_IF)
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+# in cl_types_osd.h '_DEBUG_' is defined by virture of '_DEBUG" being defined.
+!else
+# favor fast over default small; default is /Oxs.
+MSC_OPTIMIZATION= /Oxt
+!endif
+
+LINKER_FLAGS= $(LINKER_FLAGS) /DEF:$(VENDOR_LIB).exports
+
+MSC_WARNING_LEVEL= /W2 /wd4242
+
+

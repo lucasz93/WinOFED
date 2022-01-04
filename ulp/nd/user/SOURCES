@@ -1,0 +1,67 @@
+TARGETNAME=ibndprov
+
+TARGETPATH=..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+DLLDEF=NdProv.def
+DLLENTRY=DllMain
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+#!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+USE_NTDLL=1
+NTTARGETFILES=Custom_target
+
+SOURCES= \
+	NdProv.rc				\
+	NdAdapter.cpp			\
+	NdCq.cpp				\
+	NdEndpoint.cpp			\
+	NdListen.cpp			\
+	NdMr.cpp				\
+	NdMw.cpp				\
+	NdProv.cpp				\
+	NdConnector.cpp
+
+
+INCLUDES=$(SDK_INC_PATH);..\..\..\inc;..\..\..\inc\user;..\..\..\core\al;\
+		  ..\..\..\core\al\user;$(ND_SDK_PATH)\include;\
+
+!if $(_NT_TARGET_VERSION) < 0x602
+INCLUDES=$(INCLUDES) \
+      $(PLATFORM_SDK_PATH)\include;
+!endif
+
+USER_C_FLAGS=$(USER_C_FLAGS) -DEXPORT_AL_SYMBOLS -DCL_NO_TRACK_MEM -DWPP_OLDCC 
+
+#/GL
+#LINKER_FLAGS=$(LINKER_FLAGS) /LTCG
+
+TARGETLIBS= \
+			$(SDK_LIB_PATH)\Kernel32.lib	\
+			$(SDK_LIB_PATH)\Advapi32.lib	\
+			$(SDK_LIB_PATH)\ws2_32.lib 		\
+			$(SDK_LIB_PATH)\iphlpapi.lib 	\
+            $(TARGETPATH)\*\complib.lib 	\
+            $(SDK_LIB_PATH)\uuid.lib
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -ext: .c .h .C .H \
+	-scan:nddebug.h \
+	-func:ND_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:ND_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) \
+	-dll
+!ENDIF
+
+BUILD_PRODUCES=NetworkDirect
+
+MSC_WARNING_LEVEL= /W4

@@ -1,0 +1,8 @@
+LIBRARY wvndprov.dll
+
+#ifndef _WIN64
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	WSPStartup
+#endif

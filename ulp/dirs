@@ -1,0 +1,14 @@
+DIRS=\
+	libibverbs	\
+	libibumad	\
+	libibmad	\
+	libibnetdisc	\
+	librdmacm	\
+	opensm		\
+	nd		\
+	netdirect	\
+	dapl2		\
+	wsd		\
+	ipoib		\
+	srp		\
+	qlgcvnic

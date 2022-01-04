@@ -1,0 +1,5 @@
+DIRS=\
+	core \
+	net \
+	ib \
+	drv 

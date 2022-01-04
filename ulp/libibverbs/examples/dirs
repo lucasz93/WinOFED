@@ -1,0 +1,6 @@
+DIRS =			\
+	devinfo		\
+	rc_pingpong	\
+	uc_pingpong	\
+	ud_pingpong	\
+	asyncwatch

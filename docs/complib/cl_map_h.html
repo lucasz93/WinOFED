@@ -1,0 +1,898 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_map_h.html</title>
+<!-- Source: ./inc/complib/cl_map.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_map.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo13">[Modules]<a name="Component20Library2fMap">
+Component Library/Map</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Map</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <strong>Map</strong> implements a binary tree that stores user objects.  Each item stored
+       in a map has a unique 64-bit key (duplicates are not allowed).  <strong>Map</strong>
+       provides the ability to efficiently search for an item given a key.
+
+       <strong>Map</strong> may allocate memory when inserting objects, and can therefore fail
+       operations due to insufficient memory.  Use quick map in situations where
+       such insertion failures cannot be tolerated.
+
+       <strong>Map</strong> is not thread safe, and users must provide serialization when adding
+       and removing items from the map.
+
+       The map functions operates on a <a href="#robo419">cl_map_t</a> structure which should be treated
+       as opaque and should be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Types:
+               <a href="#robo410">cl_map_iterator_t</a>
+
+       Structures:
+               <a href="#robo419">cl_map_t</a>, <a href="./cl_qmap_h.html#robo575">cl_map_item_t</a>, <a href="./cl_qmap_h.html#robo576">cl_map_obj_t</a>
+
+       Item Manipulation:
+               <a href="#robo414">cl_map_obj</a>, <a href="#robo411">cl_map_key</a>
+
+       Initialization:
+               <a href="#robo401">cl_map_construct</a>, <a href="#robo408">cl_map_init</a>, <a href="#robo404">cl_map_destroy</a>
+
+       Iteration:
+               <a href="#robo405">cl_map_end</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>
+
+       Manipulation
+               <a href="#robo409">cl_map_insert</a>, <a href="#robo406">cl_map_get</a>, <a href="#robo418">cl_map_remove_item</a>, <a href="#robo416">cl_map_remove</a>,
+               <a href="#robo417">cl_map_remove_all</a>, <a href="#robo412">cl_map_merge</a>, <a href="#robo403">cl_map_delta</a>
+
+       Attributes:
+               <a href="#robo402">cl_map_count</a>, <a href="#robo400">cl_is_map_empty</a>, <a href="#robo326">cl_is_map_inited</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo326">[Functions]<a name="Component20Library3a20Event2fcl5fis5fmap5finited">
+Component Library: Event/cl_is_map_inited</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_map_inited</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_map_inited</strong> function returns whether a map was
+       successfully initialized.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_map_inited</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        /*
+         * The map's pool of map items is the last thing initialized.
+         * We can therefore use it to test for initialization.
+         */
+        return( <a href="./cl_qpool_h.html#robo597">cl_is_qpool_inited</a>( &amp;p_map-&gt;pool ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo419">cl_map_t</a> structure whose initialization state
+               to check.
+
+ RETURN VALUES
+       TRUE if the map was initialized successfully.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows checking the state of a map to determine if invoking
+       member functions is appropriate.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo400">[Functions]<a name="Component20Library3a20Map2fcl5fis5fmap5fempty">
+Component Library: Map/cl_is_map_empty</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_map_empty</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_map_empty</strong> function returns whether a map is empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_map_empty</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        CL_ASSERT( p_map );
+        return( <a href="./cl_qmap_h.html#robo574">cl_is_qmap_empty</a>( &amp;p_map-&gt;qmap ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map to test for emptiness.
+
+ RETURN VALUES
+       TRUE if the map is empty.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo402">cl_map_count</a>, <a href="#robo417">cl_map_remove_all</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo401">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fconstruct">
+Component Library: Map/cl_map_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_construct</strong> function constructs a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_map_construct</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const p_map );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo419">cl_map_t</a> structure to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo408">cl_map_init</a>, <a href="#robo404">cl_map_destroy</a>, and <a href="#robo326">cl_is_map_inited</a>.
+
+       Calling <strong>cl_map_construct</strong> is a prerequisite to calling any other
+       map function except <a href="#robo408">cl_map_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo408">cl_map_init</a>, <a href="#robo404">cl_map_destroy</a>, <a href="#robo326">cl_is_map_inited</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo402">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fcount">
+Component Library: Map/cl_map_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_count</strong> function returns the number of items stored
+       in a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_map_count</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        CL_ASSERT( p_map );
+        return( <a href="./cl_qmap_h.html#robo579">cl_qmap_count</a>( &amp;p_map-&gt;qmap ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map whose item count to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the number of items stored in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo400">cl_is_map_empty</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo403">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fdelta">
+Component Library: Map/cl_map_delta</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_delta</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_delta</strong> function computes the differences between two maps.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_map_delta</strong>(
+        IN OUT  <a href="#robo419">cl_map_t</a>* const p_map1,
+        IN OUT  <a href="#robo419">cl_map_t</a>* const p_map2,
+        OUT             <a href="#robo419">cl_map_t</a>* const p_new,
+        OUT             <a href="#robo419">cl_map_t</a>* const p_old );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map1
+               [in/out] Pointer to the first of two <a href="#robo419">cl_map_t</a> structures whose
+               differences to compute.
+
+       p_map2
+               [in/out] Pointer to the second of two <a href="#robo419">cl_map_t</a> structures whose
+               differences to compute.
+
+       p_new
+               [out] Pointer to an empty <a href="#robo419">cl_map_t</a> structure that contains the items
+               unique to p_map2 upon return from the function.
+
+       p_old
+               [out] Pointer to an empty <a href="#robo419">cl_map_t</a> structure that contains the items
+               unique to p_map1 upon return from the function.
+
+ RETURN VALUES
+       CL_SUCCESS if the operation succeeded.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory for the operation
+       to succeed.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Items are evaluated based on their keys.  Items that exist in both
+       p_map1 and p_map2 remain in their respective maps.  Items that
+       exist only p_map1 are moved to p_old.  Likewise, items that exist only
+       in p_map2 are moved to p_new.  This function can be usefull in evaluating
+       changes between two maps.
+
+       Both maps pointed to by p_new and p_old must be empty on input.
+
+       Upon failure, all input maps are restored to their original state.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo412">cl_map_merge</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo404">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fdestroy">
+Component Library: Map/cl_map_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_destroy</strong> function destroys a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_map_destroy</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const p_map );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performs any necessary cleanup of the specified map. Further
+       operations should not be attempted on the map. <strong>cl_map_destroy</strong> does
+       not affect any of the objects stored in the map.
+       This function should only be called after a call to <a href="#robo401">cl_map_construct</a>.
+
+       In debug builds, <strong>cl_map_destroy</strong> asserts that the map is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo401">cl_map_construct</a>, <a href="#robo408">cl_map_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo405">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fend">
+Component Library: Map/cl_map_end</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_end</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_end</strong> function returns the iterator for the end of a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE const <a href="#robo410">cl_map_iterator_t</a> CL_API
+<strong>cl_map_end</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        CL_ASSERT( p_map );
+        return( <a href="./cl_qmap_h.html#robo581">cl_qmap_end</a>( &amp;p_map-&gt;qmap ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo419">cl_map_t</a> structure whose end to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Iterator for the end of the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_map_end</strong> is useful for determining the validity of map items returned
+       by <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>.  If the iterator
+       by any of these functions compares to the end, the end of the map was
+       encoutered.
+       When using <a href="#robo407">cl_map_head</a> or <a href="#robo420">cl_map_tail</a>, this condition indicates that
+       the map is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="./cl_qmap_h.html#robo583">cl_qmap_head</a>, <a href="./cl_qmap_h.html#robo596">cl_qmap_tail</a>, <a href="./cl_qmap_h.html#robo588">cl_qmap_next</a>, <a href="./cl_qmap_h.html#robo590">cl_qmap_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo406">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fget">
+Component Library: Map/cl_map_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_get</strong> function returns the object associated with a key.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_map_get</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map,
+        IN      const uint64_t                  key );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map from which to retrieve the object with
+               the specified key.
+
+       key
+               [in] Key value used to search for the desired object.
+
+ RETURN VALUES
+       Pointer to the object with the desired key value.
+
+       NULL if there was no item with the desired key value stored in
+       the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_map_get</strong> does not remove the item from the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo416">cl_map_remove</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo407">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fhead">
+Component Library: Map/cl_map_head</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_head</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_head</strong> function returns the map item with the lowest key
+       value stored in a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo410">cl_map_iterator_t</a> CL_API
+<strong>cl_map_head</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        CL_ASSERT( p_map );
+        return( <a href="./cl_qmap_h.html#robo583">cl_qmap_head</a>( &amp;p_map-&gt;qmap ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map whose item with the lowest key is returned.
+
+ RETURN VALUES
+       Iterator for the object with the lowest key in the map.
+
+       Iterator for the map end if the map was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_map_head</strong> does not remove the object from the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>, <a href="#robo405">cl_map_end</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo408">[Functions]<a name="Component20Library3a20Map2fcl5fmap5finit">
+Component Library: Map/cl_map_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_init</strong> function initialized a map for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_map_init</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const p_map,
+        IN      const size_t    min_items );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo419">cl_map_t</a> structure to initialize.
+
+       min_items
+               [in] Minimum number of items that can be stored.  All necessary
+               allocations to allow storing the minimum number of items is performed
+               at initialization time.
+
+ RETURN VALUES
+       CL_SUCCESS if the map was initialized successfully.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling map manipulation functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo404">cl_map_destroy</a>, <a href="#robo409">cl_map_insert</a>, <a href="#robo416">cl_map_remove</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo409">[Functions]<a name="Component20Library3a20Map2fcl5fmap5finsert">
+Component Library: Map/cl_map_insert</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_insert</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_insert</strong> function inserts a map item into a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_map_insert</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const         p_map,
+        IN      const uint64_t          key,
+        IN      const void* const       p_object );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map into which to add the item.
+
+       key
+               [in] Value to associate with the object.
+
+       p_object
+               [in] Pointer to an object to insert into the map.
+
+ RETURN VALUES
+       Pointer to the object in the map with the specified key after the call
+       completes.
+
+       NULL if there was not enough memory to insert the desired item.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Insertion operations may cause the map to rebalance.
+
+       If the map already contains an object already with the specified key,
+       that object will not be replaced and the pointer to that object is
+       returned.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo416">cl_map_remove</a>, <a href="./cl_qmap_h.html#robo575">cl_map_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo410">[Definitions]<a name="Component20Library3a20Map2fcl5fmap5fiterator5ft">
+Component Library: Map/cl_map_iterator_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_iterator_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Iterator type used to walk a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef const <a href="./cl_qmap_h.html#robo575">cl_map_item_t</a> *<strong>cl_map_iterator_t</strong>;
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The iterator should be treated as opaque to prevent corrupting the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>, <a href="#robo411">cl_map_key</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo411">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fkey">
+Component Library: Map/cl_map_key</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_key</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_key</strong> function retrieves the key value of a map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE uint64_t CL_API
+<strong>cl_map_key</strong>(
+        IN      const <a href="#robo410">cl_map_iterator_t</a> itor )
+{
+        return( <a href="./cl_qmap_h.html#robo586">cl_qmap_key</a>( itor ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       itor
+               [in] Iterator for the item whose key to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the 64-bit key value for the specified iterator.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The iterator specified by the itor parameter must have been retrived by
+       a previous call to <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, or <a href="#robo415">cl_map_prev</a>.
+
+       The key value is set in a call to <a href="#robo409">cl_map_insert</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo409">cl_map_insert</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo412">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fmerge">
+Component Library: Map/cl_map_merge</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_merge</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_merge</strong> function moves all items from one map to another,
+       excluding duplicates.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_map_merge</strong>(
+        OUT             <a href="#robo419">cl_map_t</a>* const p_dest_map,
+        IN OUT  <a href="#robo419">cl_map_t</a>* const p_src_map );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest_map
+               [out] Pointer to a <a href="#robo419">cl_map_t</a> structure to which items should be added.
+
+       p_src_map
+               [in/out] Pointer to a <a href="#robo419">cl_map_t</a> structure whose items to add
+               to p_dest_map.
+
+ RETURN VALUES
+       CL_SUCCESS if the operation succeeded.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory for the operation
+       to succeed.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Items are evaluated based on their keys only.
+
+       Upon return from <strong>cl_map_merge</strong>, the map referenced by p_src_map contains
+       all duplicate items.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo403">cl_map_delta</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo413">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fnext">
+Component Library: Map/cl_map_next</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_next</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_next</strong> function returns the map item with the next higher
+       key value than a specified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo410">cl_map_iterator_t</a> CL_API
+<strong>cl_map_next</strong>(
+        IN      const <a href="#robo410">cl_map_iterator_t</a> itor )
+{
+        CL_ASSERT( itor );
+        return( <a href="./cl_qmap_h.html#robo588">cl_qmap_next</a>( itor ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       itor
+               [in] Iterator for an object in a map whose successor to return.
+
+ RETURN VALUES
+       Iterator for the object with the next higher key value in a map.
+
+       Iterator for the map end if the specified object was the last item in
+       the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The iterator must have been retrieved by a previous call to <a href="#robo407">cl_map_head</a>,
+       <a href="#robo420">cl_map_tail</a>, <strong>cl_map_next</strong>, or <a href="#robo415">cl_map_prev</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo415">cl_map_prev</a>, <a href="#robo405">cl_map_end</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo414">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fobj">
+Component Library: Map/cl_map_obj</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_obj</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_obj</strong> function returns the object associated with an iterator.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void* CL_API
+<strong>cl_map_obj</strong>(
+        IN      const <a href="#robo410">cl_map_iterator_t</a> itor )
+{
+        return( <a href="./cl_qmap_h.html#robo589">cl_qmap_obj</a>( <a href="./cl_types_h.html#robo490">PARENT_STRUCT</a>( itor, <a href="./cl_qmap_h.html#robo576">cl_map_obj_t</a>, item ) ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       itor
+               [in] Iterator whose object to return.
+
+ RETURN VALUES
+       Returns the value of the object pointer associated with the iterator.
+
+       The iterator must have been retrieved by a previous call to <a href="#robo407">cl_map_head</a>,
+       <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, or <a href="#robo415">cl_map_prev</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo415">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fprev">
+Component Library: Map/cl_map_prev</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_prev</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_prev</strong> function returns the map item with the next lower
+       key value than a precified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo410">cl_map_iterator_t</a> CL_API
+<strong>cl_map_prev</strong>(
+        IN      const <a href="#robo410">cl_map_iterator_t</a> itor )
+{
+        CL_ASSERT( itor );
+        return( <a href="./cl_qmap_h.html#robo590">cl_qmap_prev</a>( itor ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       itor
+               [in] Iterator for an object in a map whose predecessor to return.
+
+ RETURN VALUES
+       Iterator for the object with the next lower key value in a map.
+
+       Iterator for the map end if the specified object was the first item in
+       the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The iterator must have been retrieved by a previous call to <a href="#robo407">cl_map_head</a>,
+       <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, or <strong>cl_map_prev</strong>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo405">cl_map_end</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo416">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fremove">
+Component Library: Map/cl_map_remove</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_remove</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_remove</strong> function removes the map item with the specified key
+       from a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_map_remove</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const p_map,
+        IN      const uint64_t  key );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo419">cl_map_t</a> structure from which to remove the item
+               with the specified key.
+
+       key
+               [in] Key value used to search for the object to remove.
+
+ RETURN VALUES
+       Pointer to the object associated with the specified key if
+       it was found and removed.
+
+       NULL if no object with the specified key exists in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo418">cl_map_remove_item</a>, <a href="#robo417">cl_map_remove_all</a>, <a href="#robo409">cl_map_insert</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo417">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fremove5fall">
+Component Library: Map/cl_map_remove_all</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_remove_all</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_remove_all</strong> function removes all objects from a map,
+       leaving it empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_map_remove_all</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const p_map );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map to empty.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo416">cl_map_remove</a>, <a href="#robo418">cl_map_remove_item</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo418">[Functions]<a name="Component20Library3a20Map2fcl5fmap5fremove5fitem">
+Component Library: Map/cl_map_remove_item</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_remove_item</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_remove_item</strong> function removes the specified map item
+       from a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_map_remove_item</strong>(
+        IN      <a href="#robo419">cl_map_t</a>* const                 p_map,
+        IN      const <a href="#robo410">cl_map_iterator_t</a> itor );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map from which to remove the object associated with
+               the specified iterator.
+
+       itor
+               [in] Iterator for an object to remove from its map.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Removes the object associated with the specifid iterator from its map.
+
+       The specified iterator is no longer valid after the call completes.
+
+       The iterator must have been retrieved by a previous call to <a href="#robo407">cl_map_head</a>,
+       <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, or <a href="#robo415">cl_map_prev</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo416">cl_map_remove</a>, <a href="#robo417">cl_map_remove_all</a>, <a href="#robo409">cl_map_insert</a>, <a href="#robo407">cl_map_head</a>,
+       <a href="#robo420">cl_map_tail</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo419">[Structures]<a name="Component20Library3a20Map2fcl5fmap5ft">
+Component Library: Map/cl_map_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick map structure.
+
+       The <strong>cl_map_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_map
+{
+        <a href="./cl_qmap_h.html#robo595">cl_qmap_t</a>       qmap;
+        <a href="./cl_qpool_h.html#robo608">cl_qpool_t</a>      pool;
+
+} <strong>cl_map_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       qmap
+               Quick map object that maintains the map.
+
+       pool
+               <a href="./cl_pool_h.html#robo18">Pool</a> of <a href="./cl_qmap_h.html#robo576">cl_map_obj_t</a> structures used to store user objects
+               in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="./cl_qmap_h.html#robo576">cl_map_obj_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo420">[Functions]<a name="Component20Library3a20Map2fcl5fmap5ftail">
+Component Library: Map/cl_map_tail</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_map_tail</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_map_tail</strong> function returns the map item with the highest key
+       value stored in a map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo410">cl_map_iterator_t</a> CL_API
+<strong>cl_map_tail</strong>(
+        IN      const <a href="#robo419">cl_map_t</a>* const   p_map )
+{
+        CL_ASSERT( p_map );
+        return( <a href="./cl_qmap_h.html#robo596">cl_qmap_tail</a>( &amp;p_map-&gt;qmap ) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a map whose item with the highest key
+               is returned.
+
+ RETURN VALUES
+       Iterator for the object with the highest key in the map.
+
+       Iterator for the map end if the map was empty.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <a href="#robo405">cl_map_end</a> does no remove the object from the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo13">Map</a>, <a href="#robo407">cl_map_head</a>, <a href="#robo413">cl_map_next</a>, <a href="#robo415">cl_map_prev</a>, <a href="#robo405">cl_map_end</a>
+</pre>
+</span>
+</body>
+</html>

@@ -1,0 +1,25 @@
+TARGETNAME = winverbs
+TARGETPATH = ..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DRIVER
+
+KMDF_VERSION_MAJOR = 1
+NTTARGETFILES=Custom_target
+TARGETLIBS = $(TARGETLIBS)			\
+	     $(DDK_LIB_PATH)\wdmsec.lib		\
+	     $(TARGETPATH)\*\complib.lib
+
+SOURCES = \
+	winverbs.rc		\
+	wv_driver.c		\
+	wv_provider.c	\
+	wv_device.c		\
+	wv_cq.c			\
+	wv_pd.c			\
+	wv_srq.c		\
+	wv_qp.c			\
+	wv_ep.c
+
+INCLUDES = ..;..\..\..\inc;..\..\..\inc\kernel;..\..\..\inc\user;..\..\..\etc\kernel;..\..\complib\kernel\$(O);
+
+C_DEFINES = $(C_DEFINES) -DIOCTL_INTERFACE=1
+

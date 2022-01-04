@@ -1,0 +1,6 @@
+LIBRARY	ibwsd
+EXPORTS
+WSPStartupEx
+IBSPPmOpen
+IBSPPmCollectData
+IBSPPmClose

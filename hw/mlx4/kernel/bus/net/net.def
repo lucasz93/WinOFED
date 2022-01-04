@@ -1,0 +1,24 @@
+LIBRARY	mlx4_net.lib
+
+EXPORTS
+; DllInitialize and DllUnload must be exported for the OS reference counting to
+; work, and must be private for the compiler to accept them.
+DllInitialize private
+DllUnload private
+
+; main.c
+mlx4_init_one
+mlx4_remove_one
+mlx4_net_init
+mlx4_is_eth_port
+mlx4_count_ib_ports
+
+; alloc.c
+mlx4_buf_alloc
+mlx4_buf_free
+
+;port.c
+mlx4_init_vlan_table
+mlx4_init_mac_table
+mlx4_SET_PORT
+

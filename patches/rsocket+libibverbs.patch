@@ -1,0 +1,3052 @@
+Index: inc/user/rdma/wvstatus.h
+===================================================================
+--- inc/user/rdma/wvstatus.h	(revision 3618)
++++ inc/user/rdma/wvstatus.h	(working copy)
+@@ -82,6 +82,9 @@
+ #define WV_BUFFER_OVERFLOW				((HRESULT)0x80000005L)
+ #define WV_DEVICE_BUSY					((HRESULT)0x80000011L)
+ #define WV_NO_MORE_ENTRIES				((HRESULT)0x8000001AL)
++#define WV_FILE_NOT_FOUND               ((HRESULT)0x80070002L)
++#define WV_BAD_NETPATH                  ((HRESULT)0x80070035L)
++#define WV_NOT_FOUND                    ((HRESULT)0x80070490L)
+ #define WV_IO_PENDING					((HRESULT)0x800703E5L)
+ #define WV_REJECTED						((HRESULT)0x80070047L)
+ #define WV_UNSUCCESSFUL					((HRESULT)0xC0000001L)
+Index: ulp/libibverbs/src/verbs.cpp
+===================================================================
+--- ulp/libibverbs/src/verbs.cpp	(revision 3618)
++++ ulp/libibverbs/src/verbs.cpp	(working copy)
+@@ -908,6 +908,7 @@
+ 	switch (hr) {
+ 	case WV_SUCCESS:			return 0;
+ 	case WV_PENDING:			_set_errno(EINPROGRESS); break;
++    case WV_FILE_NOT_FOUND:     _set_errno(ENOENT); break;
+ 	case WV_IO_PENDING:			_set_errno(EINPROGRESS); break;
+ 	case WV_TIMEOUT:			_set_errno(ETIMEDOUT); break;
+ 	case WV_BUFFER_OVERFLOW:	_set_errno(EOVERFLOW); break;
+@@ -920,6 +921,8 @@
+ 	case WV_IO_TIMEOUT:			_set_errno(ETIMEDOUT); break;
+ 	case WV_NOT_SUPPORTED:		_set_errno(ENOSYS); break;
+ 	case WV_CANCELLED:			_set_errno(ECANCELED); break;
++    case WV_NOT_FOUND:
++    case WV_BAD_NETPATH:
+ 	case WV_INVALID_ADDRESS:	_set_errno(EADDRNOTAVAIL); break;
+ 	case WV_ADDRESS_ALREADY_EXISTS: _set_errno(EADDRINUSE); break;
+ 	case WV_CONNECTION_REFUSED:	_set_errno(ECONNREFUSED); break;
+Index: ulp/librdmacm/examples/riostream/riostream.c
+===================================================================
+--- ulp/librdmacm/examples/riostream/riostream.c	(revision 3618)
++++ ulp/librdmacm/examples/riostream/riostream.c	(working copy)
+@@ -1,837 +1,841 @@
+-/*
+- * Copyright (c) 2011-2012 Intel Corporation.  All rights reserved.
+- * Copyright (c) 2013 Oce Printing Systems GmbH.  All rights reserved.
+- *
+- * This software is available to you under the OpenIB.org BSD license
+- * below:
+- *
+- *     Redistribution and use in source and binary forms, with or
+- *     without modification, are permitted provided that the following
+- *     conditions are met:
+- *
+- *      - Redistributions of source code must retain the above
+- *        copyright notice, this list of conditions and the following
+- *        disclaimer.
+- *
+- *      - Redistributions in binary form must reproduce the above
+- *        copyright notice, this list of conditions and the following
+- *        disclaimer in the documentation and/or other materials
+- *        provided with the distribution.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AWV
+- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+- * SOFTWARE.
+- */
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <sys/types.h>
+-#include <string.h>
+-#include <_errno.h>
+-#include "../../../../etc/user/gtod.c" // gettimeofday()
+-#include "getopt.c"
+-
+-#include "..\src\openib_osd.h"
+-#include <rdma/rdma_cma.h>
+-#include <rdma/rwinsock.h>
+-
+-#define MSG_DONTWAIT 0x80
+-
+-struct test_size_param {
+-	int size;
+-	int option;
+-};
+-
+-static struct test_size_param test_size[] = {
+-	{ 1 <<  6, 0 },
+-	{ 1 <<  7, 1 }, { (1 <<  7) + (1 <<  6), 1},
+-	{ 1 <<  8, 1 }, { (1 <<  8) + (1 <<  7), 1},
+-	{ 1 <<  9, 1 }, { (1 <<  9) + (1 <<  8), 1},
+-	{ 1 << 10, 1 }, { (1 << 10) + (1 <<  9), 1},
+-	{ 1 << 11, 1 }, { (1 << 11) + (1 << 10), 1},
+-	{ 1 << 12, 0 }, { (1 << 12) + (1 << 11), 1},
+-	{ 1 << 13, 1 }, { (1 << 13) + (1 << 12), 1},
+-	{ 1 << 14, 1 }, { (1 << 14) + (1 << 13), 1},
+-	{ 1 << 15, 1 }, { (1 << 15) + (1 << 14), 1},
+-	{ 1 << 16, 0 }, { (1 << 16) + (1 << 15), 1},
+-	{ 1 << 17, 1 }, { (1 << 17) + (1 << 16), 1},
+-	{ 1 << 18, 1 }, { (1 << 18) + (1 << 17), 1},
+-	{ 1 << 19, 1 }, { (1 << 19) + (1 << 18), 1},
+-	{ 1 << 20, 0 }, { (1 << 20) + (1 << 19), 1},
+-	{ 1 << 21, 1 }, { (1 << 21) + (1 << 20), 1},
+-	{ 1 << 22, 1 }, { (1 << 22) + (1 << 21), 1},
+-};
+-
+-#define TEST_CNT (sizeof test_size / sizeof test_size[0])
+-
+-enum rs_optimization {
+-	opt_mixed,
+-	opt_latency,
+-	opt_bandwidth
+-};
+-
+-static int rs, lrs;
+-static int use_async = 0;
+-static int verify = 0;
+-static int flags = 0/*MSG_DONTWAIT*/;
+-static int poll_timeout = 0;
+-static int custom;
+-static enum rs_optimization optimization;
+-static int size_option = 0;
+-static int iterations = 1;
+-static int transfer_size = 1000;
+-static int transfer_count = 1000;
+-static int buffer_size;
+-static char test_name[10] = "custom";
+-static char *port = "7471";
+-static char *dst_addr;
+-static char *src_addr;
+-static struct timeval start, end;
+-static char *buf;
+-static volatile uint8_t *poll_byte;
+-
+-static void size_str (char *str, size_t ssize, long long size)
+-{
+-	long long base, fraction = 0;
+-	char mag;
+-
+-	if (size >= (1 << 30)) {
+-		base = 1 << 30;
+-		mag = 'g';
+-	} else if (size >= (1 << 20)) {
+-		base = 1 << 20;
+-		mag = 'm';
+-	} else if (size >= (1 << 10)) {
+-		base = 1 << 10;
+-		mag = 'k';
+-	} else {
+-		base = 1;
+-		mag = '\0';
+-	}
+-
+-	if (size / base < 10) {
+-		fraction = (size % base) * 10 / base;
+-	}
+-
+-	if (fraction) {
+-		_snprintf(str, ssize, "%lld.%lld%c", size / base, fraction, mag);
+-	} else {
+-		_snprintf(str, ssize, "%lld%c", size / base, mag);
+-	}
+-}
+-
+-static void cnt_str (char *str, size_t ssize, long long cnt)
+-{
+-	if (cnt >= 1000000000) {
+-		_snprintf(str, ssize, "%lldb", cnt / 1000000000);
+-	} else if (cnt >= 1000000) {
+-		_snprintf(str, ssize, "%lldm", cnt / 1000000);
+-	} else if (cnt >= 1000) {
+-		_snprintf(str, ssize, "%lldk", cnt / 1000);
+-	} else {
+-		_snprintf(str, ssize, "%lld", cnt);
+-	}
+-}
+-
+-static void show_perf (void)
+-{
+-	char str[32];
+-	float usec;
+-	long long bytes;
+-
+-	usec  = (float)((end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec));
+-	bytes = (long long) iterations * transfer_count * transfer_size * 2;
+-
+-	/* name size transfers iterations bytes seconds Gb/sec usec/xfer */
+-	printf("%-10s", test_name);
+-	size_str(str, sizeof str, transfer_size);
+-	printf("%-8s", str);
+-	cnt_str(str, sizeof str, transfer_count);
+-	printf("%-8s", str);
+-	cnt_str(str, sizeof str, iterations);
+-	printf("%-8s", str);
+-	size_str(str, sizeof str, bytes);
+-	printf("%-8s", str);
+-	printf("%8.2fs%10.2f%11.2f\n",
+-		usec / 1000000., (bytes * 8) / (1000. * usec),
+-		(usec / iterations) / (transfer_count * 2));
+-}
+-
+-static int size_to_count (int size)
+-{
+-	if (size >= 1000000) {
+-		return 100;
+-	} else if (size >= 100000) {
+-		return 1000;
+-	} else if (size >= 10000) {
+-		return 10000;
+-	} else if (size >= 1000) {
+-		return 100000;
+-	} else {
+-		return 1000000;
+-	}
+-}
+-
+-static void init_latency_test (int size)
+-{
+-	char sstr[5];
+-
+-	size_str(sstr, sizeof sstr, size);
+-	_snprintf(test_name, sizeof test_name, "%s_lat", sstr);
+-	transfer_count = 1;
+-	transfer_size = size;
+-	iterations = size_to_count(transfer_size);
+-}
+-
+-static void init_bandwidth_test (int size)
+-{
+-	char sstr[5];
+-
+-	size_str(sstr, sizeof sstr, size);
+-	_snprintf(test_name, sizeof test_name, "%s_bw", sstr);
+-	iterations = 1;
+-	transfer_size = size;
+-	transfer_count = size_to_count(transfer_size);
+-}
+-
+-static void format_buf (void *buf, int size)
+-{
+-	uint8_t *array = buf;
+-	static uint8_t data = 0;
+-	int i;
+-
+-	for (i = 0; i < size; i++) {
+-		array[i] = data++;
+-	}
+-}
+-
+-static int verify_buf (void *buf, int size)
+-{
+-	static long long total_bytes = 0;
+-	uint8_t *array = buf;
+-	static uint8_t data = 0;
+-	int i, ret;
+-
+-	for (i = 0; i < size; i++, total_bytes++) {
+-		if (array[i] != data++) {
+-			printf("data verification failed data=0x%02X  total_bytes=%lld\n", data, total_bytes);
+-			_flushall();
+-			return -1;
+-		}
+-	}
+-	return 0;
+-}
+-
+-static int do_poll (struct pollfd *fds)
+-{
+-	int		ret;
+-	int		nfds = 0;
+-	fd_set	readfds, writefds, exceptfds;
+-	struct timeval timeout;
+-	
+-	FD_ZERO(&readfds);
+-	FD_ZERO(&writefds);
+-	FD_ZERO(&exceptfds);
+-	
+-	if (fds->events & (POLLIN | POLLHUP)) {
+-		FD_SET(fds->fd, &readfds);
+-		nfds++;
+-	}
+-		
+-	if (fds->events & POLLOUT) {
+-		FD_SET(fds->fd, &writefds);
+-		nfds++;
+-	}
+-
+-	if (fds->events & ~(POLLIN | POLLOUT)) {
+-		FD_SET(fds->fd, &exceptfds);
+-		nfds++;
+-	}
+-
+-	timeout.tv_sec  = poll_timeout / 1000;
+-	timeout.tv_usec = timeout.tv_sec ? 0 : poll_timeout * 1000;
+-	
+-	do {	
+-		ret = select(
+-			nfds,
+-			FD_ISSET(fds->fd, &readfds  ) ? &readfds   : NULL,
+-			FD_ISSET(fds->fd, &writefds ) ? &writefds  : NULL,
+-			FD_ISSET(fds->fd, &exceptfds) ? &exceptfds : NULL,
+-			poll_timeout < 0 ? NULL : &timeout
+-		);
+-	} while (!ret);
+-	
+-	return (ret != SOCKET_ERROR ? 0 : ret);
+-}
+-
+-static int send_msg (int size)
+-{
+-	struct pollfd fds;
+-	int offset, ret;
+-
+-	if (verify) {
+-		format_buf(buf, size);
+-	}
+-
+-	if (use_async) {
+-		fds.fd = rs;
+-		fds.events = POLLOUT;
+-	}
+-
+-	for (offset = 0; offset < size; ) {
+-		if (use_async) {
+-			ret = do_poll(&fds);
+-			if (ret) {
+-				return ret;
+-			}
+-		}
+-
+-		ret = send(rs, buf + offset, size - offset, flags);
+-		if (ret > 0) {
+-			offset += ret;
+-		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
+-			perror("send");
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int send_xfer (int size)
+-{
+-	struct pollfd fds;
+-	int offset, ret;
+-
+-	if (verify) {
+-		format_buf(buf, size - 1);
+-	}
+-
+-	if (use_async) {
+-		fds.fd = rs;
+-		fds.events = POLLOUT;
+-	}
+-
+-	for (offset = 0; offset < size; ) {
+-		if (use_async) {
+-			ret = do_poll(&fds);
+-			if (ret) {
+-				return ret;
+-			}
+-		}
+-
+-		ret = rsIoWrite(rs, buf + offset, size - offset, offset, flags);
+-		if (ret > 0) {
+-			offset += ret;
+-		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
+-			perror("rsIoWrite");
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int recv_msg (int size)
+-{
+-	struct pollfd fds;
+-	int offset, ret;
+-
+-	if (use_async) {
+-		fds.fd = rs;
+-		fds.events = POLLIN;
+-	}
+-
+-	for (offset = 0; offset < size; ) {
+-		if (use_async) {
+-			ret = do_poll(&fds);
+-			if (ret) {
+-				return ret;
+-			}
+-		}
+-
+-		ret = recv(rs, buf + offset, size - offset, flags);
+-		if (ret > 0) {
+-			offset += ret;
+-		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
+-			perror("recv");
+-			return ret;
+-		}
+-	}
+-
+-	if (verify) {
+-		ret = verify_buf(buf, size);
+-		if (ret) {
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int recv_xfer (int size, uint8_t marker)
+-{
+-	int ret;
+-
+-	while (*poll_byte != marker) {
+-		;
+-	}
+-
+-	if (verify) {
+-		ret = verify_buf(buf, size - 1);
+-		if (ret) {
+-			return ret;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-static int sync_test (void)
+-{
+-	int ret;
+-
+-	ret = dst_addr ? send_msg(16) : recv_msg(16);
+-	if (ret) {
+-		return ret;
+-	}
+-
+-	return dst_addr ? recv_msg(16) : send_msg(16);
+-}
+-
+-static int run_test (void)
+-{
+-	int ret, i, t;
+-	off_t offset = -1;
+-	uint8_t marker = 0;
+-
+-	 poll_byte = buf + transfer_size - 1;
+-	*poll_byte = -1;
+-	offset = rsIoMap(rs, buf, transfer_size, PROT_WRITE, 0, 0);
+-	if (offset ==  -1) {
+-		perror("rsIoMap");
+-		ret = -1;
+-		goto out;
+-	}
+-	ret = sync_test();
+-	if (ret) {
+-		goto out;
+-	}
+-
+-	gettimeofday(&start, NULL);
+-	for (i = 0; i < iterations; i++) {
+-		if (dst_addr) {
+-			for (t = 0; t < transfer_count - 1; t++) {
+-				ret = send_xfer(transfer_size);
+-				if (ret) {
+-					goto out;
+-				}
+-			}
+-
+-			*poll_byte = (uint8_t) marker++;
+-			ret = send_xfer(transfer_size);
+-			if (ret) {
+-				goto out;
+-			}
+-
+-			ret = recv_xfer(transfer_size, marker++);
+-		} else {
+-			ret = recv_xfer(transfer_size, marker++);
+-			if (ret) {
+-				goto out;
+-			}
+-
+-			for (t = 0; t < transfer_count - 1; t++) {
+-				ret = send_xfer(transfer_size);
+-				if (ret) {
+-					goto out;
+-				}
+-			}
+-
+-			*poll_byte = (uint8_t) marker++;
+-			ret = send_xfer(transfer_size);
+-		}
+-
+-		if (ret) {
+-			goto out;
+-		}
+-	}
+-
+-	gettimeofday(&end, NULL);
+-	show_perf();
+-
+-out:
+-	if (offset != -1) {
+-		rsIoUnmap(rs, buf, transfer_size);
+-	}
+-
+-	return ret;
+-}
+-
+-static void set_options (SOCKET rs)
+-{
+-	int val;
+-
+-	if (buffer_size) {
+-		setsockopt(rs, SOL_SOCKET, SO_SNDBUF, (void *) &buffer_size,
+-			    sizeof buffer_size);
+-		setsockopt(rs, SOL_SOCKET, SO_RCVBUF, (void *) &buffer_size,
+-			    sizeof buffer_size);
+-	} else {
+-		val = 1 << 19;
+-		setsockopt(rs, SOL_SOCKET, SO_SNDBUF, (void *) &val, sizeof val);
+-		setsockopt(rs, SOL_SOCKET, SO_RCVBUF, (void *) &val, sizeof val);
+-	}
+-
+-	val = 1;
+-	setsockopt(rs, IPPROTO_TCP, TCP_NODELAY, (void *) &val, sizeof(val));
+-	setsockopt(rs, SOL_RDMA, RDMA_IOMAPSIZE, (void *) &val, sizeof val);
+-	
+-	val = 1;
+-	if (flags & MSG_DONTWAIT) {
+-		ioctlsocket(rs, FIONBIO, (u_long *)&val);
+-	}
+-
+-	/* Inline size based on experimental data */
+-	if (optimization == opt_latency) {
+-		val = 384;
+-		setsockopt(rs, SOL_RDMA, RDMA_INLINE, (char *)&val, sizeof val);
+-	} else if (optimization == opt_bandwidth) {
+-		val = 0;
+-		setsockopt(rs, SOL_RDMA, RDMA_INLINE, (char *)&val, sizeof val);
+-	}
+-}
+-
+-static int server_listen (void)
+-{
+-	struct addrinfo hints, *res;
+-	int val, ret;
+-
+-	memset(&hints, 0, sizeof hints);
+-	hints.ai_flags    = RAI_PASSIVE;
+-	hints.ai_family   = AF_INET;
+-	hints.ai_socktype = SOCK_STREAM;
+-	hints.ai_protocol = IPPROTO_TCP;
+-
+- 	ret = getaddrinfo(src_addr, port, &hints, &res);
+-	if (ret) {
+-		perror("getaddrinfo");
+-		return ret;
+-	}
+-
+-	lrs = (int)WSASocket(res->ai_family, res->ai_socktype, res->ai_protocol, rsGetProtocolInfo(NULL), 0, 0);
+-	if (lrs == INVALID_SOCKET) {
+-		perror("WSASocket");
+-		ret = (int)lrs;
+-		goto free;
+-	}
+-
+-	val = 1;
+-	ret = setsockopt(lrs, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof val);
+-	if (ret) {
+-		perror("setsockopt SO_REUSEADDR");
+-		goto close;
+-	}
+-
+-	ret = bind(lrs, res->ai_addr, res->ai_addrlen);
+-	if (ret) {
+-		perror("bind");
+-		goto close;
+-	}
+-
+-	ret = listen(lrs, 1);
+-	if (ret) {
+-		perror("listen");
+-	}
+-
+-close:
+-	if (ret) {
+-		closesocket(lrs);
+-	}
+-
+-free:
+-	freeaddrinfo(res);
+-	return ret;
+-}
+-
+-static int server_connect (void)
+-{
+-	struct pollfd fds;
+-	int ret = 0;
+-
+-	set_options(lrs);
+-	do {
+-		if (use_async) {
+-			fds.fd = lrs;
+-			fds.events = POLLIN;
+-
+-			ret = do_poll(&fds);
+-			if (ret) {
+-				perror("rpoll");
+-				return ret;
+-			}
+-		}
+-
+-		rs = (int)accept(lrs, NULL, 0);
+-	} while (rs == INVALID_SOCKET && (errno == EAGAIN || errno == EWOULDBLOCK));
+-	if (rs == INVALID_SOCKET) {
+-		perror("accept");
+-		return (int)rs;
+-	}
+-
+-	set_options(rs);
+-	return ret;
+-}
+-
+-static int client_connect (void)
+-{
+-	struct addrinfo hints, *res;
+-	struct pollfd fds;
+-	int ret, err;
+-	socklen_t len;
+-
+-	memset(&hints, 0, sizeof hints);
+-	hints.ai_flags  = RAI_PASSIVE;
+-	hints.ai_family = AF_INET;
+-	hints.ai_socktype = SOCK_STREAM;
+-	hints.ai_protocol = IPPROTO_TCP;
+-	
+- 	ret = getaddrinfo(dst_addr, port, &hints, &res);
+-	if (ret) {
+-		perror("getaddrinfo");
+-		return ret;
+-	}
+-
+-	rs = (int)WSASocket(res->ai_family, res->ai_socktype, res->ai_protocol, rsGetProtocolInfo(NULL), 0, 0);
+-	if (rs == INVALID_SOCKET) {
+-		perror("WSASocket");
+-		ret = (int)rs;
+-		goto free;
+-	}
+-
+-	set_options(rs);
+-	/* TODO: bind client to src_addr */
+-
+-	ret = connect(rs, res->ai_addr, res->ai_addrlen);
+-	if (ret && (errno != EINPROGRESS)) {
+-		perror("connect");
+-		goto close;
+-	}
+-
+-	if (ret && (errno == EINPROGRESS)) {
+-		fds.fd = rs;
+-		fds.events = POLLOUT;
+-		ret = do_poll(&fds);
+-		if (ret) {
+-			goto close;
+-		}
+-
+-		len = sizeof err;
+-		ret = getsockopt(rs, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
+-		if (ret) {
+-			goto close;
+-		}
+-
+-		if (err) {
+-			ret = -1;
+-			errno = err;
+-			perror("async connect");
+-		}
+-	}
+-
+-close:
+-	if (ret) {
+-		closesocket(rs);
+-	}
+-
+-free:
+-	freeaddrinfo(res);
+-	return ret;
+-}
+-
+-static int run (void)
+-{
+-	int i, ret = 0;
+-
+-	buf = malloc(!custom ? test_size[TEST_CNT - 1].size : transfer_size);
+-	if (!buf) {
+-		perror("malloc");
+-		return -1;
+-	}
+-
+-	if (!dst_addr) {
+-		ret = server_listen();
+-		if (ret) {
+-			goto free;
+-		}
+-	}
+-
+-	printf("%-10s%-8s%-8s%-8s%-8s%8s %10s%13s\n",
+-	       "name", "bytes", "xfers", "iters", "total", "time", "Gb/sec", "usec/xfer");
+-	if (!custom) {
+-		optimization = opt_latency;
+-		ret = dst_addr ? client_connect() : server_connect();
+-		if (ret) {
+-			goto free;
+-		}
+-
+-		for (i = 0; i < TEST_CNT; i++) {
+-			if (test_size[i].option > size_option) {
+-				continue;
+-			}
+-
+-			init_latency_test(test_size[i].size);
+-			run_test();
+-		}
+-
+-		if (SOCKET_ERROR == shutdown(rs, SHUT_RDWR)) {
+-			perror("shutdown");
+-		}
+-
+-		if (SOCKET_ERROR == closesocket(rs)) {
+-			perror("closesocket");
+-		}
+-
+-		optimization = opt_bandwidth;
+-		ret = dst_addr ? client_connect() : server_connect();
+-		if (ret) {
+-			goto free;
+-		}
+-
+-		for (i = 0; i < TEST_CNT; i++) {
+-			if (test_size[i].option > size_option) {
+-				continue;
+-			}
+-
+-			init_bandwidth_test(test_size[i].size);
+-			run_test();
+-		}
+-	} else {
+-		ret = dst_addr ? client_connect() : server_connect();
+-		if (ret) {
+-			goto free;
+-		}
+-
+-		ret = run_test();
+-	}
+-
+-	if (SOCKET_ERROR == shutdown(rs, SHUT_RDWR)) {
+-		perror("shutdown");
+-	}
+-
+-	if (SOCKET_ERROR == closesocket(rs)) {
+-		perror("closesocket");
+-	}
+-
+-free:
+-	free(buf);
+-	return ret;
+-}
+-
+-static int set_test_opt (char *optarg)
+-{
+-	if (strlen(optarg) == 1) {
+-		switch (optarg[0]) {
+-		case 'b':
+-			flags &= ~MSG_DONTWAIT;
+-			break;
+-		case 'n':
+-			flags |=  MSG_DONTWAIT;
+-			break;
+-		case 'v':
+-			verify = 1;
+-			break;
+-		default:
+-			return -1;
+-		}
+-	} else if (!_strnicmp("block",    optarg, 5)) {
+-		flags &= ~MSG_DONTWAIT;
+-	} else if (!_strnicmp("nonblock", optarg, 8)) {
+-		flags |=  MSG_DONTWAIT;
+-	} else if (!_strnicmp("verify",   optarg, 6)) {
+-		verify = 1;
+-	} else {
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-int __cdecl main (int argc, char **argv)
+-{
+-	int op, ret;
+-	WSADATA wsaData;
+-
+-    if (0 != (ret = WSAStartup(0x202, &wsaData)) ) {
+-        fprintf(stderr, "WSAStartup failed with error %d\n", ret);
+-		ret = -1;
+-        goto out;
+-    }
+-	
+-	while ((op = getopt(argc, argv, "s:b:B:I:C:S:p:T:")) != -1) {
+-		switch (op) {
+-		case 's':
+-			dst_addr = optarg;
+-			break;
+-		case 'b':
+-			src_addr = optarg;
+-			break;
+-		case 'B':
+-			buffer_size = atoi(optarg);
+-			break;
+-		case 'I':
+-			custom = 1;
+-			iterations = atoi(optarg);
+-			break;
+-		case 'C':
+-			custom = 1;
+-			transfer_count = atoi(optarg);
+-			break;
+-		case 'S':
+-			if (!_strnicmp("all", optarg, 3)) {
+-				size_option = 1;
+-			} else {
+-				custom = 1;
+-				transfer_size = atoi(optarg);
+-			}
+-			break;
+-		case 'p':
+-			port = optarg;
+-			break;
+-		case 'T':
+-			if (!set_test_opt(optarg)) {
+-				break;
+-			}
+-			/* invalid option - fall through */
+-		default:
+-			printf("usage: %s\n", argv[0]);
+-			printf("\t[-s server_address]\n");
+-			printf("\t[-b bind_address]\n");
+-			printf("\t[-B buffer_size]\n");
+-			printf("\t[-I iterations]\n");
+-			printf("\t[-C transfer_count]\n");
+-			printf("\t[-S transfer_size or all]\n");
+-			printf("\t[-p port_number]\n");
+-			printf("\t[-T test_option]\n");
+-			printf("\t    b|blocking - use blocking calls\n");
+-			printf("\t    n|nonblocking - use nonblocking calls\n");
+-			printf("\t    v|verify - verify data\n");
+-			exit(1);
+-		}
+-	}
+-
+-	if (!(flags & MSG_DONTWAIT)) {
+-		poll_timeout = -1;
+-	}
+-
+-	ret = run();
+-
+-out:
+-	WSACleanup();
+-	return ret;
+-}
++/*
++ * Copyright (c) 2011-2012 Intel Corporation.  All rights reserved.
++ * Copyright (c) 2013 Oce Printing Systems GmbH.  All rights reserved.
++ *
++ * This software is available to you under the OpenIB.org BSD license
++ * below:
++ *
++ *     Redistribution and use in source and binary forms, with or
++ *     without modification, are permitted provided that the following
++ *     conditions are met:
++ *
++ *      - Redistributions of source code must retain the above
++ *        copyright notice, this list of conditions and the following
++ *        disclaimer.
++ *
++ *      - Redistributions in binary form must reproduce the above
++ *        copyright notice, this list of conditions and the following
++ *        disclaimer in the documentation and/or other materials
++ *        provided with the distribution.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AWV
++ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
++ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
++ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
++ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/types.h>
++#include <string.h>
++#include "../../../../etc/user/gtod.c" // gettimeofday()
++#include "getopt.c"
++
++#include "..\src\openib_osd.h"
++#include <rdma/rdma_cma.h>
++#include <rdma/rwinsock.h>
++
++#define MSG_DONTWAIT 0x80
++
++#define EWOULDBLOCK WSAEWOULDBLOCK
++#define EAGAIN      WSAEWOULDBLOCK
++#define EINPROGRESS WSAEINPROGRESS
++#undef  errno
++#define errno (WSAGetLastError())
++#define perror(s) printf("%s: WSAError=%d", s, errno)
++
++struct test_size_param {
++	int size;
++	int option;
++};
++
++static struct test_size_param test_size[] = {
++	{ 1 <<  6, 0 },
++	{ 1 <<  7, 1 }, { (1 <<  7) + (1 <<  6), 1},
++	{ 1 <<  8, 1 }, { (1 <<  8) + (1 <<  7), 1},
++	{ 1 <<  9, 1 }, { (1 <<  9) + (1 <<  8), 1},
++	{ 1 << 10, 1 }, { (1 << 10) + (1 <<  9), 1},
++	{ 1 << 11, 1 }, { (1 << 11) + (1 << 10), 1},
++	{ 1 << 12, 0 }, { (1 << 12) + (1 << 11), 1},
++	{ 1 << 13, 1 }, { (1 << 13) + (1 << 12), 1},
++	{ 1 << 14, 1 }, { (1 << 14) + (1 << 13), 1},
++	{ 1 << 15, 1 }, { (1 << 15) + (1 << 14), 1},
++	{ 1 << 16, 0 }, { (1 << 16) + (1 << 15), 1},
++	{ 1 << 17, 1 }, { (1 << 17) + (1 << 16), 1},
++	{ 1 << 18, 1 }, { (1 << 18) + (1 << 17), 1},
++	{ 1 << 19, 1 }, { (1 << 19) + (1 << 18), 1},
++	{ 1 << 20, 0 }, { (1 << 20) + (1 << 19), 1},
++	{ 1 << 21, 1 }, { (1 << 21) + (1 << 20), 1},
++	{ 1 << 22, 1 }, { (1 << 22) + (1 << 21), 1},
++};
++#define TEST_CNT (sizeof test_size / sizeof test_size[0])
++
++enum rs_optimization {
++	opt_mixed,
++	opt_latency,
++	opt_bandwidth
++};
++
++static int rs, lrs;
++static int use_async = 0;
++static int verify = 0;
++static int flags = 0/*MSG_DONTWAIT*/;
++static int poll_timeout = 0;
++static int custom;
++static enum rs_optimization optimization;
++static int size_option = 0;
++static int iterations = 1;
++static int transfer_size = 1000;
++static int transfer_count = 1000;
++static int buffer_size;
++static char test_name[10] = "custom";
++static char *port = "7471";
++static char *dst_addr;
++static char *src_addr;
++static struct timeval start, end;
++static char *buf;
++static volatile uint8_t *poll_byte;
++
++static void size_str (char *str, size_t ssize, long long size)
++{
++	long long base, fraction = 0;
++	char mag;
++
++	if (size >= (1 << 30)) {
++		base = 1 << 30;
++		mag = 'g';
++	} else if (size >= (1 << 20)) {
++		base = 1 << 20;
++		mag = 'm';
++	} else if (size >= (1 << 10)) {
++		base = 1 << 10;
++		mag = 'k';
++	} else {
++		base = 1;
++		mag = '\0';
++	}
++
++	if (size / base < 10) {
++		fraction = (size % base) * 10 / base;
++	}
++
++	if (fraction) {
++		_snprintf(str, ssize, "%lld.%lld%c", size / base, fraction, mag);
++	} else {
++		_snprintf(str, ssize, "%lld%c", size / base, mag);
++	}
++}
++
++static void cnt_str (char *str, size_t ssize, long long cnt)
++{
++	if (cnt >= 1000000000) {
++		_snprintf(str, ssize, "%lldb", cnt / 1000000000);
++	} else if (cnt >= 1000000) {
++		_snprintf(str, ssize, "%lldm", cnt / 1000000);
++	} else if (cnt >= 1000) {
++		_snprintf(str, ssize, "%lldk", cnt / 1000);
++	} else {
++		_snprintf(str, ssize, "%lld", cnt);
++	}
++}
++
++static void show_perf (void)
++{
++	char str[32];
++	float usec;
++	long long bytes;
++
++	usec  = (float)((end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec));
++	bytes = (long long) iterations * transfer_count * transfer_size * 2;
++
++	/* name size transfers iterations bytes seconds Gb/sec usec/xfer */
++	printf("%-10s", test_name);
++	size_str(str, sizeof str, transfer_size);
++	printf("%-8s", str);
++	cnt_str(str, sizeof str, transfer_count);
++	printf("%-8s", str);
++	cnt_str(str, sizeof str, iterations);
++	printf("%-8s", str);
++	size_str(str, sizeof str, bytes);
++	printf("%-8s", str);
++	printf("%8.2fs%10.2f%11.2f\n",
++		usec / 1000000., (bytes * 8) / (1000. * usec),
++		(usec / iterations) / (transfer_count * 2));
++}
++
++static int size_to_count (int size)
++{
++	if (size >= 1000000) {
++		return 100;
++	} else if (size >= 100000) {
++		return 1000;
++	} else if (size >= 10000) {
++		return 10000;
++	} else if (size >= 1000) {
++		return 100000;
++	} else {
++		return 1000000;
++	}
++}
++
++static void init_latency_test (int size)
++{
++	char sstr[5];
++
++	size_str(sstr, sizeof sstr, size);
++	_snprintf(test_name, sizeof test_name, "%s_lat", sstr);
++	transfer_count = 1;
++	transfer_size = size;
++	iterations = size_to_count(transfer_size);
++}
++
++static void init_bandwidth_test (int size)
++{
++	char sstr[5];
++
++	size_str(sstr, sizeof sstr, size);
++	_snprintf(test_name, sizeof test_name, "%s_bw", sstr);
++	iterations = 1;
++	transfer_size = size;
++	transfer_count = size_to_count(transfer_size);
++}
++
++static void format_buf (void *buf, int size)
++{
++	uint8_t *array = buf;
++	static uint8_t data = 0;
++	int i;
++
++	for (i = 0; i < size; i++) {
++		array[i] = data++;
++	}
++}
++
++static int verify_buf (void *buf, int size)
++{
++	static long long total_bytes = 0;
++	uint8_t *array = buf;
++	static uint8_t data = 0;
++	int i;
++
++	for (i = 0; i < size; i++, total_bytes++) {
++		if (array[i] != data++) {
++			printf("data verification failed data=0x%02X  total_bytes=%lld\n", data, total_bytes);
++			_flushall();
++			return -1;
++		}
++	}
++	return 0;
++}
++
++static int do_poll (struct pollfd *fds)
++{
++	int		ret;
++	int		nfds = 0;
++	fd_set	readfds, writefds, exceptfds;
++	struct timeval timeout;
++	
++	FD_ZERO(&readfds);
++	FD_ZERO(&writefds);
++	FD_ZERO(&exceptfds);
++	
++	if (fds->events & (POLLIN | POLLHUP)) {
++		FD_SET(fds->fd, &readfds);
++		nfds++;
++	}
++		
++	if (fds->events & POLLOUT) {
++		FD_SET(fds->fd, &writefds);
++		nfds++;
++	}
++
++	if (fds->events & ~(POLLIN | POLLOUT)) {
++		FD_SET(fds->fd, &exceptfds);
++		nfds++;
++	}
++
++	timeout.tv_sec  = poll_timeout / 1000;
++	timeout.tv_usec = timeout.tv_sec ? 0 : poll_timeout * 1000;
++	
++	do {	
++		ret = select(
++			nfds,
++			FD_ISSET(fds->fd, &readfds  ) ? &readfds   : NULL,
++			FD_ISSET(fds->fd, &writefds ) ? &writefds  : NULL,
++			FD_ISSET(fds->fd, &exceptfds) ? &exceptfds : NULL,
++			poll_timeout < 0 ? NULL : &timeout
++		);
++	} while (!ret);
++	
++	return (ret != SOCKET_ERROR ? 0 : ret);
++}
++
++static int send_msg (int size)
++{
++	struct pollfd fds;
++	int offset, ret;
++
++	if (verify) {
++		format_buf(buf, size);
++	}
++
++	if (use_async) {
++		fds.fd = rs;
++		fds.events = POLLOUT;
++	}
++
++	for (offset = 0; offset < size; ) {
++		if (use_async) {
++			ret = do_poll(&fds);
++			if (ret) {
++				return ret;
++			}
++		}
++
++		ret = send(rs, buf + offset, size - offset, flags);
++		if (ret > 0) {
++			offset += ret;
++		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
++			perror("send");
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int send_xfer (int size)
++{
++	struct pollfd fds;
++	int offset, ret;
++
++	if (verify) {
++		format_buf(buf, size - 1);
++	}
++
++	if (use_async) {
++		fds.fd = rs;
++		fds.events = POLLOUT;
++	}
++
++	for (offset = 0; offset < size; ) {
++		if (use_async) {
++			ret = do_poll(&fds);
++			if (ret) {
++				return ret;
++			}
++		}
++
++		ret = rsIoWrite(rs, buf + offset, size - offset, offset, flags);
++		if (ret > 0) {
++			offset += ret;
++		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
++			perror("rsIoWrite");
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int recv_msg (int size)
++{
++	struct pollfd fds;
++	int offset, ret;
++
++	if (use_async) {
++		fds.fd = rs;
++		fds.events = POLLIN;
++	}
++
++	for (offset = 0; offset < size; ) {
++		if (use_async) {
++			ret = do_poll(&fds);
++			if (ret) {
++				return ret;
++			}
++		}
++
++		ret = recv(rs, buf + offset, size - offset, flags);
++		if (ret > 0) {
++			offset += ret;
++		} else if (errno != EWOULDBLOCK && errno != EAGAIN) {
++			perror("recv");
++			return ret;
++		}
++	}
++
++	if (verify) {
++		ret = verify_buf(buf, size);
++		if (ret) {
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int recv_xfer (int size, uint8_t marker)
++{
++	int ret;
++
++	while (*poll_byte != marker) {
++		;
++	}
++
++	if (verify) {
++		ret = verify_buf(buf, size - 1);
++		if (ret) {
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int sync_test (void)
++{
++	int ret;
++
++	ret = dst_addr ? send_msg(16) : recv_msg(16);
++	if (ret) {
++		return ret;
++	}
++
++	return dst_addr ? recv_msg(16) : send_msg(16);
++}
++
++static int run_test (void)
++{
++	int ret, i, t;
++	off_t offset = -1;
++	uint8_t marker = 0;
++
++	 poll_byte = buf + transfer_size - 1;
++	*poll_byte = -1;
++	offset = rsIoMap(rs, buf, transfer_size, PROT_WRITE, 0, 0);
++	if (offset ==  -1) {
++		perror("rsIoMap");
++		ret = -1;
++		goto out;
++	}
++	ret = sync_test();
++	if (ret) {
++		goto out;
++	}
++
++	gettimeofday(&start, NULL);
++	for (i = 0; i < iterations; i++) {
++		if (dst_addr) {
++			for (t = 0; t < transfer_count - 1; t++) {
++				ret = send_xfer(transfer_size);
++				if (ret) {
++					goto out;
++				}
++			}
++
++			*poll_byte = (uint8_t) marker++;
++			ret = send_xfer(transfer_size);
++			if (ret) {
++				goto out;
++			}
++
++			ret = recv_xfer(transfer_size, marker++);
++		} else {
++			ret = recv_xfer(transfer_size, marker++);
++			if (ret) {
++				goto out;
++			}
++
++			for (t = 0; t < transfer_count - 1; t++) {
++				ret = send_xfer(transfer_size);
++				if (ret) {
++					goto out;
++				}
++			}
++
++			*poll_byte = (uint8_t) marker++;
++			ret = send_xfer(transfer_size);
++		}
++
++		if (ret) {
++			goto out;
++		}
++	}
++
++	gettimeofday(&end, NULL);
++	show_perf();
++
++out:
++	if (offset != -1) {
++		rsIoUnmap(rs, buf, transfer_size);
++	}
++
++	return ret;
++}
++
++static void set_options (SOCKET rs)
++{
++	int val;
++
++	if (buffer_size) {
++		setsockopt(rs, SOL_SOCKET, SO_SNDBUF, (void *) &buffer_size,
++			    sizeof buffer_size);
++		setsockopt(rs, SOL_SOCKET, SO_RCVBUF, (void *) &buffer_size,
++			    sizeof buffer_size);
++	} else {
++		val = 1 << 19;
++		setsockopt(rs, SOL_SOCKET, SO_SNDBUF, (void *) &val, sizeof val);
++		setsockopt(rs, SOL_SOCKET, SO_RCVBUF, (void *) &val, sizeof val);
++	}
++
++	val = 1;
++	setsockopt(rs, IPPROTO_TCP, TCP_NODELAY, (void *) &val, sizeof(val));
++	setsockopt(rs, SOL_RDMA, RDMA_IOMAPSIZE, (void *) &val, sizeof val);
++	
++	val = 1;
++	if (flags & MSG_DONTWAIT) {
++		ioctlsocket(rs, FIONBIO, (u_long *)&val);
++	}
++
++	/* Inline size based on experimental data */
++	if (optimization == opt_latency) {
++		val = 384;
++		setsockopt(rs, SOL_RDMA, RDMA_INLINE, (char *)&val, sizeof val);
++	} else if (optimization == opt_bandwidth) {
++		val = 0;
++		setsockopt(rs, SOL_RDMA, RDMA_INLINE, (char *)&val, sizeof val);
++	}
++}
++
++static int server_listen (void)
++{
++	struct addrinfo hints, *res;
++	int val, ret;
++
++	memset(&hints, 0, sizeof hints);
++	hints.ai_flags    = RAI_PASSIVE;
++	hints.ai_family   = AF_INET;
++	hints.ai_socktype = SOCK_STREAM;
++	hints.ai_protocol = IPPROTO_TCP;
++
++ 	ret = getaddrinfo(src_addr, port, &hints, &res);
++	if (ret) {
++		perror("getaddrinfo");
++		return ret;
++	}
++
++	lrs = (int)WSASocket(res->ai_family, res->ai_socktype, res->ai_protocol, rsGetProtocolInfo(NULL), 0, 0);
++	if (lrs == INVALID_SOCKET) {
++		perror("WSASocket");
++		ret = (int)lrs;
++		goto free;
++	}
++
++	val = 1;
++	ret = setsockopt(lrs, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof val);
++	if (ret) {
++		perror("setsockopt SO_REUSEADDR");
++		goto close;
++	}
++
++	ret = bind(lrs, res->ai_addr, res->ai_addrlen);
++	if (ret) {
++		perror("bind");
++		goto close;
++	}
++
++	ret = listen(lrs, 1);
++	if (ret) {
++		perror("listen");
++	}
++
++close:
++	if (ret) {
++		closesocket(lrs);
++	}
++
++free:
++	freeaddrinfo(res);
++	return ret;
++}
++
++static int server_connect (void)
++{
++	struct pollfd fds;
++	int ret = 0;
++
++	set_options(lrs);
++	do {
++		if (use_async) {
++			fds.fd = lrs;
++			fds.events = POLLIN;
++
++			ret = do_poll(&fds);
++			if (ret) {
++				perror("rpoll");
++				return ret;
++			}
++		}
++
++		rs = (int)accept(lrs, NULL, 0);
++	} while (rs == INVALID_SOCKET && (errno == EAGAIN || errno == EWOULDBLOCK));
++	if (rs == INVALID_SOCKET) {
++		perror("accept");
++		return (int)rs;
++	}
++
++	set_options(rs);
++	return ret;
++}
++
++static int client_connect (void)
++{
++	struct addrinfo hints, *res;
++	struct pollfd fds;
++	int ret, err;
++	socklen_t len;
++
++	memset(&hints, 0, sizeof hints);
++	hints.ai_flags  = RAI_PASSIVE;
++	hints.ai_family = AF_INET;
++	hints.ai_socktype = SOCK_STREAM;
++	hints.ai_protocol = IPPROTO_TCP;
++	
++ 	ret = getaddrinfo(dst_addr, port, &hints, &res);
++	if (ret) {
++		perror("getaddrinfo");
++		return ret;
++	}
++
++	rs = (int)WSASocket(res->ai_family, res->ai_socktype, res->ai_protocol, rsGetProtocolInfo(NULL), 0, 0);
++	if (rs == INVALID_SOCKET) {
++		perror("WSASocket");
++		ret = (int)rs;
++		goto free;
++	}
++
++	set_options(rs);
++	/* TODO: bind client to src_addr */
++
++	ret = connect(rs, res->ai_addr, res->ai_addrlen);
++	if (ret && (errno != EINPROGRESS)) {
++		perror("connect");
++		goto close;
++	}
++
++	if (ret && (errno == EINPROGRESS)) {
++		fds.fd = rs;
++		fds.events = POLLOUT;
++		ret = do_poll(&fds);
++		if (ret) {
++			goto close;
++		}
++
++		len = sizeof err;
++		ret = getsockopt(rs, SOL_SOCKET, SO_ERROR, (char *)&err, &len);
++		if (ret) {
++			goto close;
++		}
++
++		if (err) {
++			ret = -1;
++			perror("async connect");
++		}
++	}
++
++close:
++	if (ret) {
++		closesocket(rs);
++	}
++
++free:
++	freeaddrinfo(res);
++	return ret;
++}
++
++static int run (void)
++{
++	int i, ret = 0;
++
++	buf = malloc(!custom ? test_size[TEST_CNT - 1].size : transfer_size);
++	if (!buf) {
++		perror("malloc");
++		return -1;
++	}
++
++	if (!dst_addr) {
++		ret = server_listen();
++		if (ret) {
++			goto free;
++		}
++	}
++
++	printf("%-10s%-8s%-8s%-8s%-8s%8s %10s%13s\n",
++	       "name", "bytes", "xfers", "iters", "total", "time", "Gb/sec", "usec/xfer");
++	if (!custom) {
++		optimization = opt_latency;
++		ret = dst_addr ? client_connect() : server_connect();
++		if (ret) {
++			goto free;
++		}
++
++		for (i = 0; i < TEST_CNT; i++) {
++			if (test_size[i].option > size_option) {
++				continue;
++			}
++
++			init_latency_test(test_size[i].size);
++			run_test();
++		}
++
++		if (SOCKET_ERROR == shutdown(rs, SHUT_RDWR)) {
++			perror("shutdown");
++		}
++
++		if (SOCKET_ERROR == closesocket(rs)) {
++			perror("closesocket");
++		}
++
++		optimization = opt_bandwidth;
++		ret = dst_addr ? client_connect() : server_connect();
++		if (ret) {
++			goto free;
++		}
++
++		for (i = 0; i < TEST_CNT; i++) {
++			if (test_size[i].option > size_option) {
++				continue;
++			}
++
++			init_bandwidth_test(test_size[i].size);
++			run_test();
++		}
++	} else {
++		ret = dst_addr ? client_connect() : server_connect();
++		if (ret) {
++			goto free;
++		}
++
++		ret = run_test();
++	}
++
++	if (SOCKET_ERROR == shutdown(rs, SHUT_RDWR)) {
++		perror("shutdown");
++	}
++
++	if (SOCKET_ERROR == closesocket(rs)) {
++		perror("closesocket");
++	}
++
++free:
++	free(buf);
++	return ret;
++}
++
++static int set_test_opt (char *optarg)
++{
++	if (strlen(optarg) == 1) {
++		switch (optarg[0]) {
++		case 'b':
++			flags &= ~MSG_DONTWAIT;
++			break;
++		case 'n':
++			flags |=  MSG_DONTWAIT;
++			break;
++		case 'v':
++			verify = 1;
++			break;
++		default:
++			return -1;
++		}
++	} else if (!_strnicmp("block",    optarg, 5)) {
++		flags &= ~MSG_DONTWAIT;
++	} else if (!_strnicmp("nonblock", optarg, 8)) {
++		flags |=  MSG_DONTWAIT;
++	} else if (!_strnicmp("verify",   optarg, 6)) {
++		verify = 1;
++	} else {
++		return -1;
++	}
++
++	return 0;
++}
++
++int main (int argc, char **argv)
++{
++	int op, ret;
++	WSADATA wsaData;
++
++    if (0 != (ret = WSAStartup(0x202,&wsaData)) ) {
++        fprintf(stderr, "WSAStartup failed with error %d\n",ret);
++		ret = -1;
++        goto out;
++    }
++	
++	while ((op = getopt(argc, argv, "s:b:B:I:C:S:p:T:")) != -1) {
++		switch (op) {
++		case 's':
++			dst_addr = optarg;
++			break;
++		case 'b':
++			src_addr = optarg;
++			break;
++		case 'B':
++			buffer_size = atoi(optarg);
++			break;
++		case 'I':
++			custom = 1;
++			iterations = atoi(optarg);
++			break;
++		case 'C':
++			custom = 1;
++			transfer_count = atoi(optarg);
++			break;
++		case 'S':
++			if (!_strnicmp("all", optarg, 3)) {
++				size_option = 1;
++			} else {
++				custom = 1;
++				transfer_size = atoi(optarg);
++			}
++			break;
++		case 'p':
++			port = optarg;
++			break;
++		case 'T':
++			if (!set_test_opt(optarg)) {
++				break;
++			}
++			/* invalid option - fall through */
++		default:
++			printf("usage: %s\n", argv[0]);
++			printf("\t[-s server_address]\n");
++			printf("\t[-b bind_address]\n");
++			printf("\t[-B buffer_size]\n");
++			printf("\t[-I iterations]\n");
++			printf("\t[-C transfer_count]\n");
++			printf("\t[-S transfer_size or all]\n");
++			printf("\t[-p port_number]\n");
++			printf("\t[-T test_option]\n");
++			printf("\t    b|blocking - use blocking calls\n");
++			printf("\t    n|nonblocking - use nonblocking calls\n");
++			printf("\t    v|verify - verify data\n");
++			exit(1);
++		}
++	}
++
++	if (!(flags & MSG_DONTWAIT)) {
++		poll_timeout = -1;
++	}
++
++	ret = run();
++
++out:
++	WSACleanup();
++	return ret;
++}
+Index: ulp/librdmacm/examples/rstream/rstream.c
+===================================================================
+--- ulp/librdmacm/examples/rstream/rstream.c	(revision 3618)
++++ ulp/librdmacm/examples/rstream/rstream.c	(working copy)
+@@ -40,7 +40,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <_errno.h>
+ #include "../../../../etc/user/gtod.c" // gettimeofday()
+ #include "getopt.c"
+ #include <sys/types.h>
+@@ -55,6 +54,13 @@
+ 
+ #define MSG_DONTWAIT 0x80
+ 
++#define EWOULDBLOCK WSAEWOULDBLOCK
++#define EAGAIN      WSAEWOULDBLOCK
++#define EINPROGRESS WSAEINPROGRESS
++#undef  errno
++#define errno (WSAGetLastError())
++#define perror(s) printf("%s: WSAError=%d", s, errno)
++
+ struct test_size_param {
+ 	int size;
+ 	int option;
+@@ -79,7 +85,6 @@
+ 	{ 1 << 21, 1 }, { (1 << 21) + (1 << 20), 1},
+ 	{ 1 << 22, 1 }, { (1 << 22) + (1 << 21), 1},
+ };
+-
+ #define TEST_CNT (sizeof test_size / sizeof test_size[0])
+ 
+ enum rs_optimization {
+@@ -584,7 +589,6 @@
+ 
+ 		if (err) {
+ 			ret = -1;
+-			errno = err;
+ 			perror("async rconnect");
+ 		}
+ 	}
+Index: ulp/librdmacm/include/rdma/rsocket.h
+===================================================================
+--- ulp/librdmacm/include/rdma/rsocket.h	(revision 3618)
++++ ulp/librdmacm/include/rdma/rsocket.h	(working copy)
+@@ -52,14 +52,13 @@
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+-__declspec(dllexport)
++
+ int rsocket(int domain, int type, int protocol);
+-__declspec(dllexport)
+ int rbind(int socket, const struct sockaddr *addr, socklen_t addrlen);
+-__declspec(dllexport)
+ int rlisten(int socket, int backlog);
+-__declspec(dllexport)
++#if 0 // Direct Call variant:
+ int raccept(int socket, struct sockaddr *addr, socklen_t *addrlen);
++#else // Winsock Provider variant:
+ SOCKET WSPAPI WSPAccept(
+ 	SOCKET			 socket,
+ 	struct sockaddr	*addr,
+@@ -68,42 +67,26 @@
+ 	DWORD_PTR		 dwCallbackData,
+ 	LPINT			 lpErrno
+ );
+-__declspec(dllexport)
++#endif
+ int rconnect(int socket, const struct sockaddr *addr, socklen_t addrlen);
+-__declspec(dllexport)
+ int rshutdown(int socket, int how);
+-__declspec(dllexport)
+ int rclose(int socket);
+-__declspec(dllexport)
+ ssize_t rrecv(int socket, void *buf, size_t len, int flags);
+-__declspec(dllexport)
+ ssize_t rrecvfrom(int socket, void *buf, size_t len, int flags,
+ 		  struct sockaddr *src_addr, socklen_t *addrlen);
+-__declspec(dllexport)
+ ssize_t rrecvmsg(int socket, struct msghdr *msg, int flags);
+-__declspec(dllexport)
+ ssize_t rsend(int socket, const void *buf, size_t len, int flags);
+-__declspec(dllexport)
+ ssize_t rsendto(int socket, const void *buf, size_t len, int flags,
+ 		const struct sockaddr *dest_addr, socklen_t addrlen);
+-__declspec(dllexport)
+ ssize_t rsendmsg(int socket, const struct msghdr *msg, int flags);
+-__declspec(dllexport)
+ ssize_t rread(int socket, void *buf, size_t count);
+-__declspec(dllexport)
+ ssize_t rreadv(int socket, const struct iovec *iov, int iovcnt);
+-__declspec(dllexport)
+ ssize_t rwrite(int socket, const void *buf, size_t count);
+-__declspec(dllexport)
+ ssize_t rwritev(int socket, const struct iovec *iov, int iovcnt);
+-__declspec(dllexport)
+ int rpoll(struct pollfd *fds, nfds_t nfds, int timeout);
+-__declspec(dllexport)
+ int rselect(int nfds, fd_set *readfds, fd_set *writefds,
+ 	    fd_set *exceptfds, struct timeval *timeout);
+-__declspec(dllexport)
+ int rgetpeername(int socket, struct sockaddr *addr, socklen_t *addrlen);
+-__declspec(dllexport)
+ int rgetsockname(int socket, struct sockaddr *addr, socklen_t *addrlen);
+ 
+ #ifndef SOL_RDMA
+@@ -123,21 +106,13 @@
+ };
+ #endif
+ 
+-__declspec(dllexport)
+ int rsetsockopt(int socket, int level, int optname,
+ 		const void *optval, socklen_t optlen);
+-__declspec(dllexport)
+ int rgetsockopt(int socket, int level, int optname,
+ 		void *optval, socklen_t *optlen);
+-__declspec(dllexport)
+-int rfcntl(int socket, int cmd, ... /* arg */ );
+-__declspec(dllexport)
+ off_t riomap(int socket, void *buf, size_t len, int prot, int flags, off_t offset);
+-__declspec(dllexport)
+ int riounmap(int socket, void *buf, size_t len);
+-__declspec(dllexport)
+ size_t riowrite(int socket, const void *buf, size_t count, off_t offset, int flags); 
+-__declspec(dllexport)
+ int rioctlsocket(int socket, long cmd, u_long* argp);
+ 
+ #ifdef __cplusplus
+Index: ulp/librdmacm/RSocket.txt
+===================================================================
+--- ulp/librdmacm/RSocket.txt	(revision 3618)
++++ ulp/librdmacm/RSocket.txt	(working copy)
+@@ -42,19 +42,10 @@
+ =======
+ The RSockets protocol provides socket-based RDMA communication between
+ Windows nodes (like to WSD or ND) as well as between Windows and Linux nodes.
++The RSockets functionality is contained within the librdmacm.dll which acts
++as a Winsock base transport provider.
+ 
+-The RSockets functionality is contained within the librdmacm.dll which now
+-is capable to act as a Winsock base transport provider.
+ 
+-For now the librdmacm.dll still exports the direct rsocket calls
+-(rsocket, rbind, rrecv etc.) as well. So application developers can
+-alternatively circumvent Winsock and call those functions directly
+-(by including rsocket.h instead of rwinsock.h).
+-Aside from a slight performance gain, this might be useful in case of
+-quickly porting a Linux app to Windows(?).
+-But beware of using both access methods concurrently in the same application!
+-
+-
+ INSTALLATION
+ ============
+ Installation of that Winsock provider (i.e. registration of the
+@@ -75,7 +66,7 @@
+ USAGE
+ =====
+ Usage of the RSocket provider at application level is quite simple,
+-as demonstrated by the rstream tool (see ulp/librdmacm/examples/rstream)
++as demonstrated by the rstream tool (see examples/rstream)
+ which is also a porting from Linux OFED. In contrast to a 'normal' Winsock
+ application there are just two essential differences:
+ 
+Index: ulp/librdmacm/src/cma.cpp
+===================================================================
+--- ulp/librdmacm/src/cma.cpp	(revision 3618)
++++ ulp/librdmacm/src/cma.cpp	(working copy)
+@@ -51,6 +51,8 @@
+ #include "cma.h"
+ #include "..\..\..\etc\user\comp_channel.cpp"
+ 
++extern __declspec(thread) int WSAErrno;
++
+ static struct ibvw_windata windata;
+ 
+ enum cma_state
+@@ -111,10 +113,10 @@
+ static int cma_dev_cnt;
+ static DWORD ref;
+ 
+-void wsa_setlasterror(int err)
++void wsa_setlasterror(void)
+ {
+ 	int wsa_err = 0;
+-	switch (err) {
++	switch (errno) {
+ 		case 0:													break;
+ 		case EADDRINUSE:		wsa_err = WSAEADDRINUSE;		break;
+ 		case EADDRNOTAVAIL:		wsa_err = WSAEADDRNOTAVAIL;		break;
+@@ -162,7 +164,10 @@
+ 		case EWOULDBLOCK:		wsa_err = WSAEWOULDBLOCK;		break;
+ 		default:				wsa_err = WSASYSCALLFAILURE;
+ 	}
+-	WSASetLastError(wsa_err);
++
++	if (wsa_err) {
++        WSAErrno = wsa_err;
++    }
+ }
+ 
+ static int ucma_acquire(void)
+Index: ulp/librdmacm/src/cma.h
+===================================================================
+--- ulp/librdmacm/src/cma.h	(revision 3618)
++++ ulp/librdmacm/src/cma.h	(working copy)
+@@ -63,16 +63,17 @@
+ void ucma_cleanup();
+ int ucma_max_qpsize(struct rdma_cm_id *id);
+ int ucma_complete(struct rdma_cm_id *id);
+-void wsa_setlasterror(int err);
+-RS_NETSTAT_ENTRY* rsNetstatEntryCreate(int rs);
++void wsa_setlasterror(void);
++RS_NETSTAT_ENTRY* rsNetstatEntryCreate(int rs, int *lpErrno);
+ RS_NETSTAT_ENTRY* rsNetstatEntryGet   (int rs);
+ 
+ static __inline int ERR(int err)
+ {
+     int ret = rdma_seterrno(err);
+-	if (ret)
+-		wsa_setlasterror(err);
+-	return ret;
++    if (ret)
++        wsa_setlasterror();
++
++    return ret;
+ }
+  
+ __inline void* __cdecl operator new(size_t size)
+Index: ulp/librdmacm/src/cma_exports.src
+===================================================================
+--- ulp/librdmacm/src/cma_exports.src	(revision 3618)
++++ ulp/librdmacm/src/cma_exports.src	(working copy)
+@@ -35,32 +35,4 @@
+ rdma_create_ep
+ rdma_destroy_ep
+ rdmaw_wsa_errno
+-rsocket
+-rbind
+-rlisten
+-raccept
+-rconnect
+-rshutdown
+-rclose
+-rrecv
+-rrecvfrom
+-rrecvmsg
+-rsend
+-rsendto
+-rsendmsg
+-rread
+-rreadv
+-rwrite
+-rwritev
+-rgetpeername
+-rgetsockname
+-rsetsockopt
+-rgetsockopt
+-rfcntl
+-rioctlsocket
+-rselect
+-rpoll
+-riomap
+-riounmap
+-riowrite
+ #endif
+Index: ulp/librdmacm/src/cma_main.cpp
+===================================================================
+--- ulp/librdmacm/src/cma_main.cpp	(revision 3618)
++++ ulp/librdmacm/src/cma_main.cpp	(working copy)
+@@ -60,6 +60,8 @@
+ /*
+  * Globals used across files
+  */
++__declspec(thread) int WSAErrno = 0;
++
+ CRITICAL_SECTION    gCriticalSection;   // Critical section to protect startup/cleanup
+ WSPUPCALLTABLE      gMainUpCallTable;   // Winsock upcall table
+ WSAPROTOCOL_INFOW	gProtocolInfo;
+@@ -157,19 +159,18 @@
+ 	return count;
+ }
+ 
+-RS_NETSTAT_ENTRY* rsNetstatEntryCreate (int rs)
++RS_NETSTAT_ENTRY* rsNetstatEntryCreate (int rs, int *lpErrno)
+ {
+ 	if (pNetstat) {
+ 		for (int i = 0; i < NetstatCount; i++) {
+ 			if (pNetstat[i].s == INVALID_SOCKET) {
+ 				RS_NETSTAT_ENTRY* pEntry = &pNetstat[i];
+-				int                Errno = 0;
+ 	
+ 				ZeroMemory(pEntry, sizeof(*pEntry));
+ 				pEntry->s = (int) gMainUpCallTable.lpWPUCreateSocketHandle(
+ 									gProtocolInfo.dwCatalogEntryId,
+ 									rs,	// __in  DWORD_PTR dwContext
+-									&Errno
++									lpErrno
+ 								);
+ 				if (INVALID_SOCKET == pEntry->s) {
+ 					return NULL;
+@@ -298,6 +299,8 @@
+ 	RS_NETSTAT_ENTRY  *pNetstatEntry = NULL;
+     int                 rc;
+ 
++    WSAErrno = 0;
++
+ TRACE("af=%d  type=%d  protocol=%d  flags=0x%X", af, type, protocol, dwFlags);
+ 
+ 	if (af != AF_INET) {
+@@ -324,7 +327,6 @@
+     // Create the socket from the lower layer
+     //
+ 	if ( INVALID_SOCKET == (rs = rsocket(af, type, protocol)) ) {
+-		*lpErrno = WSAGetLastError();
+         goto cleanup;
+     }
+ 	
+@@ -349,9 +351,11 @@
+     if (INVALID_SOCKET != rs) {
+         rclose((int)rs);
+ 	}
+-	
+-	*lpErrno = WSAGetLastError();
+ 
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+     return INVALID_SOCKET;
+ }
+ 
+@@ -373,10 +377,8 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	ret = rbind((int)rs, name, namelen);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
+ 
+ TRACE("Socket = %d:", s);
+ 	if (AF_INET == name->sa_family) {
+@@ -401,6 +403,10 @@
+ 		TRACE("  Port = %d ,  Returning %d", name_in6->sin6_port, ret);
+ 	}
+ 
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -418,13 +424,15 @@
+ 		return ret;
+ 	}
+ 	
++    WSAErrno = 0;
+ 	ret = rlisten((int)rs, backlog);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
+ 
+ TRACE("Socket = %d: Backlog=%d, Returning %d", s, backlog, ret);
+ 
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -449,12 +457,9 @@
+ 	if (SOCKET_ERROR == ret) {
+ 		return ret;
+ 	}
+-	
++
++	WSAErrno = 0;
+ 	ret = rconnect((int)rs, name, namelen);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
+-
+ 	if (lpCalleeData) {
+ 		lpCalleeData->len = 0;
+ 	}
+@@ -482,6 +487,10 @@
+ 		TRACE("  Port = %d ,  Returning %d", name_in6->sin6_port, ret);
+ 	}
+ 
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -498,14 +507,16 @@
+ 	if (SOCKET_ERROR == ret) {
+ 		return ret;
+ 	}
+-	
++
++	WSAErrno = 0;
+ 	ret = rshutdown((int)rs, how);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
+ 
+ TRACE("Socket = %d: how=%d, Returning %d", s, how, ret);
+ 
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -521,10 +532,12 @@
+ 	if (SOCKET_ERROR == ret) {
+ 		return ret;
+ 	}
+-	
++
++	WSAErrno = 0;
+ 	ret = rclose((int)rs);
+ 	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
++        *lpErrno = WSAErrno;
++		TRACE("rclose() failed with Errno %d!", *lpErrno);
+ 	}
+ 	
+ 	ret = gMainUpCallTable.lpWPUCloseSocketHandle(s, lpErrno);
+@@ -557,14 +570,14 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	for (i = 0; i < dwBufferCount; i++) {
+ 		len = (int)rrecv((int)rs, lpBuffers[i].buf, lpBuffers[i].len, *lpFlags);
+ 		switch (len) {
+ 		case  0:
+ 			goto out;
+ 		case -1:
+-			*lpErrno = WSAGetLastError();
+-			   ret   = SOCKET_ERROR;
++			   ret = SOCKET_ERROR;
+ 			goto out;
+ 		default:
+ 			dwNumberOfBytesRecvd += len;
+@@ -573,7 +586,10 @@
+ 
+ out:
+ 	*lpNumberOfBytesRecvd = dwNumberOfBytesRecvd;
+-	
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -600,18 +616,22 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	for (i = 0; i < dwBufferCount; i++) {
+ 		len = (int)rsend((int)rs, lpBuffers[i].buf, lpBuffers[i].len, dwFlags);
+ 		if (-1 == len) {
+-			*lpErrno = WSAGetLastError();
+-			   ret   = SOCKET_ERROR;
+-		   break;
++		    ret = SOCKET_ERROR;
++		    break;
+ 		} else {
+ 			dwNumberOfBytesSent += len;
+ 		}
+ 	}
+ 
+ 	*lpNumberOfBytesSent = dwNumberOfBytesSent;
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -631,13 +651,14 @@
+ 	if (SOCKET_ERROR == ret) {
+ 		return ret;
+ 	}
+-	
++
++	WSAErrno = 0;
+ 	ret = rgetsockopt((int)rs, level, optname, optval, optlen);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
+ 
+-	return ret;
++    return ret;
+ }
+ 
+ int WSPAPI
+@@ -657,12 +678,13 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	ret = rsetsockopt((int)rs, level, optname, optval, optlen);
+-	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
+-	}
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
+ 
+-	return ret;
++    return ret;
+ }
+ 
+ int WSPAPI
+@@ -741,7 +763,8 @@
+ 			rexceptfds.fd_count++;
+ 		}
+ 	}
+-	
++
++    WSAErrno = 0;
+ 	ret = rselect(
+ 			nfds + 1, // Max. valid rsocket descriptor + 1
+ 			readfds   ? &rreadfds   : NULL,
+@@ -750,7 +773,7 @@
+ 			(struct timeval*)timeout
+ 		);
+ 	if (SOCKET_ERROR == ret) {
+-		*lpErrno = WSAGetLastError();
++        *lpErrno = WSAErrno;
+ 		return ret;
+ 	}
+ 
+@@ -812,6 +835,7 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	switch (dwIoControlCode) {
+ 	case SIO_RS_IO_MAP:
+ 		if (lpvInBuffer && lpvOutBuffer) {
+@@ -850,7 +874,7 @@
+ 					*lpcbBytesReturned = dwCount * sizeof(RS_TRACE_OUT);
+ 				} else {
+ 					 ret				= SOCKET_ERROR;
+-					*lpErrno			= WSA_IO_INCOMPLETE;
++					WSAErrno			= WSA_IO_INCOMPLETE;
+ 					*lpcbBytesReturned	= cbOutBuffer; // Copy as much as possible anyway
+ 				}
+ 			}
+@@ -869,14 +893,18 @@
+ 		}
+ 	default:
+ 		ret = SOCKET_ERROR;
+-		*lpErrno = WSAEINVAL;
++		WSAErrno = WSAEINVAL;
+ 	}
+ 
+ 	if (lpResultBuffer)	{
+ 		memcpy(lpvOutBuffer, lpResultBuffer, *lpcbBytesReturned);
+ 		free(lpResultBuffer);
+ 	}
+-		
++
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -998,11 +1026,13 @@
+ 		return ret;
+ 	}
+ 
+-	if (SOCKET_ERROR == (ret = rgetpeername((int)rs, name, namelen))) {
+-		*lpErrno = WSAGetLastError();
+-	}
++    WSAErrno = 0;
++	ret = rgetpeername((int)rs, name, namelen);
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
+ 
+-	return ret;
++    return ret;
+ }
+ 
+ int WSPAPI
+@@ -1020,11 +1050,13 @@
+ 		return ret;
+ 	}
+ 
+-	if (SOCKET_ERROR == (ret = rgetsockname((int)rs, name, namelen))) {
+-		*lpErrno = WSAGetLastError();
+-	}
++    WSAErrno = 0;
++	ret = rgetsockname((int)rs, name, namelen);
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
+ 
+-	return ret;
++    return ret;
+ }
+ 
+ BOOL WSPAPI
+@@ -1091,6 +1123,7 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	for (i = 0; i < dwBufferCount; i++)	{
+ 		switch (len = (int)rrecvfrom(
+ 							(int)rs,
+@@ -1103,8 +1136,7 @@
+ 		case  0:
+ 			goto out;
+ 		case -1:
+-			*lpErrno = WSAGetLastError();
+-			   ret   = SOCKET_ERROR;
++			   ret = SOCKET_ERROR;
+ 			goto out;
+ 		default:
+ 			dwNumberOfBytesRecvd += len;
+@@ -1113,7 +1145,10 @@
+ 
+ out:
+ 	*lpNumberOfBytesRecvd = dwNumberOfBytesRecvd;
+-	
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+@@ -1152,6 +1187,7 @@
+ 		return ret;
+ 	}
+ 
++    WSAErrno = 0;
+ 	for (i = 0; i < dwBufferCount; i++)	{
+ 		if (-1 == (len = (int)rsendto(
+ 								(int)rs,
+@@ -1161,8 +1197,7 @@
+ 								lpTo,
+ 								iTolen
+ 							)))	{
+-			*lpErrno = WSAGetLastError();
+-			   ret   = SOCKET_ERROR;
++			   ret = SOCKET_ERROR;
+ 			break;
+ 		} else {
+ 			dwNumberOfBytesSent += len;
+@@ -1170,6 +1205,10 @@
+ 	}
+ 
+ 	*lpNumberOfBytesSent = dwNumberOfBytesSent;
++    if (WSAErrno) {
++        *lpErrno = WSAErrno;
++    }
++
+ 	return ret;
+ }
+ 
+Index: ulp/librdmacm/src/openib_osd.h
+===================================================================
+--- ulp/librdmacm/src/openib_osd.h	(revision 3618)
++++ ulp/librdmacm/src/openib_osd.h	(working copy)
+@@ -27,14 +27,12 @@
+ #define O_NONBLOCK		0x4000
+ 
+ /* allow casting to WSABUF */
+-struct iovec
+-{
++struct iovec {
+        u_long iov_len;
+        char FAR* iov_base;
+ };
+ 
+-struct msghdr
+-{
++struct msghdr {
+ 	void         *msg_name;       // optional address
+ 	socklen_t     msg_namelen;    // size of address
+ 	struct iovec *msg_iov;        // scatter/gather array
+@@ -44,4 +42,31 @@
+ 	int           msg_flags;      // flags on received message
+ };
+ 
++#if(_WIN32_WINNT < 0x0600)
++
++/* Event flag definitions for WSAPoll(). */
++
++#define POLLRDNORM  0x0100
++#define POLLRDBAND  0x0200
++#define POLLIN      (POLLRDNORM | POLLRDBAND)
++#define POLLPRI     0x0400
++
++#define POLLWRNORM  0x0010
++#define POLLOUT     (POLLWRNORM)
++#define POLLWRBAND  0x0020
++
++#define POLLERR     0x0001
++#define POLLHUP     0x0002
++#define POLLNVAL    0x0004
++
++typedef struct pollfd {
++
++    SOCKET  fd;
++    SHORT   events;
++    SHORT   revents;
++
++} WSAPOLLFD, *PWSAPOLLFD, FAR *LPWSAPOLLFD;
++
++#endif // (_WIN32_WINNT < 0x0600)
++
+ #endif // OPENIB_OSD_H
+Index: ulp/librdmacm/src/rsocket.cpp
+===================================================================
+--- ulp/librdmacm/src/rsocket.cpp	(revision 3618)
++++ ulp/librdmacm/src/rsocket.cpp	(working copy)
+@@ -85,6 +85,8 @@
+ static uint32_t def_wmem = (1 << 17);
+ static uint32_t polling_time = 10;
+ 
++extern __declspec(thread) int WSAErrno;
++
+ extern fastlock_t		mut;
+ extern BOOL				gDetached;			// Indicates if process is detaching from DLL
+ extern CRITICAL_SECTION gCriticalSection;   // Critical section for initialization and 
+@@ -695,21 +697,23 @@
+ 	rs->sseq_comp = ntohs(conn->credits);
+ }
+ 
+-__declspec(dllexport)
+ int rsocket(int domain, int type, int protocol)
+ {
+ 	struct rsocket *rs;
+ 	int ret;
+ 
+-	wsa_setlasterror(0);
+ 	if ((domain != PF_INET && domain != PF_INET6) ||
+-	    (type != SOCK_STREAM) || (protocol && protocol != IPPROTO_TCP))
+-		return ERR(ENOTSUP);
++	    (type != SOCK_STREAM) || (protocol && protocol != IPPROTO_TCP)) {
++		ret = ERR(ENOTSUP);
++        return ret;
++    }
+ 
+ 	rs_configure();
+ 	rs = rs_alloc(NULL);
+-	if (!rs)
+-		return ERR(ENOMEM);
++	if (!rs) {
++		ret = ERR(ENOMEM);
++        return ret;
++    }
+ 
+ 	ret = rdma_create_id(NULL, &rs->cm_id, rs, RDMA_PS_TCP);
+ 	if (ret)
+@@ -720,7 +724,7 @@
+ 		goto err;
+ 
+ 	rs->cm_id->route.addr.src_addr.sa_family = (ADDRESS_FAMILY)domain;
+-	rs->pNetstatEntry = rsNetstatEntryCreate(rs->index);
++	rs->pNetstatEntry = rsNetstatEntryCreate(rs->index, &WSAErrno);
+ 	if (rs->pNetstatEntry)
+ 		rs->pNetstatEntry->saSrc = rs->cm_id->route.addr.src_addr;
+ 
+@@ -729,16 +733,14 @@
+ 
+ err:
+ 	rs_free(rs);
+-	return ret;
++	return ERR(ret);
+ }
+ 
+-__declspec(dllexport)
+ int rbind(int socket, const struct sockaddr *addr, socklen_t addrlen)
+ {
+ 	struct rsocket *rs;
+ 	int ret;
+ 
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	ret = rdma_bind_addr(rs->cm_id, (struct sockaddr *) addr);
+ 	if (!ret) {
+@@ -746,18 +748,16 @@
+ 		if (rs->pNetstatEntry)
+ 			rs->pNetstatEntry->saSrc = rs->cm_id->route.addr.src_addr;
+ 	} else
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 	
+ 	return ret;
+ }
+ 
+-__declspec(dllexport)
+ int rlisten(int socket, int backlog)
+ {
+ 	struct rsocket *rs;
+ 	int ret;
+ 
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 
+ 	if (backlog > RS_MAX_BACKLOG || backlog == SOMAXCONN)
+@@ -767,7 +767,7 @@
+ 	if (!ret)
+ 		rs_set_state(rs, rs_listening);
+ 	else
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 	
+ 	return ret;
+ }
+@@ -876,18 +876,16 @@
+ 			rs_set_state(rs, rs_connect_error);
+ 			rs->err = errno;
+ 		}
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 	}
+ 	return ret;
+ }
+ 
+-__declspec(dllexport)
+ int rconnect(int socket, const struct sockaddr *addr, socklen_t addrlen)
+ {
+ 	struct rsocket *rs;
+ 	int             ret;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	memcpy(&rs->cm_id->route.addr.dst_addr, addr, addrlen);
+ 	ret = rs_do_connect(rs);
+@@ -1334,8 +1332,7 @@
+ /*
+  * Continue to receive any queued data even if the remote side has disconnected.
+  */
+- __declspec(dllexport)
+-ssize_t rrecv(int socket, void *buf, size_t len, int flags)
++ ssize_t rrecv(int socket, void *buf, size_t len, int flags)
+ {
+ 	struct rsocket *rs;
+ 	size_t left = len;
+@@ -1343,7 +1340,6 @@
+ 	int ret;
+ 	uint8_t *bufb = (uint8_t *)buf;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	if (rs->state & rs_opening) {
+ 		ret = rs_do_connect(rs);
+@@ -1400,7 +1396,7 @@
+ 
+ out:
+ 	if (ret) {
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 		return ret;
+ 	} else
+ 		return len - left;
+@@ -1525,14 +1521,13 @@
+ 	int ret = 0;
+ 	uint8_t *bufb = (uint8_t *)buf;
+ 
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	if (rs->state & rs_opening) {
+ 		ret = rs_do_connect(rs);
+ 		if (ret) {
+ 			if (errno == EINPROGRESS)
+ 				errno = EAGAIN;
+-			wsa_setlasterror(errno);
++			wsa_setlasterror();
+ 			return ret;
+ 		}
+ 	}
+@@ -1597,7 +1592,7 @@
+ 	fastlock_release(&rs->slock);
+ 
+ 	if (ret && left == len)	{
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 		return ret;
+ 	} else
+ 		return len - left;
+@@ -1719,23 +1714,23 @@
+ 	return (ret && left == len) ? ret : len - left;
+ }
+ 
+-__declspec(dllexport)
+ ssize_t rsendmsg(int socket, const struct msghdr *msg, int flags)
+ {
+-	wsa_setlasterror(0);
+-	if (msg->msg_control && msg->msg_controllen)
+-		return ERR(ENOTSUP);
++    int ret = 0;
+ 
++	if (msg->msg_control && msg->msg_controllen) {
++		ret = ERR(ENOTSUP);
++        return ret;
++    }
++
+ 	return rsendv(socket, msg->msg_iov, (int) msg->msg_iovlen, msg->msg_flags);
+ }
+ 
+-__declspec(dllexport)
+ ssize_t rwrite(int socket, const void *buf, size_t count)
+ {
+ 	return rsend(socket, buf, count, 0);
+ }
+ 
+-__declspec(dllexport)
+ ssize_t rwritev(int socket, const struct iovec *iov, int iovcnt)
+ {
+ 	return rsendv(socket, iov, iovcnt, 0);
+@@ -1886,7 +1881,6 @@
+  * to the user (e.g. connection events or credit updates).  Process those
+  * events, then return to polling until we find ones of interest.
+  */
+-__declspec(dllexport)
+ int rpoll(struct pollfd *fds, nfds_t nfds, int timeout)
+ {
+ 	struct timeval s, e;
+@@ -1896,7 +1890,6 @@
+ 	uint32_t poll_time = 0;
+ 	int i, ret;
+ 	
+-	wsa_setlasterror(0);
+ 	do {
+ 		ret = rs_poll_check(fds, nfds);
+ 		if (ret || !timeout)
+@@ -1911,11 +1904,15 @@
+ 	} while (poll_time <= polling_time);
+ 
+ 	rfds = rs_fds_alloc(nfds);
+-	if (!rfds)
+-		return ERR(ENOMEM);
++	if (!rfds) {
++		ret = ERR(ENOMEM);
++        return ret;
++    }
+ 
+-	if (CompSetInit(&cs))
+-		return ERR(ENOMEM);
++	if (CompSetInit(&cs)) {
++        ret = ERR(ENOMEM);
++        return ret;
++    }
+ 	
+ 	do {
+ 		ret = rs_poll_arm(rfds, fds, nfds);
+@@ -2001,17 +1998,17 @@
+ 		timeout->tv_sec * 1000 + timeout->tv_usec / 1000;
+ }
+ 
+-__declspec(dllexport)
+ int rselect(int nfds, fd_set *readfds, fd_set *writefds,
+ 	    fd_set *exceptfds, struct timeval *timeout)
+ {
+ 	struct pollfd *fds;
+ 	int ret;
+ 	
+-	wsa_setlasterror(0);
+ 	fds = rs_select_to_poll(&nfds, readfds, writefds, exceptfds);
+-	if (!fds)
+-		return ERR(ENOMEM);
++	if (!fds) {
++		ret = ERR(ENOMEM);
++        return ret;
++    }
+ 
+ 	ret = rpoll(fds, nfds, rs_convert_timeout(timeout));
+ 
+@@ -2033,13 +2030,11 @@
+  * For graceful disconnect, notify the remote side that we're
+  * disconnecting and wait until all outstanding sends complete.
+  */
+-__declspec(dllexport)
+ int rshutdown(int socket, int how)
+ {
+ 	struct rsocket *rs;
+ 	int ctrl, ret = 0;
+ 
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	if (how == SHUT_RD) {
+ 		rs_set_state(rs, rs->state & ~rs_connect_rd);
+@@ -2061,7 +2056,7 @@
+ 		if (!rs->ctrl_avail) {
+ 			ret = rs_process_cq(rs, 0, rs_conn_can_send_ctrl);
+ 			if (ret) {
+-				wsa_setlasterror(errno);
++				wsa_setlasterror();
+ 				return ret;
+ 			}
+ 		}
+@@ -2082,12 +2077,10 @@
+ 	return 0;
+ }
+ 
+-__declspec(dllexport)
+ int rclose(int socket)
+ {
+ 	struct rsocket *rs;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	if (rs->state & rs_connected)
+ 		rshutdown(socket, SHUT_RDWR);
+@@ -2113,28 +2106,25 @@
+ 	memcpy(dst, src, size);
+ }
+ 
+-__declspec(dllexport)
+ int rgetpeername(int socket, struct sockaddr *addr, socklen_t *addrlen)
+ {
+ 	struct rsocket *rs;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	rs_copy_addr(addr, rdma_get_peer_addr(rs->cm_id), addrlen);
+ 	return 0;
+ }
+ 
+-__declspec(dllexport)
+ int rgetsockname(int socket, struct sockaddr *addr, socklen_t *addrlen)
+ {
+ 	struct rsocket *rs;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	rs_copy_addr(addr, rdma_get_local_addr(rs->cm_id), addrlen);
+ 	return 0;
+ }
+ 
++#if 0 // Direct Call variant:
+ /*
+  * Nonblocking is usually not inherited between sockets, but we need to
+  * inherit it here to establish the connection only.  This is needed to
+@@ -2147,7 +2137,6 @@
+  * Data transfers on the new socket remain blocking unless the user
+  * specifies otherwise through rfcntl.
+  */
+-__declspec(dllexport)
+ int raccept(int socket, struct sockaddr *addr, socklen_t *addrlen)
+ {
+ 	struct rsocket *rs, *new_rs;
+@@ -2155,11 +2144,12 @@
+ 	struct rs_conn_data *creq, cresp;
+ 	int ret;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	new_rs = rs_alloc(rs);
+-	if (!new_rs)
+-		return ERR(ENOMEM);
++	if (!new_rs) {
++		ret = ERR(ENOMEM);
++        return ret;
++    }
+ 
+ 	ret = rdma_get_request(rs->cm_id, &new_rs->cm_id);
+ 	if (ret)
+@@ -2203,9 +2193,12 @@
+ 
+ err:
+ 	rs_free(new_rs);
++    wsa_setlasterror();
+ 	return ret;
+ }
+ 
++#else // Winsock Provider variant:
++
+ /*
+  * Socket provider's variant:
+  */
+@@ -2231,11 +2224,12 @@
+ 	if (SOCKET_ERROR == ret)
+ 		return INVALID_SOCKET;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, (int)rsock);
+ 	new_rs = rs_alloc(rs);
+-	if (!new_rs)
+-		return ERR(ENOMEM);
++	if (!new_rs) {
++		ret = ERR(ENOMEM);
++        return ret;
++    }
+ 
+ 	ret = rdma_get_request(rs->cm_id, &new_rs->cm_id);
+ 	if (ret)
+@@ -2291,7 +2285,7 @@
+ 			/* Fall through. */
+ 		case CF_REJECT:
+ 			//TRACE("Conditional routine returned CF_REJECT");
+-			*lpErrno = WSAECONNREFUSED;
++			errno = ECONNREFUSED;
+ 			ret = (int)INVALID_SOCKET;
+ 			goto err;
+ 		case CF_DEFER:
+@@ -2304,7 +2298,7 @@
+ 		}
+ 	}
+ 	
+-	new_rs->pNetstatEntry = rsNetstatEntryCreate(new_rs->index);
++	new_rs->pNetstatEntry = rsNetstatEntryCreate(new_rs->index, lpErrno);
+ 	new_socket = new_rs->pNetstatEntry	? new_rs->pNetstatEntry->s 
+ 										: gMainUpCallTable.lpWPUCreateSocketHandle(
+ 											gProtocolInfo.dwCatalogEntryId,
+@@ -2335,13 +2329,16 @@
+ 
+ err:
+ 	rs_free(new_rs);
++    if (WSAErrno)
++        *lpErrno = WSAErrno;
++
+ 	if (new_socket != INVALID_SOCKET)
+ 		gMainUpCallTable.lpWPUCloseSocketHandle(new_socket, lpErrno);
+ 
+ 	return INVALID_SOCKET;
+ }
++#endif /* 0 */
+ 
+-__declspec(dllexport)
+ int rsetsockopt(int socket, int level, int optname,
+ 		const void *optval, socklen_t optlen)
+ {
+@@ -2462,17 +2459,18 @@
+ 			*opts &= ~(1 << optname);
+ 	}
+ 
++    if (ret)
++        wsa_setlasterror();
++
+ 	return ret;
+ }
+ 
+-__declspec(dllexport)
+ int rgetsockopt(int socket, int level, int optname,
+ 		void *optval, socklen_t *optlen)
+ {
+ 	struct rsocket *rs;
+ 	int ret = 0;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	switch (level) {
+ 	case SOL_SOCKET:
+@@ -2563,40 +2561,10 @@
+ 		ret = ENOTSUP;
+ 		break;
+ 	}
+-
++    
+ 	return ERR(ret);
+ }
+ 
+-__declspec(dllexport)
+-int rfcntl(int socket, int cmd, ... /* arg */ )
+-{
+-	struct rsocket *rs;
+-	va_list args;
+-	long param;
+-	int ret = 0;
+-	
+-	wsa_setlasterror(0);
+-	rs = (struct rsocket *)idm_at(&idm, socket);
+-	va_start(args, cmd);
+-	switch (cmd) {
+-	case F_GETFL:
+-		ret = (int) rs->fd_flags;
+-		break;
+-	case F_SETFL:
+-		param = va_arg(args, long);
+-		if (param & O_NONBLOCK)
+-			ret = rs_set_nonblocking(rs, 1);
+-
+-		if (!ret)
+-			rs->fd_flags |= param;
+-		break;
+-	default:
+-		ret = ERR(ENOTSUP);
+-	}
+-	va_end(args);
+-	return ret;
+-}
+-
+ static struct rs_iomap_mr *rs_get_iomap_mr(struct rsocket *rs)
+ {
+ 	int i;
+@@ -2623,16 +2591,18 @@
+  * offset to the address of buf.  We do not check for conflicts, which must
+  * be fixed at some point.
+  */
+-__declspec(dllexport)
+ off_t riomap(int socket, void *buf, size_t len, int prot, int flags, off_t offset)
+ {
+ 	struct rsocket *rs;
+ 	struct rs_iomap_mr *iomr;
+ 	int access = IBV_ACCESS_LOCAL_WRITE;
++    int ret    = 0;
+ 
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+-	if (!rs->cm_id->pd || (prot & ~(PROT_WRITE | PROT_NONE)))
+-		return ERR(EINVAL);
++	if (!rs->cm_id->pd || (prot & ~(PROT_WRITE | PROT_NONE))) {
++		ret = ERR(EINVAL);
++        return ret;
++    }
+ 
+ 	fastlock_acquire(&rs->iomap_lock);
+ 	if (prot & PROT_WRITE) {
+@@ -2651,7 +2621,7 @@
+ 	if (!iomr->mr) {
+ 		if (iomr->index < 0)
+ 			free(iomr);
+-		offset = -1;
++		offset = ERR(ENOMEM);
+ 		goto out;
+ 	}
+ 
+@@ -2671,7 +2641,6 @@
+ 	return offset;
+ }
+ 
+-__declspec(dllexport)
+ int riounmap(int socket, void *buf, size_t len)
+ {
+ 	struct rsocket *rs;
+@@ -2717,7 +2686,6 @@
+ 	return NULL;
+ }
+ 
+-__declspec(dllexport)
+ size_t riowrite(int socket, const void *buf, size_t count, off_t offset, int flags)
+ {
+ 	struct rsocket *rs;
+@@ -2728,7 +2696,6 @@
+ 	uint32_t xfer_size, olen = RS_OLAP_START_SIZE;
+ 	int ret = 0;
+ 
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	fastlock_acquire(&rs->slock);
+ 	if (rs->iomap_pending) {
+@@ -2797,28 +2764,31 @@
+ 	fastlock_release(&rs->slock);
+ 
+ 	if (ret && left == count) {
+-		wsa_setlasterror(errno);
++		wsa_setlasterror();
+ 		return ret;
+ 	} else
+ 		return count - left;
+ }
+ 
+-__declspec(dllexport)
+ int rioctlsocket(int socket, long cmd, u_long* argp)
+ {
++    int ret = 0;
+ 	struct rsocket *rs;
+ 	
+-	wsa_setlasterror(0);
+ 	rs = (struct rsocket *)idm_at(&idm, socket);
+ 	switch (cmd) {
+ 		case FIONBIO:
+ 			if (*argp)
+ 				rs->fd_flags |= O_NONBLOCK;
+-			return rs_set_nonblocking(rs, *argp ? 1 : 0);
++			ret = rs_set_nonblocking(rs, *argp ? 1 : 0);
++            break;
+ 		case FIONREAD:
+ 		case SIOCATMARK:
+-			return ERR(ENOTSUP);
+-		default:
+-			return ERR(ENOTSUP);
++			ret = ERR(ENOTSUP);
++            break;
++        default:
++			ret = ERR(ENOTSUP);
+ 	}
++
++    return ret;
+ }
+Index: ulp/librdmacm/src/Sources
+===================================================================
+--- ulp/librdmacm/src/Sources	(revision 3618)
++++ ulp/librdmacm/src/Sources	(working copy)
+@@ -7,7 +7,6 @@
+ 
+ DLLENTRY = DllMain
+ USE_MSVCRT = 1
+-NTTARGETFILES=Custom_target
+ 
+ SOURCES =			\
+ 	cma.rc			\
+@@ -18,12 +17,12 @@
+ 	indexer.cpp
+ 
+ INCLUDES = ..\include;..\..\..\inc;..\..\..\inc\user;..\..\libibverbs\include;\
+-	..\..\..\inc\user\linux;..\..\libibverbs\src\$(O);\
+-	..\..\..\core\winverbs\user\$(O);\
+-	..\..\..\core\ibat\user\$(O);
++		   ..\..\..\inc\user\linux
+ 
+ USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_CMA_SYMBOLS
+ 
++LINKER_FLAGS = /IGNORE:4210
++
+ TARGETLIBS = \
+ 	$(SDK_LIB_PATH)\kernel32.lib	\
+ 	$(SDK_LIB_PATH)\uuid.lib		\

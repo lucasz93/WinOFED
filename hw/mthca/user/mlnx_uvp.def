@@ -1,0 +1,10 @@
+#if DBG
+LIBRARY mthcaud.dll
+#else
+LIBRARY mthcau.dll
+#endif
+
+#ifndef _WIN64
+EXPORTS
+uvp_get_interface
+#endif

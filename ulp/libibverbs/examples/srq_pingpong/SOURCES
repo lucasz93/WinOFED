@@ -1,0 +1,26 @@
+TARGETNAME = ibv_srq_pingpong
+TARGETPATH = ..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+
+UMTYPE = console
+UMENTRY = main
+
+USE_MSVCRT = 1
+USE_STL = 1
+USE_NATIVE_EH = 1
+USE_IOSTREAM = 1
+NTTARGETFILES=Custom_target
+
+SOURCES = srq_pingpong.c srq_pingpong.rc
+	
+INCLUDES = ..;..\..\include;..\..\..\..\inc;..\..\..\..\inc\user;\
+		   ..\..\..\..\inc\user\linux;..\..\src\$(O);
+
+TARGETLIBS =						\
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\advapi32.lib	\
+	$(SDK_LIB_PATH)\user32.lib		\
+	$(SDK_LIB_PATH)\ole32.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(TARGETPATH)\*\libibverbs.lib
+

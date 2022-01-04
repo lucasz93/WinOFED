@@ -1,0 +1,23 @@
+TARGETNAME = dapl2test
+
+TARGETPATH = ..\..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+UMTYPE = console
+USE_MSVCRT = 1
+
+SOURCES = \
+	dapltest.rc		\
+	..\dt_cmd.c		\
+	..\dt_test.c	\
+	..\dt_common.c	\
+	..\dt_udapl.c	\
+	..\dt_mdep.c
+
+INCLUDES=..\include;..\mdep\windows;..\..\..\dat\include;%DDK_INC_PATH%
+
+RCOPTIONS=/I..\..\..\..\..\inc;
+
+TARGETLIBS = $(TARGETPATH)\*\dat2.lib $(SDK_LIB_PATH)\ws2_32.lib
+
+# XXX do this ASAP - MSC_WARNING_LEVEL= /W3
+MSC_WARNING_LEVEL= /W1

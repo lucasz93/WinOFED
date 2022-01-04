@@ -1,0 +1,64 @@
+TRUNK=..\..\..\..
+
+TARGETNAME=mlx4u
+
+
+TARGETPATH=$(TRUNK)\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+
+DLLDEF=$(OBJ_PATH)\$O\mlx4.def
+
+USE_MSVCRT=1
+NTTARGETFILES=Custom_target
+
+!if $(FREEBUILD)
+#ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES= \
+	mlx4u.rc	\
+	buf.c		\
+	cq.c 		\
+	dbrec.c		\
+	mlx4.c		\
+	mlx4_debug.c \
+	qp.c		\
+	srq.c		\
+	verbs.c
+
+INCLUDES= \
+	..\..\inc; \
+	$(TRUNK)\inc\user; \
+	$(TRUNK)\inc\complib; \
+	$(TRUNK)\inc\user\complib; \
+	$(TRUNK)\inc;	\
+    $(ND_SDK_PATH)\include; \
+
+USER_C_FLAGS=$(USER_C_FLAGS) /DCL_NO_TRACK_MEM
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\user32.lib \
+	$(SDK_LIB_PATH)\kernel32.lib \
+	$(SDK_LIB_PATH)\Advapi32.lib \
+    $(TARGETPATH)\*\complib.lib 
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG=1
+!endif
+
+#LINKER_FLAGS=/MAP /MAPINFO:LINES
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING  -DWPP_OLDCC
+
+
+RUN_WPP= $(SOURCES) -ext:.c.h -dll\
+	-scan:mlx4_debug.h \
+	-func:MLX4_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:MLX4_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

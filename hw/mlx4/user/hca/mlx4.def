@@ -1,0 +1,31 @@
+LIBRARY mlx4u.dll
+
+EXPORTS
+#ifndef _WIN64
+uvp_get_interface
+#endif
+mlx4_pre_open_ca
+mlx4_post_open_ca
+mlx4_post_close_ca
+mlx4_pre_alloc_pd
+mlx4_post_alloc_pd
+mlx4_post_free_pd
+mlx4_pre_create_cq
+mlx4_post_create_cq
+mlx4_post_destroy_cq
+mlx4_arm_cq
+mlx4_poll_cq_array
+mlx4_pre_create_srq
+mlx4_post_create_srq
+mlx4_pre_destroy_srq
+mlx4_post_destroy_srq
+mlx4_post_srq_recv
+mlx4_pre_create_qp
+mlx4_wv_pre_create_qp
+mlx4_post_create_qp
+mlx4_pre_destroy_qp
+mlx4_post_destroy_qp
+mlx4_nd_modify_qp
+mlx4_nd_get_qp_state
+mlx4_post_send
+mlx4_post_recv

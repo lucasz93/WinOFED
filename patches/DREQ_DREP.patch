@@ -1,0 +1,211 @@
+Index: core/al/kernel/al_cm_cep.c
+===================================================================
+--- core/al/kernel/al_cm_cep.c	(revision 3613)
++++ core/al/kernel/al_cm_cep.c	(working copy)
+@@ -1622,7 +1622,50 @@
+ }
+ 
+ 
++static ib_api_status_t
++__format_drep_mad(
++	IN				uint32_t					local_comm_id,
++	IN				uint32_t					remote_comm_id,
++	IN		const	uint8_t*					p_pdata OPTIONAL,
++	IN				uint8_t						pdata_len,
++	IN	OUT			mad_cm_drep_t* const		p_drep )
++{
++	ib_api_status_t		status;
++
++	AL_ENTER( AL_DBG_CM );
++
++	p_drep->local_comm_id = local_comm_id;
++	p_drep->remote_comm_id = remote_comm_id;
++
++	/* copy optional data */
++	status = conn_drep_set_pdata( p_pdata, pdata_len, p_drep );
++
++	AL_EXIT( AL_DBG_CM );
++	return status;
++}
++
++
+ static void
++__send_unaffiliated_drep(
++	IN				cep_agent_t* const			p_port_cep,
++	IN				ib_mad_element_t* const		p_mad )
++{
++	mad_cm_dreq_t		*p_dreq;
++
++	AL_ENTER( AL_DBG_CM );
++
++	p_dreq = (mad_cm_dreq_t*)p_mad->p_mad_buf;
++
++	p_mad->p_mad_buf->attr_id = CM_DREP_ATTR_ID;
++	/* __format_drep returns always SUCCESS while no private data */
++	__format_drep_mad( p_dreq->remote_comm_id, p_dreq->local_comm_id, NULL, 0, (mad_cm_drep_t*)p_mad->p_mad_buf );
++	__cep_send_mad( p_port_cep, p_mad );
++
++	AL_EXIT( AL_DBG_CM );
++}
++
++
++static void
+ __dreq_handler(
+ 	IN				cep_agent_t* const			p_port_cep,
+ 	IN				ib_mad_element_t* const		p_mad )
+@@ -1650,8 +1693,8 @@
+ 		p_cep->local_qpn != conn_dreq_get_remote_qpn( p_dreq ) )
+ 	{
+ 		AL_PRINT( TRACE_LEVEL_INFORMATION, AL_DBG_CM, ("DREQ received that could not be matched.\n") );
++		__send_unaffiliated_drep( p_port_cep, p_mad );
+ 		KeReleaseInStackQueuedSpinLockFromDpcLevel( &hdl );
+-		ib_put_mad( p_mad );
+ 		AL_EXIT( AL_DBG_CM );
+ 		return;
+ 	}
+@@ -2813,7 +2856,7 @@
+ 						p_rdma_req->maj_min_ver, p_rdma_req->ipv ) );
+ 					return NULL;
+ 				}
+-			
++
+ 				cmp = __cm_rdma_req_cmp(
+ 					p_cep->cmp_offset,
+ 					p_rdma_req,
+@@ -2822,13 +2865,13 @@
+ 			}
+ 			else
+ 			{
+-                /*
+-                 * TODO: this check seems to be for catching a malformed listen, and should
+-                 * be trapped when the listen is created.  Checking after the fact is dumb.
+-                 */
++				/*
++				 * TODO: this check seems to be for catching a malformed listen, and should
++				 * be trapped when the listen is created.  Checking after the fact is dumb.
++				 */
+ 				int len = min(p_cep->cmp_len, IB_REQ_PDATA_SIZE - p_cep->cmp_offset);
+-			cmp = cl_memcmp( &p_pdata[p_cep->cmp_offset],
+-				p_cep->p_cmp_buf, len );
++				cmp = cl_memcmp( &p_pdata[p_cep->cmp_offset],
++					p_cep->p_cmp_buf, len );
+ 			}
+ 
+ 			if( !cmp )
+@@ -3965,12 +4008,13 @@
+ 
+ 	AL_ENTER( AL_DBG_CM );
+ 
+-	p_drep->local_comm_id = p_cep->local_comm_id;
+-	p_drep->remote_comm_id = p_cep->remote_comm_id;
++	status = __format_drep_mad(
++		p_cep->local_comm_id,
++		p_cep->remote_comm_id,
++		p_pdata,
++		pdata_len,
++		p_drep );
+ 
+-	/* copy optional data */
+-	status = conn_drep_set_pdata( p_pdata, pdata_len, p_drep );
+-
+ 	/* Store the RTU MAD so we can repeat it if we get a repeated DREP. */
+ 	if( status == IB_SUCCESS && p_drep != &p_cep->mads.drep )
+ 		p_cep->mads.drep = *p_drep;
+@@ -4031,17 +4075,17 @@
+ 
+ static void
+ __cancel_listen(
+-    IN              kcep_t* const               p_cep )
++	IN				kcep_t* const				p_cep )
+ {
+-    CL_ASSERT( p_cep->state == CEP_STATE_LISTEN );
+-    /* Remove from listen map. */
+-    cl_rbmap_remove_item( &gp_cep_mgr->listen_map, &p_cep->listen_item );
++	CL_ASSERT( p_cep->state == CEP_STATE_LISTEN );
++	/* Remove from listen map. */
++	cl_rbmap_remove_item( &gp_cep_mgr->listen_map, &p_cep->listen_item );
+ 
+-    if( p_cep->p_cmp_buf )
+-    {
+-        cl_free( p_cep->p_cmp_buf );
+-        p_cep->p_cmp_buf = NULL;
+-    }
++	if( p_cep->p_cmp_buf )
++	{
++		cl_free( p_cep->p_cmp_buf );
++		p_cep->p_cmp_buf = NULL;
++	}
+ }
+ 
+ 
+@@ -4061,7 +4105,7 @@
+ 		p_cep->state != CEP_STATE_DREQ_DESTROY );
+ 
+ 	/* Cleanup the pending MAD list. */
+-    __cleanup_mad_list( p_cep );
++	__cleanup_mad_list( p_cep );
+ 
+ 	switch( p_cep->state )
+ 	{
+@@ -4121,7 +4165,7 @@
+ 		break;
+ 
+ 	case CEP_STATE_LISTEN:
+-        __cancel_listen( p_cep );
++		__cancel_listen( p_cep );
+ 		break;
+ 
+ 	case CEP_STATE_PRE_REQ:
+@@ -4311,12 +4355,12 @@
+ 		return IB_INVALID_HANDLE;
+ 	}
+ 
+-    __cleanup_mad_list( p_cep );
+-    __cancel_listen( p_cep );
+-    p_cep->state = CEP_STATE_IDLE;
++	__cleanup_mad_list( p_cep );
++	__cancel_listen( p_cep );
++	p_cep->state = CEP_STATE_IDLE;
+ 
+ 	KeReleaseInStackQueuedSpinLock( &hdl );
+-    return STATUS_SUCCESS;
++	return STATUS_SUCCESS;
+ }
+ 
+ 
+@@ -4435,7 +4479,7 @@
+ 			/* Compare offset (or mask for RDMA CM) must match. */
+ 			if( p_listen_info->cmp_offset != p_listen->cmp_offset )
+ 				break;
+-			
++
+ 			if( ib_cm_is_rdma_cm_sid(p_listen_info->svc_id) )
+ 			{
+ 				cmp = __cm_rdma_req_cmp(
+@@ -4916,7 +4960,7 @@
+ 		OUT			ib_qp_mod_t* const			p_init )
+ {
+ 	iba_cm_req req;
+-	
++
+ 	RtlZeroMemory(&req, sizeof req);
+ 	req.service_id = p_cm_req->svc_id;
+ 
+@@ -5998,7 +6042,8 @@
+ 			break;
+ 		}
+ 
+-		if( __cep_send_retry( p_port_cep, p_cep, p_mad ) == IB_SUCCESS )
++		status = __cep_send_retry( p_port_cep, p_cep, p_mad );
++		if( status == IB_SUCCESS )
+ 		{
+ 			p_cep->state = CEP_STATE_DREQ_SENT;
+ 		}
+@@ -6008,7 +6053,6 @@
+ 			__insert_timewait( p_cep );
+ 		}
+ 
+-		status = IB_SUCCESS;
+ 		break;
+ 
+ 	default:

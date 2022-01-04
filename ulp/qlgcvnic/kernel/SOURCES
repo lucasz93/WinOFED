@@ -1,0 +1,90 @@
+########################################################################
+#
+#  Copyright(c) Infinicon Systems All rights reserved.
+#
+########################################################################
+
+
+# The TARGETNAME.  This is name of the item being built (without the
+#  extension.  
+TARGETNAME=qlgcvnic
+
+########################################################################
+# The path where all binaries are built.  
+#
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+
+########################################################################
+# WDK build only: transform .inx --> .inf adding date & version stamp.
+# See '.\makefile.inc'. netvnic.inf file created in $(INF_TARGET)  
+#
+!if $(_NT_TOOLS_VERSION) != 0x700
+INF_NAME=netvnic
+INF_TARGET=..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+!endif
+
+########################################################################
+# The type of item that is being built.  This is manditory.
+# Value         Meaning
+# DYNLINK       - A DLL.
+# DRIVER        - A kernel device driver.
+# EXPORT_DRIVER - A kernel device driver with exports.
+# PROGRAM       - A windows executable.
+# PROGLIB       - A windows library.
+# MINPORT       - A miniport driver.
+# GDI_DRIVER    - A video driver.
+# LIBRARY       - A library 
+TARGETTYPE=MINIPORT
+
+########################################################################
+# The type of driver being built.  This affects the include paths.
+# Comment out for non-WDM drivers.
+#DRIVERTYPE=WDM
+
+#
+########################################################################
+# All the source files in this project.  
+#
+SOURCES=	inic.rc	\
+			vnic_driver.c \
+			vnic_adapter.c	\
+			vnic_ib.c	\
+			vnic_control.c	\
+			vnic_data.c	\
+			vnic_netpath.c	\
+			vnic_viport.c \
+
+
+
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;
+
+C_DEFINES=$(C_DEFINES) -DNDIS_MINIPORT_DRIVER -DNDIS_WDM=1 \
+	-DDEPRECATE_DDK_FUNCTIONS -DNDIS51_MINIPORT -DBINARY_COMPATIBLE=0 -DLBFO_ENABLED=1
+
+#!if $(FREEBUILD)
+#  Free build will printout error messages
+#C_DEFINES=$(C_DEFINES) -DFREE_BUILD_DBG=1
+#!endif
+
+TARGETLIBS= \
+	$(DDK_LIB_PATH)\ntoskrnl.lib \
+	$(DDK_LIB_PATH)\hal.lib		\
+	$(DDK_LIB_PATH)\ndis.lib	\
+	$(TARGETPATH)\*\complib.lib
+
+#!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+#
+# The driver is built in the Win2K build environment
+# - use the library version of safe strings 
+#
+#TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\ntstrsafe.lib
+#!endif
+
+########################################################################
+# Set the warning levels to maximum.
+MSC_WARNING_LEVEL= /W4
+#
+
+

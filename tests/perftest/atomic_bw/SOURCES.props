@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TARGETNAME Condition="'$(OVERRIDE_TARGETNAME)'!='true'">ibv_atomic_bw</TARGETNAME>
+    <TARGETPATH Condition="'$(OVERRIDE_TARGETPATH)'!='true'">..\..\..\bin\user\obj$(BUILD_ALT_DIR)</TARGETPATH>
+    <TARGETTYPE Condition="'$(OVERRIDE_TARGETTYPE)'!='true'">PROGRAM</TARGETTYPE>
+    <NTTARGETFILES Condition="'$(OVERRIDE_NTTARGETFILES)'!='true'">Custom_target</NTTARGETFILES>
+    <UMTYPE Condition="'$(OVERRIDE_UMTYPE)'!='true'">console</UMTYPE>
+    <UMENTRY Condition="'$(OVERRIDE_UMENTRY)'!='true'">main</UMENTRY>
+    <USE_MSVCRT Condition="'$(OVERRIDE_USE_MSVCRT)'!='true'">1</USE_MSVCRT>
+    <USE_STL Condition="'$(OVERRIDE_USE_STL)'!='true'">1</USE_STL>
+    <USE_NATIVE_EH Condition="'$(OVERRIDE_USE_NATIVE_EH)'!='true'">1</USE_NATIVE_EH>
+    <USE_IOSTREAM Condition="'$(OVERRIDE_USE_IOSTREAM)'!='true'">1</USE_IOSTREAM>
+    <SOURCES Condition="'$(OVERRIDE_SOURCES)'!='true'">atomic_bw.rc ..\atomic_bw.c ..\perftest_resources.c ..\perftest.c ..\multicast_resources.c ..\perftest_parameters.c ..\perftest_communication.c</SOURCES>
+    <INCLUDES Condition="'$(OVERRIDE_INCLUDES)'!='true'">..;..\..\..\ulp\libibverbs\include;..\..\..\ulp\libibumad\include;..\..\..\ulp\librdmacm\include\rdma; 	   ..\..\..\inc;..\..\..\inc\user;..\..\..\inc\user\linux;..\..\..\inc\complib; 		..\..\..\hw\mlx4\user\hca;..\..\..\tools\perftests\user; 		   ..\..\..\ulp\libibverbs\src\$(O);  		   ..\..\..\ulp\libibumad\src\$(O); 		   ..\..\..\core\complib\user\$(O);  	  ..\..\..\ulp\librdmacm\src\$(O);</INCLUDES>
+    <TARGETLIBS Condition="'$(OVERRIDE_TARGETLIBS)'!='true'">$(SDK_LIB_PATH)\kernel32.lib	 	$(SDK_LIB_PATH)\advapi32.lib	 	$(SDK_LIB_PATH)\user32.lib		 	$(SDK_LIB_PATH)\ole32.lib		 	$(SDK_LIB_PATH)\ws2_32.lib		 	$(SDK_LIB_PATH)\uuid.lib  	$(TARGETPATH)\*\libibverbs.lib		 	$(TARGETPATH)\*\libibumad.lib		 	$(TARGETPATH)\*\complib.lib		 	$(TARGETPATH)\*\librdmacm.lib</TARGETLIBS>
+  </PropertyGroup>
+  <ItemGroup>
+    <InvokedTargetsList Include="Custom_target">
+      <Pass>All</Pass>
+      <Condition>
+      </Condition>
+    </InvokedTargetsList>
+  </ItemGroup>
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

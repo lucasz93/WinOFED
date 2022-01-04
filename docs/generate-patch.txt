@@ -1,0 +1,18 @@
+Patches can be generated using the 'svn diff' utility if the changes are
+limited to a single branch in the svn tree.  However, to generate a patch
+by comparing two branches using a 'diff' program (e.g. GnuWin32 'diff'),
+the following syntax will help produce patches that are more easily
+reviewable:
+
+diff -up -r -X trunk\docs\dontdiff.txt -I \$Id: old_path new_path
+
+For full diff syntax information, see the diff documentation, but as a summary:
+
+-u  provides a unified diff (includes lines around changed lines for context)
+ p  lists the C function name containing the diff
+-r  does a recursive diff (use when old_path and new_path are directories)
+-X  excludes files listed in docs\dontdiff from the diff
+-I  ignores diffs caused by the SVN Id line
+
+Patches generated using this method can be applied by using a 'patch' program,
+such as GnuWin32 'patch'.

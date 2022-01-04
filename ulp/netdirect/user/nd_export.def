@@ -1,0 +1,7 @@
+
+LIBRARY	WVNDPROV.DLL
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	WSPStartup

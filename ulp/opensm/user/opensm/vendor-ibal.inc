@@ -1,0 +1,4 @@
+# Vendor IBAL
+VENDOR_LIBS=$(LIBPATH)\*\osmv_ibal.lib
+VENDOR_IF=OSM_VENDOR_INTF_AL
+

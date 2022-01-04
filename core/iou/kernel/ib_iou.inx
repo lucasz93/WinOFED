@@ -1,0 +1,128 @@
+; OpenIB InfiniBand IOU Driver.
+; Copyright 2005 SilverStorm Technologies all Rights Reserved.
+; Copyright 2006 Mellanox Technologies all Rights Reserved.
+
+[Version]
+Signature="$Windows NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%OPENIB%
+DriverVer=04/29/2008,1.1.0000.1085
+CatalogFile=ib_iou.cat
+
+; ================= Device Install section =====================
+
+; 64-bit platforms also copy 32-bit user-mode binaries.
+[DestinationDirs]
+DefaultDestDir=%DIRID_DRIVERS%
+
+[SourceDisksNames.x86]
+1=%DiskId%,,,""
+
+[SourceDisksNames.amd64]
+1=%DiskId%,,,""
+
+[SourceDisksNames.ia64]
+1=%DiskId%,,,""
+
+[SourceDisksFiles.x86]
+ibiou.sys=1
+
+[SourceDisksFiles.amd64]
+ibiou.sys=1
+
+[SourceDisksFiles.ia64]
+ibiou.sys=1
+
+[Manufacturer]
+%OPENIB% = GenIOU.DeviceSection,ntx86,ntamd64,ntia64
+%SST% = QLogicIOU.DeviceSection,ntx86,ntamd64,ntia64
+
+[GenIOU.DeviceSection]
+; empty since we don't support W9x/Me
+
+[GenIOU.DeviceSection.ntx86]
+%Iou.DeviceDesc% = Iou.DDInstall,IBA\IB_IOU
+
+[GenIOU.DeviceSection.ntamd64]
+%Iou.DeviceDesc% = Iou.DDInstall,IBA\IB_IOU
+
+[GenIOU.DeviceSection.ntia64]
+%Iou.DeviceDesc% = Iou.DDInstall,IBA\IB_IOU
+
+[QLogicIOU.DeviceSection]
+; empty since we don't support W9x/Me
+
+[QLogicIOU.DeviceSection.ntx86]
+%VFx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0060,IBA\V00066aP0010
+%VEx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0058
+%FVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00dd
+%EVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00de
+%BC2FC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e0
+%BC2GE.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e1
+
+[QLogicIOU.DeviceSection.ntamd64]
+%VFx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0060,IBA\V00066aP0010
+%VEx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0058
+%FVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00dd
+%EVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00de
+%BC2FC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e0
+%BC2GE.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e1
+
+[QLogicIOU.DeviceSection.ntia64]
+%VFx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0060,IBA\V00066aP0010
+%VEx.DeviceDesc% = Iou.DDInstall,IBA\V00066aP0058
+%FVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00dd
+%EVIC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00de
+%BC2FC.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e0
+%BC2GE.DeviceDesc% = Iou.DDInstall,IBA\V00066aP00e1
+
+[Iou.DDInstall.nt]
+CopyFiles = Iou.CopyFiles
+
+[Iou.DDInstall.nt.Services]
+AddService = ibiou,%SPSVCINST_ASSOCSERVICE%,Iou.ServiceInstall
+;AddService = ibiou,,Iou.ServiceInstall
+
+[Iou.CopyFiles]
+ibiou.sys
+
+;
+; ============= Service Install section ==============
+;
+
+[Iou.ServiceInstall]
+DisplayName	= %Iou.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_DEMAND_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ibiou.sys
+AddReg          = Iou.ParamsReg
+
+[Iou.ParamsReg]
+HKR,"Parameters","DebugLevel",%REG_DWORD%,2
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x00ffffff
+
+[Strings]
+OPENIB = "OpenFabrics Alliance"
+SST = "SilverStorm Technologies"
+VFx.DeviceDesc = "SilverStorm VFx"
+VEx.DeviceDesc = "SilverStorm VEx"
+FVIC.DeviceDesc = "SilverStorm FVIC"
+EVIC.DeviceDesc = "SilverStorm EVIC"
+BC2FC.DeviceDesc = "QLogic InfiniBand Fibre Channel Bridge Module"
+BC2GE.DeviceDesc = "QLogic InfiniBand Ethernet Bridge Module"
+
+Iou.DeviceDesc = "InfiniBand I/O Unit"
+Iou.ServiceDesc = "OpenIB InfiniBand  I/O Unit Driver"
+DiskId = "OpenIB InfiniBand Access Layer installation disk"
+SPSVCINST_NULL = 0x0
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+REG_DWORD              = 0x00010001
+REG_DWORD_NO_CLOBBER   = 0x00010003
+DIRID_SYSTEM           = 11
+DIRID_DRIVERS          = 12
+DIRID_SYSTEM_X86       = 16425

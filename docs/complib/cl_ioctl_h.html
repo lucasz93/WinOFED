@@ -1,0 +1,609 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_ioctl_h.html</title>
+<!-- Source: ./inc/complib/cl_ioctl.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_ioctl.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo9">[Modules]<a name="Component20Library2fIOCTL20Object">
+Component Library/IOCTL Object</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The IOCTL object provides functionality for handling IOCTL requests.
+
+       The IOCTL object is only available in kernel mode and provides
+       functionality for accessing information about IO requests initiated
+       by a user-mode application.  The <a href="#robo361">IOCTL_CODE</a> macro is used in both
+       user and kernel mode to initiate and dispatch IOCTL requests, respectively.
+
+       In Linux, in order for the IOCTL object to be used, requests must be
+       initiated and handled using the Device Framework abstraction.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo351">cl_ioctl_handle_t</a>
+
+       Callbacks:
+               <a href="#robo360">cl_pfn_ioctl_handler_t</a>
+
+       Control Code Generation
+               <a href="#robo361">IOCTL_CODE</a>
+
+       Kernel Mode Access
+               <a href="#robo356">cl_ioctl_process</a>
+               <a href="#robo349">cl_ioctl_complete</a>
+               <a href="#robo359">cl_ioctl_type</a>
+               <a href="#robo348">cl_ioctl_cmd</a>
+               <a href="#robo350">cl_ioctl_ctl_code</a>
+               <a href="#robo352">cl_ioctl_in_buf</a>
+               <a href="#robo353">cl_ioctl_in_size</a>
+               <a href="#robo354">cl_ioctl_out_buf</a>
+               <a href="#robo355">cl_ioctl_out_size</a>
+
+       User Mode Access
+               <a href="#robo357">cl_ioctl_request</a>
+               <a href="#robo358">cl_ioctl_result</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo348">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fcmd">
+Component Library: IOCTL Object/cl_ioctl_cmd</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_cmd</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the command of an IOCTL
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint16_t CL_API
+<strong>cl_ioctl_cmd</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the command of the specified IOCTL request, as defined using
+       the IOCTL_CMD macro.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_cmd</strong> function is only available in the kernel.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo359">cl_ioctl_type</a>, <a href="#robo350">cl_ioctl_ctl_code</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo349">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fcomplete">
+Component Library: IOCTL Object/cl_ioctl_complete</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_complete</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Fills in completion information for an IOCTL and releases the IOCTL request
+       for completion.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_ioctl_complete</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl,
+        IN      <a href="./cl_types_h.html#robo308">cl_status_t</a>                     io_status,
+        IN      size_t                          ret_bytes );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               Handle to the IOCTL being completed.  This handle was provided to
+               the IOCTL handler.
+
+       io_status
+               Status of the IOCTL request.
+
+       ret_bytes
+               Number of bytes written to the output buffer.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo356">cl_ioctl_process</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo350">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fctl5fcode">
+Component Library: IOCTL Object/cl_ioctl_ctl_code</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_ctl_code</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the 32-bit control code of an IOCTL
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint32_t CL_API
+<strong>cl_ioctl_ctl_code</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the 32-bit control code of the specified IOCTL request,
+       as defined using the IOCTL_CMD macro.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_ctl_code</strong> function is only available in the kernel.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo359">cl_ioctl_type</a>, <a href="#robo348">cl_ioctl_cmd</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo351">[Definitions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fhandle5ft">
+Component Library: IOCTL Object/cl_ioctl_handle_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_handle_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Opaque handle representing an IO request.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_handle_t</strong> type is only available in the kernel.
+       The <strong>cl_ioctl_handle_t</strong> type should be treated as opaque, as it
+       varies from environment to environment.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo359">cl_ioctl_type</a>, <a href="#robo348">cl_ioctl_cmd</a>, <a href="#robo352">cl_ioctl_in_buf</a>,
+       <a href="#robo353">cl_ioctl_in_size</a>, <a href="#robo354">cl_ioctl_out_buf</a>, <a href="#robo355">cl_ioctl_out_size</a>,
+       cl_ioctl_set_status, cl_ioctl_set_ret_bytes
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo352">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fin5fbuf">
+Component Library: IOCTL Object/cl_ioctl_in_buf</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_in_buf</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns a pointer to the input buffer of an IOCTL.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_ioctl_in_buf</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the input buffer of the specified IOCTL request.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_in_buf</strong> function is only available in the kernel.
+
+       In Windows, for IOCTL operations defined as METHOD_IN_DIRECT, the
+       returned pointer points to the MDL describing the input buffer.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo353">cl_ioctl_in_size</a>,
+       <a href="#robo354">cl_ioctl_out_buf</a>, <a href="#robo355">cl_ioctl_out_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo353">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fin5fsize">
+Component Library: IOCTL Object/cl_ioctl_in_size</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_in_size</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the size of the input buffer of an IOCTL.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT ULONG CL_API
+<strong>cl_ioctl_in_size</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the size, in bytes, of the input buffer of the specified
+       IOCTL request.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_in_size</strong> function is only available in the kernel.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo352">cl_ioctl_in_buf</a>,
+       <a href="#robo354">cl_ioctl_out_buf</a>, <a href="#robo355">cl_ioctl_out_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo354">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fout5fbuf">
+Component Library: IOCTL Object/cl_ioctl_out_buf</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_out_buf</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns a pointer to the output buffer of an IOCTL.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_ioctl_out_buf</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns a pointer to the output buffer of the specified IOCTL request.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_out_buf</strong> function is only available in the kernel.
+
+       In Windows, for IOCTL operations defined as METHOD_IN_DIRECT or
+       METHOD_OUT_DIRECT, the returned pointer points to the MDL describing
+       the input buffer.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo355">cl_ioctl_out_size</a>,
+       <a href="#robo352">cl_ioctl_in_buf</a>, <a href="#robo353">cl_ioctl_in_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo355">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fout5fsize">
+Component Library: IOCTL Object/cl_ioctl_out_size</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_out_size</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the size of the output buffer of an IOCTL.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT ULONG CL_API
+<strong>cl_ioctl_out_size</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the size, in bytes, of the input buffer of the specified
+       IOCTL request.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_out_size</strong> function is only available in the kernel.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo354">cl_ioctl_out_buf</a>,
+       <a href="#robo352">cl_ioctl_in_buf</a>, <a href="#robo353">cl_ioctl_in_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo356">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fprocess">
+Component Library: IOCTL Object/cl_ioctl_process</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_process</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ioctl_process</strong> function unpacks information initiated by a call to
+       <a href="#robo357">cl_ioctl_request</a> function and invokes a user-supplied callback.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_ioctl_process</strong>(
+        IN      void                                    *p_ioctl,
+        IN      <a href="#robo360">cl_pfn_ioctl_handler_t</a>  pfn_ioctl_handler,
+        IN      void                                    *context_1,
+        IN      void                                    *context_2 );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_ioctl
+               [in] Pointer to an OS specific IOCTL information.  In Linux,
+               this parameter depends on whether the IOCTL is handled synchronously
+               or asynchronously.  See the notes for further detail.
+               In Windows, this is a pointer to an IRP.
+
+       pfn_ioctl_handler
+               [in] Pointer to the callback function to invoke for handling the IOCTL.
+               This callback is independent of the IOCTL command.
+
+       context_1
+               [in] First of two context parameters to pass to the handler.
+
+       context_2
+               [in] Second of two context parameters to pass to the handler.
+
+ RETURN VALUES
+       CL_SUCCESS if the IOCTL was processed successfully.
+
+       Other values to indicate various failures.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Users must call <a href="#robo349">cl_ioctl_complete</a> from within the handler if completing
+       the IOCTL request synchronously.  If the IOCTL request's control code is
+       invalid, the handler should return CL_INVALID_REQUEST.
+
+       In Linux, the p_ioctl parameter is a copy of the argp parameter on input,
+       and on output points to the IOCTL request object passed to the IOCTL
+       handler if and only if the IOCTL handler returned CL_PENDING.
+       This allows the user to cancel the request by passing the same
+       handle to the cancel routine that was passed to the IOCTL handler.
+       If all IOCTLs are handled synchronously, it is acceptable to pass the argp
+       parameter of the IOCTL entry point instead of a copy.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo360">cl_pfn_ioctl_handler_t</a>, <a href="#robo349">cl_ioctl_complete</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo357">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5frequest">
+Component Library: IOCTL Object/cl_ioctl_request</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_request</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ioctl_request</strong> is used by user-mode clients to initiate IOCTL
+       requests to a device.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_ioctl_request</strong>(
+        IN              void                    *h_dev,
+        IN              uint32_t                ioctl_code,
+        IN              void                    *p_in_buf,
+        IN              size_t                  in_size,
+                OUT     void                    *p_out_buf,
+        IN              size_t                  out_size,
+                OUT     size_t                  *p_ret_bytes OPTIONAL,
+        IN              void                    *p_async_info OPTIONAL );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_dev
+               [in] Handle to the device to which the IOCTL request is targetted.
+               In Linux, this is a file descriptor.  In Windows, this is a file
+               handle.
+
+       ioctl_code
+               [in] Control code for the IOCTL request.
+
+       p_in_buf
+               [in] Pointer to the input buffer.
+
+       in_size
+               [in] Size, in bytes, of the input buffer.
+
+       p_out_buf
+               [out] Pointer to the output buffer.
+
+       out_size
+               [in] Size, in bytes, of the output buffer.
+
+       p_ret_bytes
+               [out] Number of bytes written to the output buffer.  This parameter is
+               mutually exclusive of the p_async_info parameter.
+
+       p_async_info
+               [in] For platforms that support asynchronous I/O, supplies a pointer
+               to that platform's async I/O structure, if any.  For Windows, this
+               is a pointer to an OVERLAPPED structure.  This parameter is mutually
+               exclusive of the p_ret_bytes parameter.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo358">cl_ioctl_result</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo358">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5fresult">
+Component Library: IOCTL Object/cl_ioctl_result</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_result</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Checks the status of an asynchronous IOCTL request.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_ioctl_result</strong>(
+        IN      void            *h_dev,
+        IN      void            *p_async_info,
+        OUT     size_t          *p_ret_bytes,
+        IN      boolean_t       blocking );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_dev
+               [in] Handle to the device to which the IOCTL request is targetted.
+               In Linux, this is a file descriptor.  In Windows, this is a file
+               handle.
+
+       p_async_info
+               [in] For platforms that support asynchronous I/O, supplies a pointer
+               to that platform's async I/O structure, if any.  For Windows, this
+               is a pointer to an OVERLAPPED structure.  This must be the same
+               as that provided in the <a href="#robo357">cl_ioctl_request</a> function.
+
+       p_ret_bytes
+               [out] Number of bytes written to the output buffer.
+
+       blocking
+               [in] If TRUE, indicates that the call should wait until the
+               specified IOCTL request is complete.
+
+ RETURN VALUES
+       CL_SUCCESS if the IOCTL request was successful.  p_ret_bytes contains
+       the number bytes written to the output buffer.
+
+       CL_PENDING if the IOCTL request is not yet complete.
+
+       Other status values to indicate errors.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo357">cl_ioctl_request</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo359">[Functions]<a name="Component20Library3a20IOCTL20Object2fcl5fioctl5ftype">
+Component Library: IOCTL Object/cl_ioctl_type</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ioctl_type</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the type of an IOCTL.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint16_t CL_API
+<strong>cl_ioctl_type</strong>(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to an IOCTL
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the type of the specified IOCTL request, as defined using
+       the IOCTL_CMD macro.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <strong>cl_ioctl_type</strong> function is only available in the kernel.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo348">cl_ioctl_cmd</a>, <a href="#robo350">cl_ioctl_ctl_code</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo360">[Definitions]<a name="Component20Library3a20IOCTL20Object2fcl5fpfn5fioctl5fhandler5ft">
+Component Library: IOCTL Object/cl_pfn_ioctl_handler_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_ioctl_handler_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_ioctl_handler_t</strong> function type defines the prototype for
+       IOCTL handlers used when handling IOCTL requests initiated by
+       <a href="#robo357">cl_ioctl_request</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef <a href="./cl_types_h.html#robo308">cl_status_t</a>
+(CL_API *<strong>cl_pfn_ioctl_handler_t</strong>)(
+        IN      <a href="#robo351">cl_ioctl_handle_t</a>       h_ioctl,
+        IN      void                            *context_1,
+        IN      void                            *context_2 );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       h_ioctl
+               [in] Handle to the IOCTL request.
+
+       context_1
+               [in] First context parameters, as provided to <a href="#robo356">cl_ioctl_process</a>.
+
+       context_2
+               [in] Second context parameters, as provided to <a href="#robo356">cl_ioctl_process</a>.
+
+ RETURN VALUES
+       CL_SUCCESS if the IOCTL was completed successfully.
+
+       CL_PENDING if the IOCTL is being processed asynchronously.
+
+       Other return values in case of errors.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       It is acceptable to complete the IOCTL successfully to report an error
+       status in the output buffer.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, <a href="#robo351">cl_ioctl_handle_t</a>, <a href="#robo356">cl_ioctl_process</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo361">[Definitions]<a name="Component20Library3a20IOCTL20Object2fIOCTL5fCODE">
+Component Library: IOCTL Object/IOCTL_CODE</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>IOCTL_CODE</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Macro for defining IO control command codes.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint32_t <strong>IOCTL_CODE</strong>( uint16_t type, uint16_t cmd )
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       type
+               [in] user-defined type representing the type of command.  For Linux,
+               the type is truncated to 8-bits.  For Windows, the type is a 16-bit
+               value, as described in "Specifying Device Types" in the DDK docs.
+
+       cmd
+               [in] User-defined command.  For Linux, the command field is truncated
+               to 8-bits.  For Windows, the command can be 12-bits, with values
+               below 0x800 reserved by Microsoft for system defined commands.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       A 32-bit control code.  User-mode clients use the control code to initiate
+       requests.  Kernel-mode clients use the control code to distinguish between
+       different requests.
+</pre>
+</span><p><strong>NOTE</strong></p>
+<span class="NOTE"><pre>       In Windows, all IOCTL command codes defined with the <strong>IOCTL_CODE</strong> command
+       result in FILE_ANY_ACCESS and METHOD_BUFFERED being specified.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       IOCTL <a href="./cl_obj_h.html#robo14">Object</a>, cl_dev_ioctl, <a href="#robo359">cl_ioctl_type</a>, <a href="#robo348">cl_ioctl_cmd</a>
+</pre>
+</span>
+</body>
+</html>

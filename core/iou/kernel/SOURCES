@@ -1,0 +1,52 @@
+TARGETNAME=ibiou
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+!if $(_NT_TOOLS_VERSION) != 0x700
+# WDK build only - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=ib_iou
+INF_TARGET=..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+!endif
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+
+SOURCES= ibiou.rc		\
+	iou_driver.c		\
+	iou_pnp.c			\
+	iou_ioc_mgr.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\kernel;..\..\..\core\al
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -DNEED_CL_OBJ -DWPP_OLDCC
+
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib
+	
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+#
+# The driver is built in the Win2K build environment
+# - use the library version of safe strings 
+#
+TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\ntstrsafe.lib
+!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+  -scan:iou_driver.h \
+	-func:IOU_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:IOU_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

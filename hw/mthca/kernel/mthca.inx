@@ -1,0 +1,438 @@
+; Mellanox Technologies InfiniBand HCAs.
+; Copyright 2005 Mellanox Technologies all Rights Reserved.
+
+[Version]
+Signature="$Windows NT$"
+Class=InfiniBandController
+ClassGUID={58517E00-D3CF-40c9-A679-CEE5752F4491}
+Provider=%OFA%
+; must be synchronized with MTHCA_DEV.H
+DriverVer=03/08/2006,1.0.0000.614
+CatalogFile=mthca.cat
+
+; ================= Destination directory section =====================
+
+[DestinationDirs]
+DefaultDestDir=%DIRID_DRIVERS%
+MTHCA.UMCopyFiles=%DIRID_SYSTEM%
+MTHCA.WOW64CopyFiles=%DIRID_SYSTEM_X86%
+Ibal.UMCopyFiles=%DIRID_SYSTEM%
+Ibal.WOW64CopyFiles=%DIRID_SYSTEM_X86%
+WinVerbs.CopySysFiles = %DIRID_DRIVERS%
+WinVerbs.CopyDllFiles = %DIRID_SYSTEM%
+WinMad.CopySysFiles = %DIRID_DRIVERS%
+WinMad.CopyDllFiles = %DIRID_SYSTEM%
+Wdf_CoInstaller_CopyFiles = %DIRID_SYSTEM%
+
+
+; ================= Class Install section =====================
+
+[ClassInstall32]
+AddReg=ClassAddReg
+
+[ClassAddReg]
+HKR,,,,"InfiniBand Channel Adapters"
+HKR,,Icon,,-5
+HKR,,SilentInstall,,1
+HKR,,"UpperFilters",0x00010000,"ibbus"	; enable IBBUS/AL Filter driver load.
+HKR,,"UpperFilters",0x00010008,"WinVerbs" ; enable winverbs Filter driver load.
+HKR,,"UpperFilters",0x00010008,"WinMad"
+
+
+; ================= Device Install section =====================
+
+[SourceDisksNames.x86]
+1=%DiskId%,,,""
+
+[SourceDisksNames.amd64]
+1=%DiskId%,,,""
+
+[SourceDisksNames.ia64]
+1=%DiskId%,,,""
+
+[SourceDisksFiles]
+mthca.sys=1,,
+mthcau.dll=1,,
+ibal.dll=1,,
+complib.dll=1,,
+ibbus.sys=1,,
+winverbs.sys = 1,,
+winverbs.dll = 1,,
+winmad.sys = 1,,
+winmad.dll = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll = 1,,
+
+
+[SourceDisksFiles.amd64]
+mthca.sys=1,,
+mthcau.dll=1,,
+mthca32.dll=1,,
+ibal.dll=1,,
+complib.dll=1,,
+cl32.dll=1,,
+ibal32.dll=1,,
+ibbus.sys=1,,
+winverbs.sys = 1,,
+winverbs.dll = 1,,
+winmad.sys = 1,,
+winmad.dll = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll = 1,,
+
+[SourceDisksFiles.ia64]
+mthca.sys=1,,
+mthcau.dll=1,,
+mthca32.dll=1,,
+ibal.dll=1,,
+complib.dll=1,,
+cl32.dll=1,,
+ibal32.dll=1,,
+ibbus.sys=1,,
+winverbs.sys = 1,,
+winverbs.dll = 1,,
+winmad.sys = 1,,
+winmad.dll = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll = 1,,
+
+[Manufacturer]
+%MTL% = HCA.DeviceSection,ntx86,ntamd64,ntia64
+
+[HCA.DeviceSection]
+; empty since we don't support W9x/Me
+
+[HCA.DeviceSection.ntx86]
+%MT23108.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5A44
+%MT25208.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6278
+%MT25218.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6282
+%MT24204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5E8C
+%MT25204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6274
+
+[HCA.DeviceSection.ntamd64]
+%MT23108.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5A44
+%MT25208.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6278
+%MT25218.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6282
+%MT24204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5E8C
+%MT25204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6274
+
+[HCA.DeviceSection.ntia64]
+%MT23108.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5A44
+%MT25208.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6278
+%MT25218.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6282
+%MT24204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_5E8C
+%MT25204.DeviceDesc%=MTHCA.DDInstall, PCI\VEN_15B3&DEV_6274
+
+[MTHCA.DDInstall.ntx86]
+CopyFiles = MTHCA.CopyFiles
+CopyFiles = MTHCA.UMCopyFiles
+CopyFiles = Ibal.UMCopyFiles
+CopyFiles = Ibbus.CopyFiles
+CopyFiles = WinVerbs.CopySysFiles
+CopyFiles = WinVerbs.CopyDllFiles
+CopyFiles = WinMad.CopySysFiles
+CopyFiles = WinMad.CopyDllFiles
+
+[MTHCA.DDInstall.ntamd64]
+CopyFiles = MTHCA.CopyFiles
+CopyFiles = MTHCA.UMCopyFiles
+CopyFiles = MTHCA.WOW64CopyFiles
+CopyFiles = Ibal.UMCopyFiles
+CopyFiles = Ibal.WOW64CopyFiles
+CopyFiles = Ibbus.CopyFiles
+CopyFiles = WinVerbs.CopySysFiles
+CopyFiles = WinVerbs.CopyDllFiles
+CopyFiles = WinMad.CopySysFiles
+CopyFiles = WinMad.CopyDllFiles
+
+[MTHCA.DDInstall.ntia64]
+CopyFiles = MTHCA.CopyFiles
+CopyFiles = MTHCA.UMCopyFiles
+CopyFiles = MTHCA.WOW64CopyFiles
+CopyFiles = Ibal.UMCopyFiles
+CopyFiles = Ibal.WOW64CopyFiles
+CopyFiles = Ibbus.CopyFiles
+CopyFiles = WinVerbs.CopySysFiles
+CopyFiles = WinVerbs.CopyDllFiles
+CopyFiles = WinMad.CopySysFiles
+CopyFiles = WinMad.CopyDllFiles
+
+
+; ============== Services ==============
+
+[MTHCA.DDInstall.ntx86.Services]
+AddService = mthca,%SPSVCINST_ASSOCSERVICE%,MTHCA.ServiceInstall,MTHCA.EventLog
+AddService = ibbus,,Ibbus.ServiceInstall,Ibbus.EventLog
+AddService = WinVerbs,,WinVerbs.ServiceInstall
+AddService = WinMad,,WinMad.ServiceInstall
+
+[MTHCA.DDInstall.ntamd64.Services]
+AddService = mthca,%SPSVCINST_ASSOCSERVICE%,MTHCA.ServiceInstall,MTHCA.EventLog
+AddService = ibbus,,Ibbus.ServiceInstall,Ibbus.EventLog
+AddService = WinVerbs,,WinVerbs.ServiceInstall
+AddService = WinMad,,WinMad.ServiceInstall
+
+[MTHCA.DDInstall.ntia64.Services]
+AddService = mthca,%SPSVCINST_ASSOCSERVICE%,MTHCA.ServiceInstall,MTHCA.EventLog
+AddService = ibbus,,Ibbus.ServiceInstall,Ibbus.EventLog
+AddService = WinVerbs,,WinVerbs.ServiceInstall
+AddService = WinMad,,WinMad.ServiceInstall
+
+
+; ============= File Copy ==============
+
+[MTHCA.CopyFiles]
+mthca.sys
+
+[MTHCA.UMCopyFiles]
+mthcau.dll,,,2
+
+[MTHCA.WOW64CopyFiles]
+mthcau.dll,mthca32.dll,,2
+
+[Ibal.UMCopyFiles]
+ibal.dll,,,2
+complib.dll,,,2
+
+[Ibal.WOW64CopyFiles]
+ibal.dll,ibal32.dll,,2
+complib.dll,cl32.dll,,2
+
+[Ibbus.CopyFiles]
+ibbus.sys
+
+[WinVerbs.CopySysFiles]
+winverbs.sys
+
+[WinVerbs.CopyDllFiles]
+winverbs.dll,,,2
+
+[WinMad.CopySysFiles]
+winmad.sys
+
+[WinMad.CopyDllFiles]
+winmad.dll,,,2
+
+; ============= MTHCA Service Install section ==============
+
+[MTHCA.ServiceInstall]
+DisplayName     = %MTHCA.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_BOOT_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\mthca.sys
+LoadOrderGroup  = extended base
+AddReg          = MTHCA.ParamsReg
+
+
+[MTHCA.EventLog]
+AddReg = MTHCA.AddEventLogReg
+
+[MTHCA.AddEventLogReg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\mthca.sys"
+HKR, , TypesSupported,   0x00010001, 7
+
+[MTHCA.ParamsReg]
+HKR,"Parameters","DebugLevel",%REG_DWORD%,0x00000003
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x0000ffff
+HKR,"Parameters","SkipTavorReset",%REG_DWORD%,0
+HKR,"Parameters","DisableTavorResetOnFailure",%REG_DWORD%,1
+HKR,"Parameters","TunePci",%REG_DWORD%,0
+HKR,"Parameters","ProcessorAffinity",%REG_DWORD%,0
+HKR,"Parameters","MaxDpcTimeUs",%REG_DWORD%,10000
+HKR,"Parameters","ProfileQpNum",%REG_DWORD%,0
+HKR,"Parameters","ProfileRdOut",%REG_DWORD%,0xffffffff
+HKLM,"System\CurrentControlSet\Control\WMI\GlobalLogger\8bf1f640-63fe-4743-b9ef-fa38c695bfde","Flags",%REG_DWORD%,0xffff
+HKLM,"System\CurrentControlSet\Control\WMI\GlobalLogger\8bf1f640-63fe-4743-b9ef-fa38c695bfde","Level",%REG_DWORD%,0x3
+
+
+; ============= IBBUS Service Install section ==============
+
+[Ibbus.ServiceInstall]
+DisplayName     = %Ibbus.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_BOOT_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ibbus.sys
+LoadOrderGroup  = PnP Filter
+AddReg          = Ibbus.ParamsReg
+Dependencies	= mthca
+
+[Ibbus.EventLog]
+AddReg = Ibbus.AddEventLogReg
+
+[Ibbus.AddEventLogReg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\ibbus.sys"
+HKR, , TypesSupported,   0x00010001, 7
+
+[Ibbus.ParamsReg]
+HKR,"Parameters","IbalDebugLevel",%REG_DWORD%,2
+HKR,"Parameters","IbalDebugFlags",%REG_DWORD%,0x00ffffff
+HKR,"Parameters","SmiPollInterval",%REG_DWORD_NO_CLOBBER%,20000
+HKR,"Parameters","IocQueryTimeout",%REG_DWORD_NO_CLOBBER%,250
+HKR,"Parameters","IocQueryRetries",%REG_DWORD_NO_CLOBBER%,4
+
+; IocPollInterval: 0 == no ioc poll, 1 == poll on demand (device rescan)
+;   (> 1) poll every x milliseconds, 30000 (30 secs) previous default.
+HKR,"Parameters","IocPollInterval",%REG_DWORD_NO_CLOBBER%,1
+
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x80000000
+HKR,"Parameters","ReportPortNIC",%REG_DWORD%,1
+
+HKR,"Parameters","StaticChild",%REG_MULTI_SZ_NO_CLOBBER%,IPoIB
+;use the following line to add your device
+;HKR,"Parameters","StaticChild",%REG_MULTI_SZ_APPEND%,"XsigoBus"
+
+HKR,"Parameters\IPoIB","DeviceId",%REG_SZ%,"IBA\IPoIB"
+HKR,"Parameters\IPoIB","CompatibleId",%REG_MULTI_SZ%,"IBA\SID_1000066a00020000"
+HKR,"Parameters\IPoIB","HardwareId",%REG_MULTI_SZ%,"IBA\IPoIB"
+HKR,"Parameters\IPoIB","Description",%REG_SZ%,"OpenIB IPoIB Adapter"
+HKR,"Parameters\IPoIB","PartitionKey",%REG_SZ%,"FFFF"
+
+HKR,"Parameters\XsigoBus","DeviceId",%REG_SZ%,"IBA\XsigoBus"
+HKR,"Parameters\XsigoBus","CompatibleId",%REG_MULTI_SZ%,"IBA\SID_0000000002139702"
+HKR,"Parameters\XsigoBus","HardwareId",%REG_MULTI_SZ%,"IBA\XsigoBus"
+HKR,"Parameters\XsigoBus","Description",%REG_SZ%,"Xsigo Virtual Bus"
+HKR,"Parameters\XsigoBus","PartitionKey",%REG_SZ%,"FFFF"
+
+; ============= WinVerbs Service Install section ==============
+
+[WinVerbs.ServiceInstall]
+DisplayName = %WinVerbs.ServiceDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER%
+StartType = %SERVICE_BOOT_START%
+ErrorControl = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\winverbs.sys
+LoadOrderGroup = PNP Filter
+Dependencies   = ibbus
+
+; ============= WinMad Service Install section ==============
+
+[WinMad.ServiceInstall]
+DisplayName = %WinMad.ServiceDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER%
+StartType = %SERVICE_BOOT_START%
+ErrorControl = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\winmad.sys
+LoadOrderGroup = PNP Filter
+Dependencies   = winverbs
+
+
+; ============= KMDF CoInstaller section ==============
+
+[MTHCA.DDInstall.ntx86.CoInstallers]
+AddReg = Wdf_CoInstaller_AddReg
+CopyFiles = Wdf_CoInstaller_CopyFiles
+
+[MTHCA.DDInstall.ntamd64.CoInstallers]
+AddReg = Wdf_CoInstaller_AddReg
+CopyFiles = Wdf_CoInstaller_CopyFiles
+
+[MTHCA.DDInstall.ntia64.CoInstallers]
+AddReg = Wdf_CoInstaller_AddReg
+CopyFiles = Wdf_CoInstaller_CopyFiles
+
+[Wdf_CoInstaller_AddReg]
+HKR,, CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[Wdf_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[MTHCA.DDInstall.ntx86.Wdf]
+KmdfService = WinVerbs, WvWdfSect
+KmdfService = WinMad, WvWdfSect
+
+[MTHCA.DDInstall.ntamd64.Wdf]
+KmdfService = WinVerbs, WvWdfSect
+KmdfService = WinMad, WvWdfSect
+
+[MTHCA.DDInstall.ntia64.Wdf]
+KmdfService = WinVerbs, WvWdfSect
+KmdfService = WinMad, WvWdfSect
+
+[WvWdfSect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+
+; ============= Uninstall Section =============
+
+[DefaultUninstall.ntx86]
+DelFiles   = MTHCA.CopyFiles
+DelFiles   = MTHCA.UMCopyFiles
+DelReg     = MTHCA.ParamsReg
+DelReg     = MTHCA.AddEventLogReg
+DelReg     = ClassAddReg
+DelFiles   = Ibal.UMCopyFiles
+DelFiles   = Ibbus.CopyFiles
+DelReg     = Ibbus.ParamsReg
+DelFiles   = WinVerbs.CopySysFiles
+DelFiles   = WinVerbs.CopyDllFiles
+DelFiles   = WinMad.CopySysFiles
+DelFiles   = WinMad.CopyDllFiles
+
+[DefaultUninstall.ntamd64]
+DelFiles   = MTHCA.CopyFiles
+DelFiles   = MTHCA.UMCopyFiles
+DelFiles   = MTHCA.WOW64CopyFiles
+DelReg     = MTHCA.ParamsReg
+DelReg     = MTHCA.AddEventLogReg
+DelReg     = ClassAddReg
+DelFiles   = Ibal.UMCopyFiles
+DelFiles   = Ibal.WOW64CopyFiles
+DelFiles   = Ibbus.CopyFiles
+DelReg     = Ibbus.ParamsReg
+DelFiles   = WinVerbs.CopySysFiles
+DelFiles   = WinVerbs.CopyDllFiles
+DelFiles   = WinMad.CopySysFiles
+DelFiles   = WinMad.CopyDllFiles
+
+[DefaultUninstall.ntia64]
+DelFiles   = MTHCA.CopyFiles
+DelFiles   = MTHCA.UMCopyFiles
+DelFiles   = MTHCA.WOW64CopyFiles
+DelReg     = MTHCA.ParamsReg
+DelReg     = MTHCA.AddEventLogReg
+DelReg     = ClassAddReg
+DelFiles   = Ibal.UMCopyFiles
+DelFiles   = Ibal.WOW64CopyFiles
+DelFiles   = Ibbus.CopyFiles
+DelReg     = Ibbus.ParamsReg
+DelFiles   = WinVerbs.CopySysFiles
+DelFiles   = WinVerbs.CopyDllFiles
+DelFiles   = WinMad.CopySysFiles
+DelFiles   = WinMad.CopyDllFiles
+
+[DefaultUninstall.Services]
+DelService = WinMad,%SPSVCINST_STOPSERVICE%
+DelService = WinVerbs,%SPSVCINST_STOPSERVICE%
+DelService = Ibbus,%SPSVCINST_STOPSERVICE%
+DelService = mthca,%SPSVCINST_STOPSERVICE%
+
+
+[Strings]
+IBClassGuid = "{58517E00-D3CF-40c9-A679-CEE5752F4491}"
+OFA = "OpenFabrics Alliance"
+MTL="Mellanox Technologies Ltd."
+MTHCA.ServiceDesc = "Driver for Mellanox InfiniHost Devices"
+MT23108.DeviceDesc="InfiniHost (MT23108) - Mellanox InfiniBand HCA"
+MT25208.DeviceDesc="InfiniHost (MT25208) - Mellanox InfiniBand HCA for PCI Express"
+MT25218.DeviceDesc="InfiniHost III Ex (MT25218) - Mellanox InfiniBand HCA for PCI Express"
+MT24204.DeviceDesc="InfiniHost III Lx (MT24204) - Mellanox InfiniBand HCA for PCI Express"
+MT25204.DeviceDesc="InfiniHost III Lx (MT25204) - Mellanox InfiniBand HCA for PCI Express"
+DiskId = "Mellanox InfiniBand HCA installation disk"
+Ibbus.ServiceDesc = "InfiniBand Bus/AL (Filter Driver)"
+WinVerbs.ServiceDesc = "WinVerbs Service"
+WinMad.ServiceDesc = "WinMad Service"
+SPSVCINST_NULL         = 0x0
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SPSVCINST_STOPSERVICE  = 0x00000200
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_BOOT_START     = 0
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+REG_DWORD              = 0x00010001
+REG_DWORD_NO_CLOBBER   = 0x00010003
+REG_MULTI_SZ	       = 0x00010000
+REG_MULTI_SZ_NO_CLOBBER = 0x00010002
+REG_MULTI_SZ_APPEND    = 0x00010008
+DIRID_SYSTEM           = 11
+DIRID_DRIVERS          = 12
+DIRID_SYSTEM_X86       = 16425
+

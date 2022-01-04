@@ -1,0 +1,1580 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="keywords" content="OFA, winOFED, OFED">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+h1
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:24.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+h2
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+h3
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:13.5pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+h4
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:blue;
+	text-decoration:underline;}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 65.95pt 1.0in 65.95pt;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+<title>OFED for Windows Release Notes</title>
+
+</head>
+
+<body lang=EN-US link=#0000FF vlink=#808080>
+
+<div class=Section1>
+
+<h1 align=center style='text-align:left'><img width=107 height=93
+src=openfabrics.gif></h1>
+
+<h1 align=center style='text-align:center'>OpenFabrics Enterprise Distribution 
+for Windows</h1>
+
+<h1 align=center style='text-align:center'>winOFED <a name="OFED_Release_Notes">3.2</a></h1>
+<h1 align=center style='text-align:center'><a name="OFED_Release_Notes">Release Notes</a></h1>
+
+<h3 align=center style='text-align:center'>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%m/%d/%Y" startspan -->06/25/2013<!--webbot bot="Timestamp" endspan i-checksum="12591" --></h3>
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+<h3 style="text-align: left"><u><font color="#000000">
+<a href="#New_Items,_Features_and/or_Behaviors"><font color="#000000">New Features, Items and 
+Behaviors</font></a></font></u></h3>
+<h3 style="text-align: left"><u><a href="#Overview"><font color="#000000">
+Overview</font></a></u></h3>
+<h3 style="text-align: left"><u>
+<a href="#Supported_Platforms,_Operating_Systems_and_Infiniband_Hardware">
+<font color="#000000">Supported Platforms, Operating Systems and InfiniBand Hardware</font></a></u></h3>
+<h3 style="text-align: left"><a href="#Installation_Specifics">
+<font color="#000000">Installation Notes</font></a></h3>
+<h3 style="text-align: left"><a href="#How_to_Install"><font color="#000000">
+How to Install</font></a></h3>
+
+</div>
+
+<h3><u><font color="#000000">
+<a href="#Unattended_Install0"><font color="#000000">Unattended Install</font></a></font></a></u></h3>
+<h3><b><a href="#HCA Driver Installation"><font color="#000000">HCA Device Driver 
+Installation</font></a></b></h3>
+<h3><u><font color="#000000"> <a href="#Server_2008_HPC_Install_Notes">
+<font color="#000000">Server 2008 HPC Install Notes</font></a></font></u></h3>
+<h3><u><a href="#Setting_the_IPoIB_Interface_IP_Address"><font color="#000000">
+Setting the IPoIB Interface IP Address</font></a></u></h3>
+<h3><u><a href="#Uninstall"><font color="#000000">
+Uninstall</font></a></u></h3>
+<h3><u><font color="#000000"><a href="#Verifying_the_WinOF_install">
+<font color="#000000">Verifying 
+the Installation</font></a></font></u></h3>
+<h3><u><a href="#Trouble_Shooting"><font color="#000000">
+Trouble Shooting</font></a></u></h3>
+<h3><a href="#OpenIB_Subnet_Management_as_a_Windows_Service">
+<font color="#000000">InfiniBand</font></a><u><a href="#OpenIB_Subnet_Management_as_a_Windows_Service"><font color="#000000"> Subnet Management as a Windows Service</font></a></u></h3>
+<h3><u><a href="#Local_Network_Adapter_Ordering"><font color="#000000">
+Local Network Adapter Ordering</font></a></u></h3>
+<h3><u><a href="#Which_WinOF_release_is_installed"><font color="#000000">
+Which release is installed</font></a></u><a href="#Which_OFED_release_is_installed"><font color="#000000">?</font></a></h3>
+<h3><u><a href="#QLogic_VNIC_Configuration"><font color="#000000">
+QLogic VNIC Configuration</font></a></u></h3>
+<h3><u><a href="#DAT_&_uDAPL_Configuration"><font color="#000000">
+DAT &amp; uDAPL Configuration</font></a></u></h3>
+<h3><u><a href="#SRP_-_SCSI_RDMA_Protocol_Driver_Installation">
+<font color="#000000">SRP (SCSI RDMA Protocol) Driver Installation</font></a></u></h3>
+<h3><a href="#WinVerbs"><font color="#000000">W</font></a><u><a href="#WinVerbs"><font color="#000000">inVerbs</font></a></u></h3>
+<h3><u><a href="#Known_Issues"><font color="#000000">
+Known Issues</font></a></u></h3>
+<hr>
+<h2><br>
+<a name="New_Items,_Features_and/or_Behaviors">New Items, Features and/or Behaviors</a></h2>
+<ul>
+	<li><font face="Arial">Supported operating environments: Windows Server 2008 R2/HPC and Windows 7;&nbsp; 
+	x64 and x86.<br>
+&nbsp;&nbsp;&nbsp; Server 2012 / Windows 8 will be available in winOFED 3.3 (ETA 
+	Q4'2013).<br>&nbsp;</font></li>
+	<li><font face="Arial">Mellanox FDR HCAs supported along with 
+	Connect-X[1234] products.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Mellanox RoCE operation is no longer supported.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Rsockets API (Infiniband sockets) available; see 
+	winOFED manual and OFED SDK install feature for code examples.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">NetworkDirect v2 provider<br>
+&nbsp;&nbsp;&nbsp; NDlist - display NetworkDirect.v2 device &amp; IP address<br>&nbsp;</font></li>
+	<li><font face="Arial">uDAT / uDAPL 2.0.35 code base used to build Windows uDAT/uDAPL binaries.<br>&nbsp;</font></li>
+	<li><font face="Arial">OpenSM version 3.3.13 (see '%windir%\temp\osm.log' 
+	for SM details).<br>
+&nbsp;</font></li>
+	<li><font face="Arial">***** Special Note *****&nbsp; winOFED no longer supports:<br>
+	<br>
+&nbsp;&nbsp;&nbsp;&nbsp; Mellanox Infinihost HCAs, ConnectX 
+	[1-4] only.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; Server 2008 (LongHorn) and Vista operating environments.<br>
+&nbsp;&nbsp;&nbsp;&nbsp; Intel ia64 processor.<br></font><br>&nbsp;</li>
+</ul>
+<hr>
+<p>&nbsp;</p>
+<h2><u><a name="Overview">Overview</a></u></h2>
+
+<p class=MsoPlainText><span style='font-size:12.0pt;font-family:"Arial"'>The OpenFabrics 
+Enterprise Distribution release package is composed of software modules
+intended for use on Microsoft Windows based computer systems connected via an InfiniBand fabric.</span></p>
+
+<p class=MsoPlainText><span style='font-size:12.0pt;font-family:"Arial"'>&nbsp;Binary
+files generated from the OpenFabrics Alliance (OFA) windows developers subversion (svn) source tree </span>
+<font face="Arial">'<font size="3">http://sofa.openfabrics.org/svn/ofw'</font><span style='font-size:12.0pt;'> 
+(branches\WOF3-2 svn revision 3635
+are packaged into a <a href="http://en.wikipedia.org/wiki/WiX">WIX 
+(Windows Installer Xml)</a> single file install package referred to as the OpenFabrics&nbsp;Enterprise 
+Distribution for Windows release 3.2.</span></font><span style='font-size:12.0pt;font-family:"Times New Roman"'><br>
+&nbsp;</span></p>
+<p class=MsoPlainText><font size="3"><span style="font-family: Arial">
+The winOFED 3.2 release is a full featured release as it contains:</span></font></p>
+
+</div>
+<ul>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">Full support for Windows 7, Windows Server 
+	2008 R2 and HPC Edition.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">NetworkDirect 
+	v2 is supported for Server 2008 R2/HPC Edition.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">RSockets for socket() 
+	based applications with InfiniBand performance.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">NDIS 6.1 IPoIB for 
+	Server 2008 R2, Windows 7.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">Mellanox ConnectX(mlx4) drivers 
+	enhanced for increased performance and stability.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">WInVerbs and WinMad HCA 
+	filter drivers are automatically loaded in support of OFED verbs and 
+	diagnostics.</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">OFED verbs library 
+	enables easy porting of Linux OFED applications into the OFED for Windows environment.</font></p>
+	</li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">IB Diags (a subset of 
+	OFED for Linux IB Diags).</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">uDAT/DAPL</font></p>
+	</li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">Bug fixes for stability in IBcore, 
+	ConnectX, WSD, NetworkDirect(v1), VNIC, SRP, IPoIB, DAT/DAPL</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">OpenSM</font></p></li>
+	<li>
+	<p class="MsoPlainText"><font face="Arial" size="3">
+	<a href="http://wix.codeplex.com/releases/view/60102">WIX 3.5</a> based 
+	installer, <a href="http://wix.sourceforge.net/manual-wix3/main.htm">WIX 3.5 
+	documentation</a>.</font></p></li>
+</ul>
+<div class=Section1>
+
+<p><font face="Arial">The OpenFabrics Enterprise Distribution for Windows (winOFED) release package contains the following:<br>
+<br>
+OpenFabrics InfiniBand core drivers and Upper Level Protocols (ULPs):</font></p>
+<ul>
+	<li>
+	<p style="text-indent: -.25in; margin-left: .5in"><font face="Arial"><span dir="LTR">HCA 
+	Drivers - </span>
+	<span style='background-position: 0% 0%; mso-highlight:yellow; background-image:none; background-repeat:repeat; background-attachment:scroll' dir="LTR">&nbsp;Mellanox 
+	: 
+	</span>
+	<st1:stockticker>
+	<span
+ style='background-position: 0% 0%; mso-highlight:yellow; background-image:none; background-repeat:repeat; background-attachment:scroll'>
+	ConnectX &amp; </span></st1:stockticker>
+	<st1:stockticker>
+	<span
+ style='background-position: 0% 0%; mso-highlight:yellow; background-image:none; background-repeat:repeat; background-attachment:scroll'>
+	Infinihost</span></st1:stockticker><span
+style='background-position: 0% 0%; mso-highlight:yellow; background-image:none; background-repeat:repeat; background-attachment:scroll'> low level drivers.</span></font></li>
+	<li>
+	<p style="text-indent: -.25in; margin-left: .5in">
+	<font face="Arial">
+	<span style="background-position: 0% 0%">InfiniBand Core components: IBAL, 
+	Winverbs, Winmad, OFED verbs and rdma_cm.</span></font></li>
+	<li>
+	<p style="text-indent: -.25in; margin-left: .5in"><font face="Arial">Upper Layer Protocols: 
+	IPoIB, WSD, NetworkDirect, Rsockets, VNIC, SRP Initiator and DAT/DAPL</font></li>
+	<li>
+	<p style="text-indent: -.25in; margin-left: .5in"><font face="Arial">OFED 
+	compatibility libraries for verbs, rdmacm and diagnostics.</font></li>
+</ul>
+
+<p><font face="Arial">OpenFabrics utilities:</font></p>
+
+<ul>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>OpenSM: InfiniBand fabric Subnet Manager</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>Performance 
+	tests</span></font></p></li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial">
+	<span dir="LTR">
+	Diagnostic tools</span></font></p>
+	</li>
+</ul>
+
+<p><font face="Arial">Documentation</font></p>
+
+<ul>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>User's manual</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>Release Notes</span></font></p>
+	</li>
+</ul>
+
+<p style="text-indent: -.25in; margin-left: .5in"><a href="#WinOF_Release_Notes">
+<font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p style="text-indent: -.25in; margin-left: .5in">&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Supported_Platforms,_Operating_Systems_and_Infiniband_Hardware">Supported Platforms, Operating Systems and Infiniband Hardware</a></u></h2>
+
+<h4>CPU architectures</h4>
+
+<ul>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>x64 (x86_64, amd64)</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>x86</span></font></p>
+	</li>
+</ul>
+
+<h4>Operating Systems</h4>
+
+<ul>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir="LTR">Windows 
+	Server 2008 R2</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir="LTR">Windows 
+	Server 2008 R2 HPC Edition</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial">Windows 7</font></p>
+	</li>
+</ul>
+
+<h4><u>Supported HCAs (Host Channel Adapters)</u></h4>
+
+<p><font face="Arial">Mellanox - Connect-X[1-4] InfiniBand HCA products are 
+supported; InfiniHost HCAs are no longer supported.<br><br>
+<a href="http://www.mellanox.com/content/pages.php?pg=firmware_download">
+Mellanox Firmware (FW) versions and update tools</a><br>
+<br>
+Current HCA firmware version can be viewed from the 'vstat' command or the 
+Mellanox firmware tool flint.</font></p>
+<h4><font face="Arial"><a name="How_to_find_the_PSID_of_a_Mellanox_HCA">How to 
+find the PSID of a Mellanox HCA</a></font></h4>
+<blockquote>
+	<p><font face="Arial">From a winOFED installed system: vstat.exe</font></p>
+	<p><font face="Arial">Should the OFED stack not install; possibly due to outdated 
+	firmware:<br>
+	<br>
+	Download and install the Mellanox Firmware burning tools from
+	<a href="http://www.mellanox.com/content/pages.php?pg=management_tools&menu_section=34">
+	Mellanox Support</a></font></p>
+	<p><font face="Arial">After you determine the PSID,<br>
+	<br>
+	Download Mx Firmware image .zip file from
+	<a href="http://www.mellanox.com/content/pages.php?pg=firmware_download">
+	Mellanox Firmware download</a></font></p>
+	<p><font face="Arial">How to find the PSID of the Mellanox card if the OFED stack did not install, 
+	otherwise use vstat.<br>
+	<br>
+	mst status<br>
+	Found 2 devices:<br>
+	mt26418_pciconf0<br>
+	mt26418_pci_cr0<br>
+	<br>
+	flint -d mt26418_pci_cr0 query<br>
+	In the output, you will find the PSID.</font></p>
+</blockquote>
+
+<h4><font face="Arial"><u>Supported Switches</u></font></h4>
+
+<ul>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir="LTR">
+	Mellanox</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial">
+	<span dir="LTR">QLogic</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>SilverStorm - 
+	update your firmware for correct embedded Subnet Manager operation.</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir="LTR">Voltaire</span></font></p>
+	</li>
+	<li>
+	<p style='margin-left:.5in;text-indent:-.25in'><font face="Arial"><span dir=LTR>Flextronics</span></font></p>
+	</li>
+</ul>
+
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Installation_Specifics">Installation </a></u>
+<a name="Installation_Specifics"><u>Notes</u></a></h2>
+
+<p><font face="Arial">User mode tools and diagnostics are installed in '%SystemDrive%\Program 
+Files\OFED'.&nbsp; Although device driver modules initially reside in 
+'%SystemDrive%\Program Files\OFED\Drivers', during installation the Windows device 
+installer copies driver files to %SystemRoot%\system32\drivers, %SystemRoot%\system32 &amp; %SystemRoot%\SysWOW64.<br>
+DAT &amp; DAPL runtime libraries are installed into %SystemRoot%\system32 &amp;&nbsp; 
+%SystemRoot%\SysWOW64 in order to be 
+accessible by user mode applications.<br>
+OFED user mode executables are designed to be run from a Command Prompt window; 
+see&nbsp; 'Start-&gt;Program Files-&gt;OpenFabrics Enterprise Distribution-&gt; OFED Command 
+Window'. </font></p>
+<p><font face="Arial">'%SystemDrive%\Program Files\OFED' is appended to the system wide search 
+path environment variable 'PATH'; any command windows created after the installation will have the updated 
+%PATH% environment variable, hence will be able to access OFED executables.</font></p>
+
+<p><font face="Arial">The ‘default’ installation installs ‘released/free’ (not
+checked/debug) versions of drivers and executables. Debug/Checked versions are 
+available as an install feature.</font></p>
+
+<p><font face="Arial">A single instance of a subnet manager, opensm.exe, must be
+running on a fabric connected node in order for the Infiniband fabric to be
+configured and useful; either Windows or Linux versions of openSM work well.</font></p>
+<p><font face="Arial">It is recommended that OpenSM be run as a Windows service.&nbsp; A typical 
+OFED install will install OpenSM as a Windows service which 
+is disabled; after an installation, choose your openSM node and start the openSM 
+service.&nbsp; 
+See the OFED Manual for details on opensm as a service.<br>
+By selecting the 'OpenSM_Service_Started' install feature, a local OpenSM subnet 
+management service will be automatically started. </font> </p>
+
+<p><font face="Arial">Note, the opensm.exe process must continue to run in order
+to maintain an Infiniband fabric configuration. Should the opensm.exe process die,
+restart the service if not automatic or re-run opensm.exe in order to continue
+correct fabric operation.</font></p>
+
+<p><font face="Arial">For more subnet management information, consult the Windows
+OpenFabrics Enterprise Distribution manual.</font></p>
+
+<p class=MsoNormal><a href="#WinOF_Release_Notes"><font color="#000000">
+&lt;Return-to-Top&gt;</font></a></p>
+<p class=MsoNormal>&nbsp;</p>
+
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="How_to_Install">How to Install</a></u></h2>
+
+<h3>Summary</h3>
+<ul>
+	<li><font face="Arial">Double-click the .msi installer file as a privileged 
+	administrator<b>. </b></font></li>
+</ul>
+<h3>Requirements</h3>
+
+<p><font face="Arial">Install HCA hardware prior to installing the Windows OpenFabrics Release
+package. Upon reboot, cancel any attempts to install new device hardware from 
+the &quot;Found New Hardware Wizard&quot;.</font></p>
+
+<p><font face="Arial">If you have previously installed openib-windows, WinOF (Windows OpenFabrics), 
+winOFED
+packages or vendor supplied Infiniband packages, uninstall and reboot prior to 
+installing this version of OpenFabrics Enterprise Distribution for Windows.</font></p>
+
+<p><font face="Arial">For an existing Windows OpenFabrics Enterprise 
+Distribution (OFED) uninstall<br>
+&nbsp;&nbsp;&nbsp; Start-&gt; Programs-&gt; OpenFabrics Enterprise Distribution-&gt; Uninstall OFED<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -or-<br>
+&nbsp;&nbsp;&nbsp; Control Panel -&gt; Add or Remove Programs-&gt;OpenFabrics 
+Enterprise Distribution-&gt;Uninstall.</font></p>
+<p><font face="Arial">openib-windows (IB stack before WinOF 1.0 release) uninstall: (not the normal 
+uninstall case)</font></p>
+
+<ol start=1 type=1>
+	<li class=MsoNormal><font face="Arial">Disable any Local Area Connections which are bound to the
+     IPoIB network adapter.</font></li>
+ <li class=MsoNormal><font face="Arial">Uninstall the IPoIB driver - My
+     computer-&gt;Manage-&gt;Devices-&gt;Network Adapters-&gt;IPoIB*</font></li>
+	<li class=MsoNormal><font face="Arial">Stop the openSM subnet manager if it is running on the 
+	local node.</font></li>
+ <li class=MsoNormal><font face="Arial">Uninstall the Infiniband HCA device; don't forget the 
+	System Device-&gt; InfiniBand Fabric</font></li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p><b>REBOOT</b></p>
+
+<p><font face="Arial">Upon system restart, cancel the 'Found New Hardware Wizard' attempts to install 
+drivers for newly discovered PCI device (HCA).</font></p>
+<p><font face="Arial">'My Computer-&gt;Manage-&gt;Device Manager' should display
+'Other Devices-&gt;?PCI device' which is your Infiniband HCA device.</font></p>
+
+<h3><u>Install</u></h3>
+
+<blockquote style='margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p><font face="Arial">For all supported Windows variants, double-clicking the installer file (.msi) 
+works correctly to start an OFED installation.<br>
+From a login session with administrator privileges, File Explorer view, double-click the OFED_M-m{-p}_OSE_arch.msi file to begin the Windows OpenFabrics 
+Enterprise Distribution 
+installation.</font></p>
+<p><font face="Arial">Where 'M-n{-p}' indicates Major release number, Minor release number, and 
+optional point-release number.</font></p>
+<p><font face="Arial">&nbsp;OSE - Operating System Environment:</font></p>
+<ul>
+	<li><font face="Arial">win7 - Windows 7 or Windows Server 2008 R2 or HPC 
+	Edition</font></li>
+</ul>
+<p><font face="Arial">'_arch_' will be one of</font></p>
+<ul>
+	<li><font face="Arial">_x64_ for&nbsp; Intel EMT64 systems or amd64; see
+	<a href="http://en.wikipedia.org/wiki/X86-64">x86-64</a></font></li>
+	<li><font face="Arial">_x86_ for x86
+compatible systems </font></li>
+</ul>
+
+<p><font face="Arial">Follow the on-screen instructions.<br>
+<br>
+Answer 'yes' or 'Continue' to any notifier windows which reference non-WHQL'ed 
+driver installation.<br>
+These non-WHQL'ed driver install questions can <b>not</b> be disabled 
+via 'My Computer-&gt;Properties-&gt;Hardware-&gt;Driver Signing-&gt;Ignore'.</font></p>
+<p><font face="Arial">Bottom-line - The digitally signed OFED drivers in this package are not WHQL'ed 
+per se, although they are 
+built from driver source which has been or is in process of being WHQL'ed by 
+hardware vendors who participate in the open source OFED for Windows development process.</font></p>
+<p>&nbsp;</p>
+<p>&nbsp;<font size="4">**** WARNING ****</font></p>
+<blockquote>
+	<p><font face="Arial">You <b>do</b> need to answer 'Yes' or 'Continue' to those notifier windows which 
+	reference non-WHQL driver installation. If you have previously 
+	set My Computer-&gt;Properties-&gt;Hardware-&gt;Driver Signing-&gt;Ignore, the FNHW 
+	windows likely will occur anyway.</font></p>
+	<p><font face="Arial">Should the install appear to hang, look around for occluded notifier windows 
+	waiting for a response which 
+	are covered by existing windows.<br>
+&nbsp;</font></p>
+</blockquote>
+
+<h4>Install type: Custom only</h4>
+
+<ul type=disc>
+ <li class=MsoNormal><font face="Arial">InfiniBand Core:</font><ul>
+	<li><font face="Arial">Mellanox HCA driver:&nbsp; ConnectX<br>
+	Windows PNP will select the correct HCA driver.</font></li>
+	<li><font face="Arial">IB core stack and libraries - includes winverbs, 
+	winmad and OFED verbs library.</font></li>
+	<li><font face="Arial">Release Notes, Manual</font></li>
+	<li><font face="Arial">Subnet Management service [OpenSM] (installed &amp; disabled), Performance &amp; 
+	OFED Diagnostic tools</font></li>
+	</ul>
+	</li>
+	<li><font face="Arial">Optional:<br>&nbsp;&nbsp;&nbsp; IPoIB - Internet Protocols over 
+	InfiniBand<br>&nbsp;&nbsp;&nbsp; Winsock Direct (Win2008 R2 only)<br>
+&nbsp;&nbsp;&nbsp; Network Direct v2 (MS supported only for Server 2008 HPC).<br>&nbsp;&nbsp;&nbsp; VNIC - Virtual Ethernet device over Infiniband<br>&nbsp;&nbsp;&nbsp; SRP - SCSI over RDMA Protocol<br>
+&nbsp;&nbsp;&nbsp; RSockets - socket()s over Infiniband.<br>&nbsp;&nbsp;&nbsp; 
+	DAT/DAPL 
+	- RDMA device independent, user-mode Direct Access Transport &amp; Direct Access 
+	Provider<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - DAT/DAPL v2.0 runtime libraries<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - DAT v2.0 application build environment<br>&nbsp;&nbsp;&nbsp; OpenSM_service_started - InfiniBand Subnet Management 
+	enabled and started as a Windows Service.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	By default OpenSM is installed as a disabled Windows Service.<br>&nbsp;&nbsp;&nbsp; Checked versions of driver files.<br>&nbsp;</font></li>
+	<li><font face="Arial">The '<b>default</b>' installation includes IB core, IPoIB, WSD (installed, 
+	not enabled), 
+	DAT 2.0 runtime libraries, OpenSM service (disabled).</font></li>
+</ul>
+
+</blockquote>
+
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="HCA Driver Installation">HCA Driver Installation</a></u></h2>
+<p><font face="Arial">OFED driver installation uses the Device Installation 
+Frameworks for Applications (DIFxApp) and the Windows Driver Store.<br>
+The&nbsp; Microsoft Plug-n-Play (PNP) subsystem 
+controls which Infiniband HCA (Host Channel Adapter) device driver is loaded 
+from the Windows Driver Store.&nbsp; HCA driver selection is based on PNP device 
+ID probing, thus InfiniHost, ConnectX or both drivers can be loaded 
+by the PNP subsystem.<br>
+Using DIFxApp and PNP device probing results in the OFED installation not 
+requiring a specific HCA model [ConnectX] feature selection; HCA 
+vendor is the feature selection criteria.</font></p>
+<p><font face="Arial"><br>
+&nbsp;</font></p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Unattended_Install0">Unattended Install</a></u></h2>
+
+<div id="main-copy0">
+
+<div id="main-copy1">
+	<font face="Arial">An unattended OFED install will install the following 'default' options</font><ul>
+		<li><font face="Arial">Infiniband Core modules - Mellanox HCA driver 
+		(see HCA driver selection note), IB core stack, libraries, utilities and 
+		documentation.</font></li>
+		<li><font face="Arial">IPoIB - Internet Protocols over InfiniBand</font></li>
+		<li><font face="Arial">WSD - (installed although not enabled: Win7 
+		Server2K8/R2) Win Sock Direct</font></li>
+		<li><font face="Arial">NDv2 - NetworkDirect [started automatically (via ndinstall.exe) only for Server 
+		2008/HPC].</font></li>
+		<li><font face="Arial">DAT &amp; DAPL (v2.0) runtime libraries + dapltest2.exe 
+		(dt-svr &amp; dt-cli).</font></li>
+	</ul>
+</div>
+<p><font face="Arial"><b>HCA selection for all Windows variants </b>
+	(Windows 7, Server 2008 R2, HPC)</font></p>
+	<blockquote>
+		<p><font face="Arial">Default HCA driver selection is driven by the 
+		Windows PNP subsystem; no user selection required or supported.</font></p>
+	</blockquote>
+	<p><font face="Arial">Should WSD be a desirable unattended install option 
+	(Win7/2008 R2 only), 
+currently you would install unattended then execute the<br>
+command 'installsp -i' 
+on each node to enable WSD.</font></p>
+	<p><font face="Arial">To perform a silent unattended installation for Server 
+	2008 R2, invoke the following command 
+	from a command window.</font></p>
+	<blockquote>
+		<p><font face="Arial">start/wait msiexec.exe /i OFED_3-2_win7_x64.msi&nbsp; /qn&nbsp; /quiet&nbsp; /log 
+		%TEMP%\OFED-install.log</font></p>
+		<p><font face="Arial">'/log dev:path\logFilename.log' is optional.</font></p>
+		<p><font face="Arial">msiexec.exe /? for all options.</font></p>
+	</blockquote>
+</div>
+<p><font face="Arial">Examples:</font></p>
+<p><font face="Arial"><b>Server 2008 </b>- Mellanox Connect-X HCA Hardware</font></p>
+<ul>
+	<li><font face="Arial">No need to specify HCA type as PNP (Plug-n-Play)&nbsp; 
+	figures out the correct HCA to install.<br>
+	start/wait msiexec.exe /i OFED_3-2_wlh_x64.msi /qb /quiet<br>
+&nbsp;</font></li>
+	<li><font face="Arial">If you desire an unattended OFED install with a 
+	progress bar, from a console window<br>
+	start/wait msiexec.exe /i OFED_3-2_win7_x64.msi /passive</font></li>
+</ul>
+<p><font face="Arial"><br>
+Non-HCA Install Features added to above msiexec command 
+line examples:</font></p>
+<ul>
+	<li><font face="Arial">Start a Subnet Manager running on the local system: 
+	add 'OSMS=1'</font></li>
+</ul>
+<p><font face="Arial">Default install +&nbsp; OpenSM Started on the local 
+system</font></p>
+<ul>
+	<li><font face="Arial">Server 2008 R2, Mellanox HCA - start/wait msiexec.exe /i OFED_3-2_wlh_x64.msi 
+	/passive&nbsp; OSMS=1<br>&nbsp;</font></li>
+</ul>
+<p><font face="Arial">Default install +&nbsp;SRP client</font></p>
+<ul>
+	<li><font face="Arial">Server 2008 R2, Mellanox HCA - start/wait msiexec.exe /i OFED_3-0_win7_x64.msi 
+	/passive&nbsp; SRP=1<br>
+&nbsp;</font></li>
+</ul>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Server_2008_HPC_Install_Notes">Server 2008 R2 HPC Install Notes</a></u></h2>
+<p><font face="Arial">Device drivers in OFED 2.0 and later releases are Digitally 
+signed by the 3rd party Software Publisher 'OpenFabrics Alliance', although they are not WHQL'ed (Windows Quality Hardware Labs) certified. 
+The OFED source code is used&nbsp; by hardware vendors to achieve WHQL 
+certification.</font></p>
+<h3><u>HPC compute node provisioning</u></h3>
+<p><font face="Arial">Microsoft has chosen WDM to provision HPC 
+cluster compute nodes; see&nbsp;
+<a href="http://technet.microsoft.com/en-us/library/dd391826.aspx" style="color: blue; text-decoration: underline">Microsoft HPC 
+installs</a> for details.<br>
+Using the HPC Cluster Manager tool, OFED device drivers can be included in the 
+compute node provisioning process by adding the device driver's .inf file to the 
+operating system image.</font></p>
+<p><font face="Arial">In support of the new Microsoft WDM HPC cluster 
+provisioning process, OFED install suggests one of two possible paths:</font></p>
+<ol>
+	<li><font face="Arial">Install winOFED on the head node and then add compute 
+	node drivers (HCA, IPoIB) from the head node (\Program Files\OFED\Drivers) 
+	to the Windows operating system image via the cluster manager toool 
+	(Configuration-&gt;Images-&gt;Manage Drivers).<br>
+&nbsp;</font></li>
+	<li><font face="Arial">OFED now supports an administrative install mode which is 
+a method to extract OFED files to the local filesystem without actually installing them; 
+thus making OFED files accessible to WDM provisioning.<br>
+	<br>
+	msiexec /A OFED_2-1_wlh_x64.msi TARGETDIR=dev:\path-to-extracted-files&nbsp;&nbsp;&nbsp; 
+# last folder in path-to-extracted-files must NOT exist.<br>
+	<br>
+	example:&nbsp; msiexec /A OFED_3-2_wlh_x64.msi TARGETDIR=%TEMP%\OFED&nbsp;&nbsp; 
+(note: TARGETDIR is case sensitive, OFED must not exist)<br>
+	The above command creates the folder structure:
+	<a href="file:///C:/windows/Temp/WOF/PFiles/WinOF/" style="color: blue; text-decoration: underline">%TEMP%\OFED\PFiles\OFED\</a></font><br>
+	<br>
+	<font face="Arial">Once the administrative install has completed, add the 
+	required winOFED device drivers to the Compute node operating system image 
+	via the Cluster Manager tool.</font></li>
+</ol>
+<h3><u>OFED device driver-less installs:</u></h3>
+<p><font face="Arial">Normally OFED device driver files are installed by processing the driver '.inf' 
+files. To install the OFED package by selecting install features without 
+installing any device drivers [HCA, IPoIB, ND, WSD, SRP or VNIC] (assumed 
+reliance on WDM to install device drivers) can be accomplished with the following 
+interactive install command:</font></p>
+<p><font face="Arial">start/wait msiexec /I OFED_3-2_wlh_x64.msi&nbsp; NODRV=1</font></p>
+<p><font face="Arial">To skip driver installation for an unattended install</font></p>
+<p><font face="Arial">&nbsp;&nbsp;&nbsp; start/wait msiexec /I OFED_3-2_wlh_x64.msi /qn /quiet NODRV=1</font></p>
+<p><font face="Arial"><b>Note</b>: when uninstalling OFED from an installation 
+which was done with NODRV=1, you <b>MUST </b>include NODRV=1 on the uninstall 
+command line; otherwise OFED drivers will be uninstalled also.</font></p>
+<p><font face="Arial">&nbsp;&nbsp;&nbsp; start/wait msiexec /X OFED_3-2_wlh_x64.msi /qn /quiet NODRV=1<br>
+&nbsp;</font></p>
+<h3><u>Unattended winOFED installation from the .msi file in the HPC Environment</u></h3>
+<p><font face="Arial">The lack of winOFED WHQL driver certification places winOFED drivers 
+in the 'unknown 3rd party SW publishers' category. <br>
+When installing 'Unknown 3rd party SW publishers' drivers, Windows prompts on 
+the install console for instructions as what to do (Install, Trust or not)?<br>
+This prompting can result in a failed remote node install when performing a 
+<font color="#FF0000">first-time</font> unattended OFED install from the .msi 
+file.<br>
+By preloading the remote node's Trusted 3rd party Software Publisher Certificate 
+Store, the unattended install will proceed without prompting, thus allowing the 
+OFED install to complete 
+successfully.</font></p>
+<p><font face="Arial">Be aware: if a node is reimaged (same or different template applied) the 
+established trust of the OpenFabric Alliance is destroyed, thus the OFA certificate 
+needs to be reinstalled.</font></p>
+<p><font face="Arial">How to install OFED drivers and components from the 
+winOFED .msi file in the HPC 
+Server 2008 environment.</font></p>
+<ul>
+	<li><font face="Arial">Add the OpenFabrics Alliance Trusted SW Publisher certificate to the head-node's Trusted Publisher Certificate store by</font><ul>
+	<li><font face="Arial">Installing&nbsp;OFED on the head node - start Open Subnet 
+	Manager if needed, otherwise depend on another OpenSM on the IB fabric.</font></li>
+	<li><font face="Arial">Our recommendation is to install OFED on the 
+	head-node; Set head-node IPoIB interface IPv4 address after OFED install.</font></li>
+	<li><font face="Arial">Or - Installing the OFA certificate from the 
+	installer .msi file by</font><ul>
+	<li><font face="Arial">right-clicking the .msi file, select Properties</font></li>
+	<li><font face="Arial">Select the Digital Signatures tab</font></li>
+	<li><font face="Arial">Highlight the OpenFabrics Alliance</font></li>
+	<li><font face="Arial">Details</font></li>
+	<li><font face="Arial">View Certificate</font></li>
+	<li><font face="Arial">Install certificate</font></li>
+	<li><font face="Arial">Trusted Publisher certificate store<br>
+&nbsp;</font></li>
+</ul>
+	</li>
+</ul>
+	</li>
+	<li><font face="Arial">Once the OFA certificate is installed, it will remain 
+	until the node is wiped clean by reprovisioning.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">If remote nodes are <b>operational </b>(booted &amp; 
+	network accessible), then run the digital certificate install script 'cert-add.bat' 
+	to 'add' the 'Open Fabrics Alliance' as a Trusted 3rd party Software Publisher 
+	to the remote node 's certificate stores.</font><ul>
+	<li><font face="Arial">CD your administrator command window to the OFED\HPC 
+	folder which contains the 'cert-add.bat' script file. </font></li>
+	<li><font face="Arial">If OFED was installed on the head-node, then 'cd /d 
+	%ProgramFiles%\OFED\HPC </font></li>
+	<li><font face="Arial">Otherwise unpack, not install, the OFED files to 
+	gain access to cert-add.bat file by executing the following commands:</font><ul>
+		<li><font face="Arial">Folder %TARGETDIR% folder must not exist, msiexec 
+		/A will create it.</font></li>
+		<li><font face="Arial">msiexec /A OFED_2-1_wlh.msi TARGETDIR=%TEMP%\OFED&nbsp;&nbsp;&nbsp; 
+		# OFED folder does not exist.</font></li>
+		<li><font face="Arial">cd /d %TEMP%\OFED\PFiles\OFED\HPC</font></li>
+	</ul></li>
+</ul>
+	<ul>
+		<li><font face="Arial">Select a filesystem share folder which is 
+		accessible from the head-node and 'all' remote nodes specified in the 
+		cert-add command; cert-add will write a batch script to this folder 
+		which the remote node will execute to add the OFA SW Publishing 
+		certificate to the local store.</font></li>
+		<li><font face="Arial">Cert add command format:&nbsp; cert-add&nbsp;&nbsp;&nbsp; 
+		share-folder&nbsp;&nbsp; list-of-remote-nodes</font></li>
+		<li><font face="Arial">For the examples, assume <a href="file://HN/WOF">
+		\\HN\OFED</a> is the compute node visible share name;<br>
+		head-node local name is \Program Files\Microsoft HPC Pack\Data\InstallShare\OFED<br>
+		Head-node uses remote share name \\HN\OFED.</font></li>
+		<li><font face="Arial">First extract OFA TP certificate to remote 
+		node visible share, creates
+		<a href="file://orion-hn/winof">\\HN\OFED\OFA_TP.cer</a> &amp;
+		<a href="file://orion-hn/winof">\\HN\OFED\rem-cert-ADD.bat</a><br>
+&nbsp;&nbsp;&nbsp; cert-add
+		<a href="file://orion-hn/winof">\\HN\OFED</a> </font></li>
+		<li><font face="Arial">example:&nbsp; add OFA Trusted Publisher 
+		certificate to remote node's local certificate store<br>&nbsp;&nbsp;&nbsp; cert-add
+		<a href="file://orion-hn/winof">\\HN\OFED</a> cn01 cn02 cn03 cn04 
+		cn05</font></li>
+		<li></li>
+		<li><font face="Arial">For all compute nodes:&nbsp; clusrun /nodes:X&nbsp; msiexec /I
+		<a href="file://orion-hn/winof">\\HN\OFED\</a>OFED_xxx_yyy.msi 
+		/quiet /qn /Lv msi.log <br>&nbsp;</font></li>
+	</ul></li>
+	<li><b><font face="Times New Roman">Node Template Provisioning using the .msi 
+	installer file</font><font face="Arial">:</font></b><font face="Arial"> if remote nodes are <b>not 
+	operational </b>(not yet provisioned) then do the following:</font><ul>
+	<li><font face="Arial">See %ProgramFiles%\OFED\HPC\* for provisioning 
+	example scripts; customization is required.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">From the head node, extract the OFA certificate to a 
+	file in the remote node visible share file OFA_TP.cer;<br>&nbsp;(example 
+	Remote node visible share: \Program Files\Microsoft HPC Pack\Data\InstallShare\OFED&nbsp; 
+	== \\HN\OFED)<br>
+&nbsp;&nbsp;&nbsp; Start --&gt;All Programs --&gt;Windows OpenFabric --&gt; OFED Command 
+	Window<br>
+&nbsp;&nbsp;&nbsp; cd HPC<br>
+&nbsp;&nbsp;&nbsp; cert-add <a href="file://orion-hn/winof">\\HN\OFED</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	# <a href="file://orion-hn/winof">\\HN\OFED</a> is the remote node visible 
+	share; create <a href="file://orion-hn/winof">\\HN\OFED</a>\OFA_TP.cer<br>&nbsp;</font></li>
+	<li><font face="Arial">copy the following files to (example: \Program 
+	Files\Microsoft HPC Pack\Data\InstallShare\OFED)</font><ul>
+		<li><font face="Arial">OFED installer .msi file</font></li>
+		<li><font face="Arial">%ProgramFiles%\OFED\HPC\OFA-cert-install.bat</font></li>
+		<li><font face="Arial">%ProgramFiles%\OFED\HPC\OFED-install.bat<br>
+&nbsp;</font></li>
+	</ul></li>
+	<li><font face="Arial">Verify you have the required OFED provisioning files 
+	in the remote node visible share:</font><ul>
+	<li><font face="Arial">OFED installer .msi file, referenced in 
+	OFED-install.bat</font></li>
+	<li><font face="Arial">OFA-cert-install.bat</font></li>
+	<li><font face="Arial">OFED-install.bat</font></li>
+	<li><font face="Arial">rem-cert-ADD.bat</font></li>
+	<li><font face="Arial">OFA_TP.cer<br>
+&nbsp;</font></li>
+</ul></li>
+	<li><font face="Arial">Run the cluster manager tool to create a compute node 
+	template; include the following steps as part of the node provisioning 
+	template steps after the HPC pack has been installed:</font><ul>
+		<li><font face="Arial">&nbsp;copy entire contents of (example: \Program 
+		Files\Microsoft HPC Pack\Data\InstallShare\OFED) to remote node as <br>
+		%INSTALLDRIVE%\OFED</font></li>
+		<li><font face="Arial">execute the DOS command: %INSTALLDRIVE%\OFED\OFA-cert-install.bat</font></li>
+		<li><font face="Arial">execute the DOS command: %INSTALLDRIVE%\OFED\OFED-install.bat<br>
+&nbsp;</font></li>
+	</ul></li>
+	<li><font face="Arial">Use 'cluster manager' to provision all compute nodes 
+	using newly created compute node template.<br>
+&nbsp;</font></li>
+</ul></li>
+</ul>
+<h3><u><font face="Arial">Common HPC </font>compute<font face="Arial"> node 
+install steps</font></u></h3>
+<ul>
+	<li><font face="Arial">Set the IPoIB interface static IPv4 address on all compute 
+	nodes; 1st IPoIB instance will be the next 'Local Area Connection X' after 
+	the Ethernet port(s) on the compute node.</font><ul>
+	<li><font face="Arial">clusrun /nodes:X netsh interface ip set address 
+	&quot;Local Area Connection 3&quot; static 10.10.4.1 255.255.255.0</font></li>
+	<li><font face="Arial">clusrun /nodes:X netsh interface ip show address 
+	&quot;Local Area Connection 3&quot;<br>
+&nbsp;</font></li>
+</ul></li>
+	<li><font face="Arial">IPoIB supports DHCP IP address assignment for those 
+	who choose to use it. Static IP address binding allows a direct mapping from 
+	IP address to physical node number, if a direct mapping is not required, 
+	then DHCP IPv4 address assignment works fine and requires fewer operational 
+	steps beyond initial HPC application network setup.<br>
+	<br>
+	If you are running OpenSM somewhere other than the head node, then disregard 
+	the following.<br>
+	When running OpenSM on the head-node and using DHCP to assign IPoIB 
+	interface IPv4 addresses to compute nodes, the best-known-install method is:</font></li>
+</ul>
+
+</div>
+<blockquote>
+	<ul>
+		<li><font face="Arial">install winOFED on the head-node 1st; select 
+		'start OpenSM' as an install feature to run OpenSM on the Head-node.</font></li>
+		<li><font face="Arial">Add 'OpenSM'&nbsp; as a startup dependency for 
+		the DHCP server; see regedit HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Dhcp\DependOnService</font></li>
+		<li><font face="Arial">After registry modifications a head-node reboot 
+		is required.</font></li>
+	</ul>
+</blockquote>
+<div class=Section1>
+
+<ul>
+	<li><font face="Arial">IPoIB static IPv4 address assignment points of 
+	Interest<br>
+	When installing OFED one must consider how the Interface name 'Local Area 
+	Connection {x}' is assigned to the IPoIB ports in order to correctly target 
+	IP address assignment. <br>
+	Assume the target compute node has two Ethernet port and your HCA has two IB 
+	ports.&nbsp; After the 1st&nbsp; OFED installation, or node reprovisioing 
+	you will see the following assignments:</font><ul>
+	<li><font face="Arial">Ethernet port 0 is 'Local Area Connection'</font></li>
+	<li><font face="Arial">Ethernet port 1 is 'Local Area Connection 2'</font></li>
+	<li><font face="Arial">IB port 1 is 'Local Area Connection 3'</font></li>
+	<li><font face="Arial">IB port 2 is 'Local Area Connection 4'</font></li>
+</ul>
+	<p><font face="Arial">A few minutes after the OFED install completes, the HPC manager will rename the active IPoIB 'Local Area Connection 3' network 
+	interface to the 'Application' network interface along with the active 
+	Ethernet interface being renamed to the 'Private' network; 'Local Area 
+	Connection' is no longer in use.<br>
+	If OFED is uninstalled and then reinstalled without node reprovisioning, 
+	the active IPoIB network interface is installed as 'Local Area Connection'.&nbsp; 
+	Within a few minutes, the active IPoIB network interface will again be 
+	renamed the 'Application' network interface.<br>
+	Summary:<br>
+&nbsp;&nbsp;&nbsp; 1st OFED install, an IB cable is attached to HCA port 1, 
+	IPoIB is named 'Local Area Connection 3'.<br>
+&nbsp;&nbsp;&nbsp; 2nd OFED install, IPoIB is named 'Local Area Connection' as 
+	the Ethernet interface is renamed the 'Private' network.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">At this juncture, the OFED drivers are installed.<br>
+&nbsp;</font></li>
+</ul>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><a name="Setting_the_IPoIB_Interface_IP_Address">Setting the IPoIB Interface IP Address</a></h2>
+<p><font face="Arial">The Windows command 'netsh' will assist in assigning an IP address to an 
+IPoIB interface.<br>
+By default, an IPoIB interface is configured to use DHCP. The following 
+discussion deals with setting a static IP address on an IPoIB interface.<br>
+If your system has two Ethernet ports, then IPoIB interfaces (HCA port 1, 2...) 
+will be assigned to 'Local Area Connection 3' and 'Local Area Connection 4'.&nbsp; 
+If you system has a single Ethernet port, then IPoIB interface is 'Local Area 
+Connection 2'.</font></p>
+<p><font face="Arial">For Server 2008/HPC systems, the OFED installation follows the above 
+discussion. In defining HPC network interfaces, the IPoIB network will 
+eventually be 
+identified as the 'Application' network '.&nbsp; A few minutes after a 
+compute node is installed, the HPC&nbsp; network manager will rename the installed IPoIB 'Local Area Connection X' network interface to the 'Application' network.</font></p>
+<p><font face="Arial">Display all network interface configuration information<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; netsh interface ip show config<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; netsh interface ip show address 
+&quot;Local Area Connection 3&quot;</font></p>
+<p><font face="Arial">Config a static IP address for an IPoIB interface: [Local Area Connection 3 
+== 1st IPoIB interface], 10.10.4.23 is the assigned IP address<br>
+with a netmask of 255.255.255.0, the gateway is 10.10.4.1 metric is 2.</font></p>
+<p><font face="Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; netsh interface ip set address 
+&quot;Local Area Connection 3&quot; static 10.10.4.23 255.255.255.0 10.10.4.1 2</font></p>
+<p><font face="Arial">See <a href="http://support.microsoft.com/kb/257748">netsh</a> for further 
+reference.</font></p>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Uninstall">Uninstall</a></u></h2>
+
+<p><font face="Arial">To uninstall a OFED package from a single node</font></p>
+<ol>
+	<li><font face="Arial">Start--&gt; All Programs-&gt; Windows OpenFabrics-&gt; 
+	Uninstall OFED</font></li>
+	<li><font face="Arial">Control Panel-&gt; Add Remove Programs-&gt; Windows OpenFabrics-&gt; Remove</font></li>
+</ol>
+<h3><span style="font-weight: 400; text-decoration: underline">Unattended 
+Uninstall</span></h3>
+<p><font face="Arial">From a Command Window invoke the following command; a system reboot will 
+occur after the uninstall.</font></p>
+<blockquote>
+	<p><font face="Arial">start/wait msiexec.exe&nbsp; /x {3A6A276E-A636-48E8-8624-9A0DE3F2A15E} 
+	/quiet 
+	/forcerestart<br>
+&nbsp; - or -<br>
+	start/wait msiexec.exe&nbsp; /x OFED_3-2_win7_x64.msi /quiet /forcerestart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+	# OFED_xxxx.msi is the file used to install OFED.</font></p>
+	<p><font face="Arial">msiexec.exe /help for details.</font></p>
+	<p><font face="Arial">'/log dev:path\logfilename.log'&nbsp; if you wish to later view the install 
+	results.</font></p>
+	<p><font face="Arial">If for some reason the Product Code {GUID} changes, the latest code can 
+	be located via<br>Programs-&gt; Windows OpenFabrics-&gt; Uninstall OFED&lt;right-click&gt;Properties</font></p>
+</blockquote>
+<p><font face="Arial">Infrequently, the 'System Device-&gt;Infiniband Fabric' may not correctly uninstall. Make sure the Infiniband Fabric device is 
+		completely uninstalled; use device manager for checking. The effect of a 
+		partially uninstalled Infiniband Fabric device is IPoIB load failure 
+		upon the next OFED install.</font></p>
+<h3><span style="text-decoration: underline">Uninstall Notes</span></h3>
+<ol>
+	<li><font face="Arial">If the SRP (SCSI RDMA Protocol) driver has been previously installed, 
+	then in order to achieve a 'clean' uninstall, the SRP target drive(s) must 
+	be released.<br>
+&nbsp;</font><ul>
+		<li><font face="Arial">Use the following diskpart.exe commands from an administrator 
+		privileged command window:</font></li>
+		<li><font face="Arial"><a href="file:///c:/windows/temp">c:\windows\temp</a>&gt; diskpart.exe<br>
+&nbsp;&nbsp;&nbsp; SELECT VOLUME=&lt;Drive Letter of the SRP target to be released&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		# example: SELECT VOLUME=L<br>
+&nbsp;&nbsp;&nbsp; OFFLINE DISK<br>
+&nbsp;&nbsp;&nbsp; EXIT</font></li>
+		<li><font face="Arial">For additional SRP drives, repeat SELECT &amp; OFFLINE DISK with new 
+		Drive Letter.</font></li>
+	</ul>
+	<p><font face="Arial">The consequences of not releasing the SRP target drive(s) is that after the 
+	uninstall reboot there are lingering InfiniBand driver files. These driver 
+	files remain because while the SRP target is active they have references, 
+	thus when the uninstall attempts to delete the files the operation fails.</font></p>
+	</li>
+</ol>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<h2><u><font face="Arial"><a name="Verifying_the_WinOF_install">Verifying the 
+OFED install</a></font></u></h2>
+<ul>
+	<li><font face="Arial">From a command windows type 'devmgmt.msc'. Look for 
+	InfiniBand HCA device(s) along with Network IPoIB devices .<br>
+&nbsp;</font></li>
+	<li><font face="Arial">From a command-window, type 'ibv_devinfo' which 
+	should print &quot;hca_id: ibv_device0&quot; on the first line.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Make sure that a Subnet Manager is running on the 
+	fabric by invoking the sminfo utility.<br>
+	<br>
+	If an SM is not running, sminfo prints:&nbsp; sminfo: iberror: query failed<br>
+	<br>
+	If an SM is running, sminfo prints the LID and other SM node information.<br>
+	<br>
+	Example:&nbsp; sminfo: sm lid 0x1 sm guid 0x2c9010b7c2ae1, activity count 20 
+	priority 1<br>
+&nbsp;</font></li>
+	<li><font face="Arial">To check if OpenSM is running on the 'management' 
+	node, enter:&nbsp; 'services.msc'.<br>
+	Look for the Infiniband Subnet Manager entry; it should be automatic &amp; 
+	started.<br>
+	View %windir%\temp\osm.syslog or %windir%\temp\osm.log files to see how 
+	OpenSM started.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Verify the status of ports by using ibv_devinfo: all 
+	connected ports should report a &quot;PORT_ACTIVE&quot; state.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Check the network connectivity status: run 
+	ibnetdiscover to see if the subnet is &quot;clean&quot; and ready for ULP/application 
+	use.<br>
+&nbsp;Note: ibndetdiscover scans the entire fabric.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">After you have assigned an IP address to the IPoIB 
+	Local Area Connection(s).&nbsp; From a command-window, type 'ping IPoIB_addr'; 
+	where IPoIB_addr is an address of an IPoIB instance on another fabric 
+	connected system.</font></li>
+</ul>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<h2><u><a name="Trouble_Shooting">Trouble Shooting</a></u></h2>
+<p><font face="Arial">From a command window type the following quick-start 
+commands:</font></p>
+<ul>
+	<li><font face="Arial">To start the Device Manager:&nbsp; 'devmgmt.msc'<br>
+	Look for InfiniBand HCA devices along with IPoIB network devices.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">To start the Services Manager:&nbsp; services.msc<br>
+	If the Subnet Manager was installed as 'started' on this system, find the 
+	InfiniBand Subnet Manager entry; entry should be automatic &amp; started.</font></li>
+</ul>
+<p><font face="Arial">To create a LOG file of your OFED installation, execute this command: msiexec /I 
+OFED_xxx_yyy.msi&nbsp; /Lv %TEMP%\OFED-install.log<br>
+View %TEMP%\OFED-install.log</font></p>
+<p><font face="Arial">msiexec /? for details.</font></p>
+<p><font face="Arial">Server 2008 R2 or WIndows-7 can also fail to install due to driver install files 
+left over from previously failed install attempts; see %windir%\system32\DriverStore\{Temp|FileRepository}. 
+Look for folders with the following in the folder name: mthca, mlx4_, netipoib, 
+srp, vnic. Once you have located one of these folders you need to remove it as 
+win2k8 R2 will use these files instead of what your attempting to install.; 
+removing the folders is a pain.<br>
+Right-click the folder and select Properties-&gt;Security-&gt;Advanced, select owner 
+tab, select Edit button, select Administrator and check the 'Replace owner on 
+subcontainers and objects', now click 'OK', OK again, select Edit button from 
+the securities tab, check allow 'Full Control' box and click OK, OK again. At 
+this point you should be back to the file explorer. Now you can delete the 
+folder!</font></p>
+<p><font face="Arial">In emergency situations (as administrator) run 
+IBcleanup.bat; download from
+<a href="https://www.openfabrics.org/downloads/Windows/etc/IBcleanup.bat">
+https://www.openfabrics.org/downloads/Windows/etc/IBcleanup.bat</a> </font></p>
+<p><font face="Arial">Setupapi.log has moved in Server 2008, see '%windir%\inf\setupapi-dev.log'. 
+Setupapi-*.log can at times contain useful install debug info.</font></p>
+<p><font face="Arial">Server 2008 R2/HPC all use dpinst.exe to preinstall drivers into the 
+driver store. Windows PNP (Plug-n-Play) later will demand load drivers when the 
+hardware is recognized. dpinst.exe writes it's error information to '%windir%\dpinst.log'.</font></p>
+<p><font face="Arial">Down rev firmware will result in IPoIB not installing or other anonmolus 
+behavior. Consult the event 
+viewer, system error records, look for 'mthca' or 'mlx4*' entries generated when the HCA 
+driver loads. One of the mthca or mlx4 entries will display the current firmware 
+revision.</font></p>
+<p><font face="Arial">Firmware version information and updates 
+		are available at
+<a href="http://www.mellanox.com/support/firmware_download.php">
+		www.mellanox.com/support/firmware_download.php</a></font></p><p:colorscheme
+ colors="#ffffff,#000000,#808080,#000000,#ffc86c,#acc5ff,#fff4b4,#c4f48a"/>
+
+<div v:shape="_x0000_s1026" style="tab-stops:.6215in">
+	<div class="O" style="mso-line-spacing:&quot;80 20 0&quot;;mso-margin-left-alt:145;
+mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<span style="font-family:&quot;Arial Narrow&quot;;
+font-size:106%;color:#F2862F">
+		<span style="mso-special-format:bullet;
+position:absolute;left:-3.41%">•</span></span><span style="font-family:&quot;Arial Narrow&quot;;
+font-size:19pt;color:#F2862F"><b> </b></span></div>
+	<blockquote>
+		<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+			<span style="font-family:&quot;Arial Narrow&quot;;font-size:94%;color:#241172">
+			<span style="mso-special-format:bullet;position:absolute;left:-4.4%">–</span></span></div>
+	</blockquote>
+	<div class="O" style="mso-line-spacing:&quot;80 20 0&quot;;mso-margin-left-alt:145;
+mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<span style="font-family:&quot;Arial Narrow&quot;;
+font-size:106%;color:#F2862F">
+		<span style="mso-special-format:bullet;
+position:absolute;left:-3.41%">•</span></span><font face="Arial"><b><span style="font-family: Arial Narrow; ">If 
+		HCA FW is older than minimal FW</span><span style="font-family: Arial Narrow; color: #F2862F"> </span> </b>
+		</font></div>
+	<blockquote>
+		<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+			<font face="Arial">
+			<span style="font-family: Arial Narrow; color: #241172"><b>Error 
+			reported to system event log </b></span></font></div>
+		<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+			<font face="Arial">
+			<span style="font-family: Arial Narrow; color: #241172">
+			<span style="mso-special-format:bullet;position:absolute;left:-4.4%">
+			–</span><b>HCA loads as memory controller to allow FW upgrade </b>
+			</span></font></div>
+	</blockquote>
+	<div class="O" style="mso-line-spacing:&quot;80 20 0&quot;;mso-margin-left-alt:145;
+mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<font face="Arial">
+		<span style="font-family: Arial Narrow; color: #F2862F">
+		<span style="mso-special-format:bullet;
+position:absolute;left:-3.41%">•</span></span><b><span style="font-family: Arial Narrow; ">If HCA<span style="mso-spacerun:yes">&nbsp;
+		</span>FW is equal or newer than optimal version</span><span style="font-family: Arial Narrow; color: #F2862F"><br>
+&nbsp;</span></b></font></div>
+	<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<blockquote>
+			<font face="Arial">
+			<span style="font-family: Arial Narrow; color: #241172">
+			<span style="mso-special-format:bullet;position:absolute;left:-4.4%">
+			–</span><b>HCA starts OK. </b></span>
+			</font>
+		</blockquote>
+	</div>
+	<div class="O" style="mso-line-spacing:&quot;80 20 0&quot;;mso-margin-left-alt:145;
+mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<font face="Arial">
+		<span style="font-family: Arial Narrow; color: #F2862F">
+		<span style="mso-special-format:bullet;
+position:absolute;left:-3.41%">•</span></span><b><span style="font-family: Arial Narrow; ">Else</span></b></font></div>
+	<blockquote>
+		<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+			<font face="Arial">
+			<span style="font-family: Arial Narrow; color: #241172">
+			<b>HCA loads OK. </b></span></font></div>
+		<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+			<font face="Arial">
+			<span style="font-family: Arial Narrow; color: #241172">
+			<span style="mso-special-format:bullet;position:absolute;left:-4.4%">
+			–</span><b>Warning will be issued to system event log </b></span>
+			</font>
+		</div>
+	</blockquote>
+	<div class="O1" style="mso-line-spacing:&quot;80 0 0&quot;;mso-margin-left-alt:395;
+mso-text-indent-alt:217;mso-char-wrap:1;mso-kinsoku-overflow:1">
+		<font face="Arial">
+		<![if ppt]>
+		<span style="font-family:&quot;Arial Narrow&quot;;font-size:94%;color:#241172;visibility:hidden">
+		<span style="mso-special-format:bullet;position:absolute;left:-4.4%">–</span></span><![endif]><span style="font-family:&quot;Arial Narrow&quot;;font-size:17pt;color:#241172"><b>
+		</b></span></font></div>
+	<div class="O" style="mso-line-spacing:&quot;80 50 0&quot;;mso-margin-left-alt:145">
+		<font face="Arial">My computer-&gt; Manage-&gt; Event Viewer-&gt; System Events; search for 
+		mthca, mlx4 or ipoib entries.</font><p><font face="Arial">ttcp or other 
+		network applications fail to connect?<br>
+&nbsp;&nbsp;&nbsp; Make sure the firewall settings allow said program or TCP 
+		port to pass.</font></p>
+		<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+		<h3>&nbsp;</h3>
+		<h3><u>Incomplete Previous Uninstall</u></h3>
+		<p><font face="Arial">Should the previous uninstall silently fail, the next installation 
+		can fail in the Driver Install phase with the following error:<br>
+&nbsp;&nbsp;&nbsp; DriverInstall - HCA Ret 2 Error 0<br>
+		<br>
+		At this juncture, check the Device Manager and uninstall the PCI 
+		device from 'InfiniBand Host Channel Adapters', and make sure you uninstall the system device
+		'InfiniBand Fabric' if it is present.<br>
+		<br>
+		<u><b>REBOOT</b></u> and retry the OFED installation again.</font><p>
+		<font face="Arial">See 
+		ibscan.bat and ibcleanup.bat @
+		<a href="http://www.openfabrics.org/downloads/windows/etc/">
+		http://www.openfabrics.org/downloads/windows/etc/</a>.<br>
+		ibscan will display OFED files on your system.<br>
+		ibcleanup will attempt to remove all OFED files from your syste. 
+		WARNING - ibcleanup is not valid as a OFED uninstall tool!</font><p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a><p>&nbsp;</div>
+</div>
+<h3><u><a name="Correct_Installation_Validation">Correct Installation Validation</a></u></h3>
+<p><font face="Arial">From the Device Manager you should find the following devices:</font></p>
+<ul>
+	<li><font face="Arial">From a command window type 'devmgmt.msc' </font></li>
+	<li><font face="Arial">InfiniBand Host Channel Adapters -&gt; InfiniHost or Mellanox ConnectX</font></li>
+	<li><font face="Arial">The System Devices -&gt; InfiniBand Fabric device is no longer present in 
+	OFED 2.0 and following releases.</font></li>
+	<li><font face="Arial">Network Adapters -&gt; OpenFabrics IPoIB Adapter (an Instance per HCA port).</font></li>
+</ul>
+<blockquote>
+	<h4><font face="Arial">Validation Test</font></h4>
+	<p><font face="Arial">Open a OFED command window</font></p>
+	<ol>
+		<li><font face="Arial">Start-&gt;Program Files-&gt;Windows OpenFabrics -&gt; Command 
+Window</font></li>
+		<li><font face="Arial">run vstat.exe to view HCA configuration.</font></li>
+		<li><font face="Arial">If IPoIB is installed (Device Manager-&gt;Network Adapters), ping another node on the InfiniBand fabric 'ping a.b.c.d'<br>
+&nbsp;</font></li>
+	</ol>
+</blockquote>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="OpenIB_Subnet_Management_as_a_Windows_Service">Subnet Management as a Windows Service</a></u></h2>
+<p><font face="Arial">Limit the number of Subnet Managers on your fabric; one SM per fabric is 
+sufficient, although redundant Subnet Managers are supported.</font></p>
+<ol>
+	<li><font face="Arial">After a 'typical' OFED install, OpenSM is installed as a <b>disabled</b> 
+	Windows service named &quot;InfiniBand Subnet Management&quot;.<br>
+	To start the OpenSM service, from a command window type 'services.msc' to 
+	start the Services manager.&nbsp; From the Services manager, find and select 
+	'InfiniBand Subnet Manager' view; Click the start button and set the service properties to 'auto' in order to restart on the next 
+	system reboot.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Install OpenSM as an automatic/running Windows service:<br>
+	a) Select the 'OpenSM_service_Started' install feature. Once 
+	the install has completed, check that the Infiniband Subnet Manager service 
+	is running: From a command windows type 'services.msc' to start the Services 
+	manager. Find and open the InfiniBand Subnet 
+	Manager view.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Consult the OpenSM log file @ %SystemRoot%\temp\osm.log to see what 
+	OpenSM thinks is happening.</font></li>
+</ol>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Local_Network_Adapter_Ordering">Local Network Adapter Ordering</a></u></h2>
+<p><font face="Arial">Local Network Adapter ordering, which results in the IP address advertised 
+for the system, can be managed from<br>&nbsp;&nbsp;&nbsp; 'My Network Places-&gt; Advanced Tab-&gt; Advanced settings'<br>From the Advanced settings display, the ordering 
+of Local Network Adapters can be 
+reordered after the IPoIB Local Network Adapters have been installed. Please 
+check for your desired adapter ordering.<br></font><br>
+<font color="#000000"><a href="#WinOF_Release_Notes"><font color="#000000">
+&lt;Return-to-Top&gt;</font></a></font></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Which_WinOF_release_is_installed">Which OFED release is installed</a></u><a name="Which_WinOF_release_is_installed">?</a></h2>
+<ol>
+	<li><font face="Arial">Start-&gt;Programs-&gt;OpenFabrics Enterprise 
+	Distribution-&gt;About OFED.<br>
+	Displays a window containing winOFED release information.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">Hold the mouse point over \Program Files\OFED\ib_read_bw.exe to display 
+the file version; [OFED-Major.Minor.not-used.svn revision number].<br>
+	If a file has been built 'checked' then a '(DEBUG)' tag will be displayed.</font></li>
+</ol>
+<ul>
+	<li><font face="Arial">WinOF 1.0 is based on openib-windows <b><u>svn revision 614</u></b> @
+	<a href="http://openib.tc.cornell.edu/downloads/binaries/">http://openib.tc.cornell.edu/downloads/binaries/</a> .<br>
+&nbsp;</font></li>
+	<li><font face="Arial">WinOF 1.0.1 is based on openib-windows <b><u>svn revision 864</u></b>.<br>
+&nbsp;</font></li>
+	<li><font face="Arial">WinOF 1.1 is based on openib-windows <b><u>
+	(svn revision 1177 branches\WOF1-1).<br>
+&nbsp;</u></b></font></li>
+	<li><font face="Arial">WinOF 2.0 is based on<b> (<u>svn.1763 branches\WOF2-0</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">WinOF 2.1 is based on<b> (<u>svn.2476 branches\WOF2-1</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">WinOF 2.2 is based on<b> (<u>svn.2667 branches\WOF2-2</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">winOFED 2.3 is based on<b> (<u>svn.3041 branches\WOF2-3</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">winOFED 3.0 is based on<b> (<u>svn.3376 branches\WOF3-0</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">winOFED 3.1 is based on<b> (<u>svn.3414 branches\WOF3-1</u>)<br>
+&nbsp;</b></font></li>
+	<li><font face="Arial">winOFED 3.2 is based on<b> (<u>svn.3635 branches\WOF3-2</u>)</b></font></li>
+</ul>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="QLogic_VNIC_Configuration">QLogic VNIC Configuration</a></u></h2>
+<p><font face="Arial">
+<span style="font-size: 12pt; ">The QLogic VNIC 
+(Virtual Network Interface Card) driver in conjunction with the QLogic Ethernet 
+Virtual I/O Controller (EVIC) provides virtual Ethernet interfaces and transport 
+for Ethernet packets over Infiniband.<br>
+<br>
+Users can modify NIC parameters through User Interface icon in Network 
+Connections:<br>
+( Properties-&gt;&quot;Configure...&quot; button -&gt; &quot;Advanced&quot; Tab).</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">Parameters 
+available:<br>
+<br>
+Vlan Id (802.1Q)&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp; values from 0 to 
+4094 ( default&nbsp;<span class="899314318-23042008">0, </span>disabled )<br>
+&nbsp; This specifies if VLAN ID-marked packet transmission is enabled and, if so, 
+specifies the ID.<br>
+<br>
+Priority (802.1P)</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp; values from 0 to 7 
+( default 0, feature disabled)<br>
+&nbsp; This specifies if priority-marked packet transmission is enabled.<br>
+<br>
+Payload MTU size&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp; values from 1500 
+to 9500 (default 1500)<br>
+&nbsp; This specifies the maximum transfer unit size in 100 bytes increments.<br>
+<br>
+Recv ChkSum offload&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp; (default enabled)<br>
+&nbsp; This specifies if IP protocols checksum calculations for receive is offloaded.<br>
+<br>
+Send ChkSum offload</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp; (default enabled)<br>
+&nbsp; This specifies if IP protocols checksum calculations for send is offloaded.<br>
+&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">Secondary Path&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp;&nbsp; (default 
+disabled)<br>
+&nbsp;&nbsp; Enabled - If more than one IB path to IOC exist then secondary IB instance of 
+virtual port will be created and configured with the same parameters as primary 
+one. Failover from Primary to Secondary IB path is transparent for user 
+application sending data through associated NIC.<br>
+<br>
+&nbsp;&nbsp; Disabled – only one path at a time is allowed. If more than one path to IOC 
+exists then failed path will be destroyed and next available path will be used 
+for new connection. With this scenario there is a possibility new interface 
+instance will be assigned different MAC address when other hosts compete for 
+EVIC resources.<br>
+&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<font face="Arial" size="3">LBFO Bundle Id<br>
+&nbsp;&nbsp; (default disabled) Enabling support for OS provided Load Balancing and Fail 
+Over functionality on adapter level.<br>
+&nbsp;&nbsp; If enabled group ID can be selected from predefined names.</font></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp;</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">Heartbeat interval</span></p>
+<p class="MsoPlainText" style="MARGIN: 0in 0in 0pt">
+<span style="font-size: 12pt; ">&nbsp;&nbsp; configures 
+interval for VNIC protocol heartbeat messages in milliseconds.<br>
+&nbsp;&nbsp; 0 – heartbeats disabled.<br>
+<br>
+Note:<br>
+&nbsp;&nbsp; To take advantage of the features supported by these options, ensure that the 
+Ethernet gateway is also configured appropriately.&nbsp; For example, if the Payload 
+MTU for a VNIC interface is set to&nbsp;<span class="899314318-23042008">4</span>000, 
+the MTU at the EVIC module must also be set at least&nbsp;<span class="899314318-23042008">4</span>000 
+for the setting to take effect.</span></p>
+</font>
+<p><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p>&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="DAT_&amp;_uDAPL_Configuration">DAT &amp; uDAPL Configuration</a></u></h2>
+<p align="left"><font face="Arial">In order for DAT/DAPL programs to execute correctly, the 'dat2.dll' 
+file must be present in the current directory,
+%SystemRoot%\System32 or in the library search path.</font></p>
+<p align="left"><font face="Arial">OFED installation places the dat2.dll and dapl2.dll 
+files in the '%SystemRoot%\system32' 
+folder (a.k.a. \Windows).</font></p>
+<p align="left"><font face="Arial">The DAT/DAPL configuration file by convention is defined as 
+'%SystemDrive%\DAT\dat.conf'. If the file '%SystemDrive%\DAT\dat.conf' does not exist, 
+a template configuration file will be installed as '%SystemDrive%\DAT\dat.conf'.<br>
+In order to preserve existing installations, the dat.conf file is not 
+automatically installed if '%SystemDrive%\DAT\dat.conf' exists.<br>
+A sample dat.conf file is always installed as '\Program Files\OFED\dat.conf 
+'.</font></p>
+<p align="left"><font face="Arial">The default DAT configuration file specification can be overridden by use 
+of the environment variable DAT_OVERRIDE. Such that 'DAT_OVERRIDE=D:\MyDAT\test.conf' 
+would be a valid override specification.</font></p>
+<p align="left"><font face="Arial">Within the dat.conf file, the DAPL library specification can be 
+located as the 5th whitespace separated line argument. By default the DAPL 
+library file is installed as %WINDIR%\dapl2.dll'.</font></p>
+<p align="left"><font face="Arial">Should you choose to relocate the DAPL library file to a folder 
+where whitespace appears in the full library path specification, then the full 
+library file specification must be contained within double-quotes. A side effect 
+of the double-quotes is the library specification is treated as a Windows string 
+which implies the '\' (backslash character) is treated as an 'escape' character.&nbsp; 
+Hence all backslashes in the library path must be duplicated when enclosed in 
+double-quotes (e.g., &quot;C:\\Programs Files\\OFED\\dapl.dll&quot;).</font></p>
+<h4 align="left"><span style="font-weight: 400"><font face="Arial">uDAT/uDAPL version 2.0 runtime 
+libraries are identified as dat2.dll and dapl2.dll, both in %SystemRoot%; see 
+manual for further details..</font><br>
+&nbsp;</span></h4>
+<p align="left"><a href="#WinOF_Release_Notes"><font color="#000000">
+&lt;Return-to-Top&gt;</font></a></p>
+<p align="left">&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2 align="left"><u><a name="SRP_-_SCSI_RDMA_Protocol_Driver_Installation">SRP (SCSI RDMA Protocol) Driver Installation</a></u></h2>
+<p align="left"><font face="Arial">The OFED installer does not install the SRP driver as part of a default 
+installation.&nbsp; 
+If the SRP feature is selected in the custom installation window, an InfiniBand 
+SRP Miniport driver will be installed; see the device manager view under SCSI 
+and RAID controllers.</font></p>
+<p align="left"><font face="Arial">The system device 'InfiniBand I/O Unit' (IOU) 
+device is required for correct SRP operation.&nbsp; The OFED installer will 
+install/load the IOU driver if the SRP feature is selected.&nbsp; See the device 
+manager view System Devices --&gt; InfiniBand I/O Unit for conformation of correct 
+IOU driver loading.</font></p>
+<p align="left"><font face="Arial">In order for the SRP miniport driver installation to complete, an SRP target must be
+detected by a Subnet Manager running somewhere on the InfiniBand fabric; either 
+a local or remote Subnet Manager works. <br>
+When the subnet manager communicates the existence of an SRP target, Windows PNP 
+(Plug-n-Play) will match the IOC device ID with DriverStore installed drives and 
+then will load the IBiou.sys driver along with the ib_srp.sys driver.</font></p>
+<p align="left"><font face="Arial">An invocation of 'diskmgmt.msc' will display 
+available SRP target disks.</font></p>
+<p align="left"><font face="Arial">Consult the OFED manual for further SRP 
+topics including configuring a Linux OFED SRP target.</font></p>
+<h3 align="left"><u>SRP Driver Uninstall</u></h3>
+<p align="left"><font face="Arial">If the SRP (SCSI RDMA Protocol) driver has been previously 
+installed, then in order to achieve a 'clean' uninstall, the SRP target drive(s) 
+must be released (set offline in diskmgmt.msc).</font></p>
+<p><font face="Arial">The consequences of not releasing the SRP target drive(s) are that after the 
+OFED uninstall reboot there are lingering InfiniBand driver files. These driver 
+files remain because while the SRP target is active they have references, thus 
+when the OFED uninstall attempts to delete the files the operation fails.</font></p>
+<p align="left">
+<br>
+<a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a></p>
+<p align="left">&nbsp;</p>
+<div class=Section1>
+
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><a name="WinVerbs">WinVerbs</a></h2>
+<p><font face="Arial">WinVerbs is a userspace verbs and communication management interface 
+optimized
+for the Windows operating system. Its lower interface is designed to support
+any RDMA based device, including Infiniband and iWarp. Its upper interface is
+capable of providing a low latency verbs interface, plus supports Microsoft's
+NetworkDirect Interface, DAPL, and OFED libibverbs interfaces. It consists of<br>
+a userspace library and a kernel filter driver.<br>
+<br>
+The WinVerbs and WinMAD drivers load as upper filter drivers for the Infiniband HCA 
+device.<br>
+(Open source iWarp drivers for Windows are not yet available.)&nbsp; A corresponding<br>
+WinVerbs.dll and libibmad.dll
+userspace libraries install as part of the Winverbs driver installation package.<br>
+Additionally, a Windows port of the OFED libibverbs library, several test
+programs and OFED InfiniBand diagnostic utilities are also included.</font></p>
+<p><font face="Arial">As of OFED 2.1, Winverbs components are now integral 
+components of a default OFED installation.<br>
+Although WinVerbs, WinMAD drivers, OFED libraries and utilities are install 
+selectable features, they are automatically included as part of the default 
+OFED install.</font></p>
+
+</div>
+
+<p class="MsoPlainText">
+<a href="#WinOF_Release_Notes" style="color: blue; text-decoration: underline"><font color="#000000">
+&lt;Return-to-Top&gt;</font></a><br>
+&nbsp;</p>
+<BLOCKQUOTE></BLOCKQUOTE>
+<h2><u><a name="Known_Issues">Known Issues</a></u> as of 
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%m/%d/%Y" startspan -->06/25/2013<!--webbot bot="Timestamp" endspan i-checksum="12591" --></h2>
+<ul>
+	<li>
+	<p class=MsoPlainText><font face="Arial" size="3">IB cable disconnect during 
+	ND v1 transfer will crash system (winverbs issue).<br>
+&nbsp;</font></p></li>
+	<li>
+	<p class=MsoPlainText><font face="Arial" size="3">Disabling the HCA on a 
+	system while openSM is running will crash the system (winmad issue).<br>
+&nbsp;</font></p></li>
+	<li>
+	<p class=MsoPlainText><font face="Arial" size="3">Should the OFED stack not 
+	install with a notifier &quot;Possible HCA driver install failure&quot;, the likely 
+	cause is outdated HCA firmware.<br>
+	See <a href="#How_to_find_the_PSID_of_a_Mellanox_HCA">finding the PSID</a> 
+	text for firmware burning instructions.<br>
+&nbsp;</font></p></li>
+	<li>
+	<p class=MsoPlainText><font face="Arial" size="3">HCA drivers are now 
+	classified as 'BOOT START' drivers; the implication being for a first time 
+	install, the system will reboot after installation.<br>&nbsp;</font></p>
+	</li>
+	<li>
+	<p class=MsoPlainText><font face="Arial" size="3">IPoIB partition 
+	multicast 
+	support requires IGMP (Internet Gateway Management Protocol) v2 Windows default is v3.<br>&nbsp;</font></p>
+	<div><span class="395594910-04112008"><font face="Arial">Partition 
+		multicast on ipoib will only work if the machine is configured to use 
+		IGMP V2 (and not V3 which is the default).</font></span></div>
+	<div><span class="395594910-04112008"><font face="Arial">To 
+		configure your machine to use IGMP v2 please do the following:</font></span></div>
+	<div><span class="395594910-04112008"></span><font face="Arial">&nbsp;</font></div>
+	<div><span class="395594910-04112008">
+		<font face="Arial" color="#0000ff" size="2">
+		</font><font face="Arial" size="2">
+		<p class="MsoNormal"><font size="3" face="Arial">Server 2008 R2,</font></font><font size="3" face="Arial"> 
+		HPC:</font></span></div>
+	<div><span class="395594910-04112008"><font face="Arial" color="#000080">If the netsh command is not 
+		available, then you will need to install via the command 'servermanagercmd.exe 
+		-install NPAS-RRAS-Services'.</font></span></div>
+	<div><span class="395594910-04112008"><font face="Tahoma" color="#0000ff">
+		<div>
+			<p class="MsoNormal"><font face="Arial"><span style="color: navy">
+			<font size="3">netsh 
+			routing ip igmp </font></span><font color="navy" size="3">
+			<span style="color: navy">install</span></font></font></div>
+		<div><font face="Arial" color="#0000ff" size="2">
+			<p class="MsoNormal"><font face="Arial"><span style="color: navy">
+			<font size="3">netsh 
+			routing ip igmp install </font></span><font color="navy" size="3">
+			<span style="color: navy">add interface &quot;interface name of IPoIB 
+			adapter&quot;&nbsp; igmpprototype=igmprtrv2</span></font></font></p>
+			<p class="MsoNormal">&nbsp;</p></font></font>
+			<font face="Tahoma" size="2">
+			<p class="MsoNormal"><font face="Arial">F</font></font><font size="3" face="Arial">uture 
+			OFED releases</font><font size="2" face="Arial"> 
+			will support IGMP V3.</font></div></span></div>
+	<p class=MsoPlainText>&nbsp;</p></li>
+	<li>
+	<p class=MsoPlainText><span style="background-color: #FFFFFF">
+	<font face="Arial" size="3">x64 Windows platforms do not exhibit 
+	the following SRP behavior.<br>SRP when run on a Windows 32-bit platform (x86) will exhibit SRP read 
+	transfer hangs when the size of the SRP read&nbsp; is greater-than&nbsp; 4096 
+	bytes.</font></span></p>
+	<div dir="ltr" align="left"><span style="background-color: #FFFFFF">
+		<font face="Arial" size="3">Setting the registry entry </font></span>
+		<font face="Arial" size="2"><strong>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ibsrp\Parameters<span class="795394519-15052008">\ModeFlags</span></strong></font></div>
+	<p class=MsoPlainText><span style="background-color: #FFFFFF">
+	<font face="Arial" size="3">&nbsp;to 1 will 
+	enable &gt; 4KB transfers to proceed without hanging.</font></span><br>&nbsp;<font face="Times New Roman" size="3"><br>&nbsp;</font></p>
+	</li>
+</ul>
+<p class=MsoPlainText><a href="#WinOF_Release_Notes"><font color="#000000">&lt;Return-to-Top&gt;</font></a><br>&nbsp;</p>
+
+</div>
+
+<h2><font face="Arial"><a name="RoCE_Installation_and_Operation">RoCE 
+Installation and Operation</a></font></h2>
+<p><font face="Arial">RoCE (RDMA over Coherent/converged Ethernet) is only 
+supported for Mellanox ConnectX-2/3 HCAs on 'x64' platforms.<br>
+Normally a RoCE HCAs are connected thru a RoCE 10gb Ethernet switch (DCA 
+enabled), although port-to-port (back-to-back) RoCE connections are supported.<br>
+<br>
+Since Mellanox declined to provide RoCE Ethernet driver sources (binary drivers 
+only), the RoCE installation is outside the scope of the standard winOFED 
+installation process.</font></p>
+<p><font face="Arial">First and foremost, install winOFED (3.1 and beyond).<br>
+<br>
+Once winOFED is installed on your x64 platform disable the OpenSM service if it 
+is running.<br>
+Now install RoCE Ethernet driver (msiexec /I RoCE_Ethernet_win7_x64.msi') or 
+Right-click the .msi file.<br>
+<br>
+The RoCE Ethernet driver 'mlx4eth62.sys' driver will be installed; from the 
+Device Manager view (devmgmt.msc) 'Network adapters' view will show the 
+'OpenFabrics&nbsp; IPoIB adapter' will be replaced with 'Mellanox ConnectX 10gb 
+Ethernet Adapter'.</font></p>
+<p><font face="Arial">Once the RoCE Ethernet driver is installed, the installer 
+will bounce (disable/enable) the Mellanox mlx4 bus driver (Mellanox ConnectX VPI, 
+under device manager 'system devices').<br>
+The RoCE Ethernet installer notifier boxes will timeout or just click the 'OK&quot; 
+button.<br>
+If for some reason the installer VPI device bounce does not work, one can 
+manually disable/enable the Mellanox VPI device.</font></p>
+<p><font face="Arial">After the RoCE Ethernet device installer has exited 
+successfully, you need to assign an IP address to the network interface (ncpa.cpl, 
+right-click the 'Mellanox 10gb Ethernet Local Area Connection' --&gt; Properties 
+--&gt; Internet Protocol Version 4/6) and assign DHCP or manual IP address 
+assignment.</font></p>
+<p><font face="Arial">RoCE Ethernet device removal can be accomplished via the 
+'Control Panel --&gt; Programs and Features --&gt; RoCE Ethernet Driver --&gt; 
+Uninstall'.</font></p>
+<p class=MsoPlainText>
+<a href="#WinOF_Release_Notes" style="color: blue; text-decoration: underline"><font color="#000000">&lt;Return-to-Top&gt;</font></a><br>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

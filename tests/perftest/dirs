@@ -1,0 +1,11 @@
+DIRS =			\
+	send_bw		\
+	write_bw	\
+	read_bw		\
+	send_lat	\
+	write_lat	\
+	read_lat	\
+	rdma_bw		\
+	rdma_lat	\
+	atomic_bw	\
+	atomic_lat

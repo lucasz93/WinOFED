@@ -1,0 +1,80 @@
+TARGETNAME=fip
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1 
+!endif
+KMDF_VERSION_MAJOR=1
+
+!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="WinLH"
+#
+# The driver is for vista/windows 2008 Build with NDIS 6.1 and KMDF 1.7
+#
+C_DEFINES=$(C_DEFINES) -DNDIS61_MINIPORT=1 -DWMI_CUSTOM_OIDS=1
+KMDF_VERSION_MINOR=7
+
+!else if "$(DDK_TARGET_OS)"=="Win7"
+
+#
+# The driver is for windows7 Build with NDIS 6.2 and KMDF 1.9
+#
+C_DEFINES=$(C_DEFINES) -DNDIS620_MINIPORT=1
+KMDF_VERSION_MINOR=9
+!endif
+
+!if defined(FIP_COMPILE)
+C_DEFINES=$(C_DEFINES) -DFIP_COMPILE
+!endif
+
+
+USECXX_FLAG=1
+
+DLLDEF=core.def
+
+NTTARGETFILES=Custom_target
+
+SOURCES= \
+	fip_main.cpp		\
+	fip_thread.cpp          \
+	fip_dbg.cpp		\
+	send_recv.cpp		\
+	fip_utils.cpp		\
+	fip_vhub_table.cpp	\
+	fip_vnic.cpp		\
+	fip_gw.cpp		\
+	fip_port.cpp		\
+	fip_eoib_interface.cpp	\
+ 
+INCLUDES=..;..\inc; \
+             ..\..\..\hw\mlx4\kernel\genutils;\
+             ..\..\..\hw\mlx4\kernel\inc;\
+             ..\..\..\hw\mlx4\inc;\
+             ..\..\..\hw\mlx4\kernel\bus\inc;\
+             ..\..\..\inc\kernel;\
+             ..\..\..\inc\;\
+             ..\..\al\kernel;\
+	     ..\..\al\;                \
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN -DUSE_WDM_INTERRUPTS
+
+TARGETLIBS= \
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -km -dll -ext: .c .cpp .h .C .CPP .H\
+	-preserveext:.cpp .h\
+	-scan:..\inc\fip_debug.h\
+	-func:FIP_PRINT(LEVEL,FLAGS,MSG,...) 
+!ENDIF
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_PCH=precomp.pch
+PRECOMPILED_CXX=1
+
+MC_SOURCEDIR=.
+
+MSC_WARNING_LEVEL= /W4

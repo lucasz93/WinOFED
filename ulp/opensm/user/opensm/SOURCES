@@ -1,0 +1,71 @@
+
+TARGETNAME=opensm
+
+!if !defined(WINIBHOME)
+WINIBHOME=..\..\..\..
+!endif
+
+LIBPATH=$(WINIBHOME)\bin\user\obj$(BUILD_ALT_DIR)
+
+!if defined(OSM_TARGET)
+TARGETPATH=$(OSM_TARGET)\bin\user\obj$(BUILD_ALT_DIR)
+!else
+TARGETPATH=$(LIBPATH)
+!endif
+
+!include ..\mad-vendor.inc
+
+TARGETTYPE=PROGRAM
+UMTYPE=console
+UMENTRY=main
+USE_MSVCRT=1
+
+SOURCES=\
+	osm.mc \
+	opensm.rc \
+	osm_qos_parser_y.c \
+	osm_qos_parser_l.c \
+	osm_sa_mcmember_record.c \
+	osm_sa_path_record.c \
+	osm_ucast_dnup.c \
+	osm_files.c
+
+OSM_HOME=..
+
+TARGETLIBS= \
+	$(SDK_LIB_PATH)\kernel32.lib \
+	$(SDK_LIB_PATH)\ws2_32.lib \
+	$(SDK_LIB_PATH)\shell32.lib \
+	$(VENDOR_LIBS) \
+	$(LIBPATH)\*\complib.lib \
+	$(LIBPATH)\*\ibal.lib
+
+INCLUDES= \
+	$(WINIBHOME)\inc; \
+	$(WINIBHOME)\inc\user; \
+	$(WINIBHOME)\inc\user\linux; \
+	$(VENDOR_INC) \
+	$(OSM_HOME); \
+	$(OSM_HOME)\include;
+
+# Could be any special flag needed for this project 
+#USER_C_FLAGS=$(USER_C_FLAGS) /MD
+
+#Add preproccessor definitions
+C_DEFINES=$(C_DEFINES) -D__WIN__ -DHAVE_CONFIG_H -D$(VENDOR_IF)
+
+C_DEFINES=$(C_DEFINES) -DWINVER=$(_NT_TARGET_VERSION) 
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG
+# If not specified, default is no optimization: /Od /Oi per WDK docs.
+!else
+# If not specified, default is /Oxs, favor fast code here.
+MSC_OPTIMIZATION= /Oxt
+!endif
+
+LINKER_FLAGS= $(LINKER_FLAGS)
+
+MSC_WARNING_LEVEL= /W2 /wd4090 /wd4242 /wd4334 /wd4007
+
+

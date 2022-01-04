@@ -1,0 +1,997 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_obj_h.html</title>
+<!-- Source: ./inc/complib/cl_obj.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_obj.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo14">[Modules]<a name="Component20Library2fObject">
+Component Library/Object</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Object</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <strong>Object</strong> describes a basic class that can be used to track accesses to an
+       object and provides automatic cleanup of an object that is dependent
+       on another object.
+
+       Dependencies between objects are described using a relationship.  A
+       child object is considered dependent on a parent object.  Destruction of
+       a parent object automatically results in the destruction of any child
+       objects associated with the parent.
+
+       The relationship between parent and child objects is many to many.
+       Parents can have multiple child objects, and a child can be dependent on
+       multiple parent objects.  In the latter case, destruction of any parent
+       object results in the destruction of the child object.
+
+       Other relationships between objects are described using references.  An
+       object that takes a reference on a second object prevents the second object
+       from being deallocated as long as the reference is held.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Types
+               <a href="#robo446">cl_destroy_type_t</a>
+
+       Structures:
+               <a href="#robo462">cl_obj_t</a>, <a href="#robo459">cl_obj_rel_t</a>
+
+       Callbacks:
+               <a href="#robo465">cl_pfn_obj_call_t</a>
+
+       Initialization/Destruction:
+               <a href="#robo455">cl_obj_mgr_create</a>, <a href="#robo456">cl_obj_mgr_destroy</a>,
+               <a href="#robo447">cl_obj_construct</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo450">cl_obj_destroy</a>, <a href="#robo448">cl_obj_deinit</a>
+
+       <strong>Object</strong> Relationships:
+               <a href="#robo458">cl_obj_ref</a>, <a href="#robo449">cl_obj_deref</a>,
+               <a href="#robo466">cl_rel_alloc</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo452">cl_obj_insert_rel</a>, <a href="#robo460">cl_obj_remove_rel</a>
+
+       <strong>Object</strong> Manipulation:
+               <a href="#robo461">cl_obj_reset</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo446">[Definitions]<a name="Component20Library3a20Object2fcl5fdestroy5ftype5ft">
+Component Library: Object/cl_destroy_type_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_destroy_type_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Indicates the type of destruction to perform on an object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef enum _cl_destroy_type
+{
+        CL_DESTROY_ASYNC,
+        CL_DESTROY_SYNC
+
+}       <strong>cl_destroy_type_t</strong>;
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       CL_DESTROY_ASYNC
+               Indicates that the object should be destroyed asynchronously.  Objects
+               destroyed asynchronously complete initial destruction processing, then
+               return the calling thread.  Once their reference count goes to zero,
+               they are queue onto an asynchronous thread to complete destruction
+               processing.
+
+       CL_DESTROY_SYNC
+               Indicates that the object should be destroyed synchronously.  Objects
+               destroyed synchronously wait (block) until their reference count goes
+               to zero.  Once their reference count goes to zero, destruction
+               processing is completed by the calling thread.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo450">cl_obj_destroy</a>, <a href="#robo448">cl_obj_deinit</a>, <a href="#robo462">cl_obj_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo447">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fconstruct">
+Component Library: Object/cl_obj_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This routine prepares an object for use.  The object must be successfully
+       initialized before being used.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_construct</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj,
+        IN              const   uint32_t                                        obj_type );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to construct.
+
+       obj_type
+               [in] A user-specified type associated with the object.  This type
+               is recorded by the object for debugging purposes and may be accessed
+               by the user.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call must succeed before invoking any other function on an object.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo450">cl_obj_destroy</a>, <a href="#robo448">cl_obj_deinit</a>.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo448">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fdeinit">
+Component Library: Object/cl_obj_deinit</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_deinit</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Release all resources allocated by an object.  This routine should
+       typically be called from a user's pfn_free routine.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_deinit</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to free.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call must be invoked to release the object from the global object
+       manager.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo447">cl_obj_construct</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo450">cl_obj_destroy</a>, <a href="#robo462">cl_obj_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo449">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fderef">
+Component Library: Object/cl_obj_deref</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_deref</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Decrements the reference count on an object and returns the updated count.
+       This routine is thread safe, but results in locking the object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_obj_deref</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to dereference.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       The updated reference count.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo462">cl_obj_t</a>, <a href="#robo458">cl_obj_ref</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo450">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fdestroy">
+Component Library: Object/cl_obj_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This routine destroys the specified object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_destroy</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> *                                      p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This routine starts the destruction process for the specified object.  For
+       additional information regarding destruction callbacks, see the following
+       fields in <a href="#robo462">cl_obj_t</a> and parameters in <a href="#robo451">cl_obj_init</a>: pfn_destroying,
+       pfn_cleanup, and pfn_free.
+
+       In most cases, after calling this routine, users should call <a href="#robo448">cl_obj_deinit</a>
+       from within their pfn_free callback routine.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo447">cl_obj_construct</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo448">cl_obj_deinit</a>,
+       <a href="#robo462">cl_obj_t</a>, <a href="#robo446">cl_destroy_type_t</a>, <a href="#robo465">cl_pfn_obj_call_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo451">[Functions]<a name="Component20Library3a20Object2fcl5fobj5finit">
+Component Library: Object/cl_obj_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This routine initializes an object for use.  Upon the successful completion
+       of this call, the object is ready for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_obj_init</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj,
+        IN                              <a href="#robo446">cl_destroy_type_t</a>                       destroy_type,
+        IN              const   <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_destroying OPTIONAL,
+        IN              const   <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_cleanup OPTIONAL,
+        IN              const   <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_free );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to initialize.
+
+       destroy_type
+               [in] Specifies the destruction model used by this object.
+
+       pfn_destroying
+               [in] User-specified callback invoked to notify a user that an object has
+               been marked for destruction.  This callback is invoked directly from
+               the thread destroying the object and is used to notify a user that
+               a parent object has invoked a child object's destructor.
+
+       pfn_cleanup
+               [in] User-specified callback invoked to an object is undergoing
+               destruction.  For object's destroyed asynchronously, this callback
+               is invoked from the context of the asynchronous destruction thread.
+               Users may block in the context of this thread; however, further
+               destruction processing will not continue until this callback returns.
+
+       pfn_free
+               [in] User-specified callback invoked to notify a user that an object has
+               been destroyed and is ready for deallocation.  Users should either
+               call <a href="#robo448">cl_obj_deinit</a> or <a href="#robo461">cl_obj_reset</a> from within this callback.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       CL_SUCCESS
+               The object was successfully initialized.
+
+       CL_INSUFFICIENT_MEMORY
+               The object could not allocate the necessary memory resources to
+               complete initialization.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The three destruction callbacks are used to notify the user of the progress
+       of the destruction, permitting the user to perform an additional processing.
+       Pfn_destroying is used to notify the user that the object is being
+       destroyed.  It is called after an object has removed itself from
+       relationships with its parents, but before it destroys any child objects
+       that it might have.
+
+       Pfn_cleanup is invoked after all child objects have been destroyed, and
+       there are no more references on the object itself.  For objects destroyed
+       asynchronously, pfn_cleanup is invoked from an asynchronous destruction
+       thread.
+
+       Pfn_free is called to notify the user that the destruction of the object has
+       completed.  All relationships have been removed, and all child objects have
+       been destroyed.  Relationship items (<a href="#robo459">cl_obj_rel_t</a>) that were used to
+       identify parent objects are returned to the user through the p_parent_list
+       field of the <a href="#robo462">cl_obj_t</a> structure.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo447">cl_obj_construct</a>, <a href="#robo450">cl_obj_destroy</a>, <a href="#robo448">cl_obj_deinit</a>,
+       <a href="#robo462">cl_obj_t</a>, <a href="#robo446">cl_destroy_type_t</a>, <a href="#robo465">cl_pfn_obj_call_t</a>,
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo452">[Functions]<a name="Component20Library3a20Object2fcl5fobj5finsert5frel">
+Component Library: Object/cl_obj_insert_rel</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_insert_rel</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Forms a relationship between two objects, with the existence of the child
+       object dependent on the parent.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_obj_insert_rel</strong>(
+        IN                              <a href="#robo459">cl_obj_rel_t</a> * const            p_rel,
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_parent_obj,
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_child_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_rel
+               [in] A reference to an unused relationship item.
+
+       p_parent_obj
+               [in] A reference to the parent object.
+
+       p_child_obj
+               [in] A reference to the child object.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call inserts a relationship between the parent and child object.
+       The relationship allows for the automatic destruction of the child object
+       if the parent is destroyed.
+
+       A given object can have multiple parent and child objects, but the
+       relationships must form into an object tree.  That is, there cannot be any
+       cycles formed through the parent-child relationships.  (For example, an
+       object cannot be both the parent and a child of a second object.)
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo466">cl_rel_alloc</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo460">cl_obj_remove_rel</a>, <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo453">[Functions]<a name="Component20Library3a20Object2fcl5fobj5finsert5frel5fparent5flocked">
+Component Library: Object/cl_obj_insert_rel_parent_locked</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_insert_rel_parent_locked</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Forms a relationship between two objects, with the existence of the child
+       object dependent on the parent.  The parent's object lock is held.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_obj_insert_rel_parent_locked</strong>(
+        IN                              <a href="#robo459">cl_obj_rel_t</a> * const            p_rel,
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_parent_obj,
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_child_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_rel
+               [in] A reference to an unused relationship item.
+
+       p_parent_obj
+               [in] A reference to the parent object.
+
+       p_child_obj
+               [in] A reference to the child object.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call inserts a relationship between the parent and child object.
+       The relationship allows for the automatic destruction of the child object
+       if the parent is destroyed.
+
+       A given object can have multiple parent and child objects, but the
+       relationships must form into an object tree.  That is, there cannot be any
+       cycles formed through the parent-child relationships.  (For example, an
+       object cannot be both the parent and a child of a second object.)
+
+       This call requires the caller to already hold the parent object's lock.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo466">cl_rel_alloc</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo460">cl_obj_remove_rel</a>, <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo454">[Functions]<a name="Component20Library3a20Object2fcl5fobj5flock">
+Component Library: Object/cl_obj_lock</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_lock</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Acquires an object's lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_obj_lock</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj )
+{
+        CL_ASSERT( p_obj-&gt;state == CL_INITIALIZED ||
+                p_obj-&gt;state == CL_DESTROYING );
+        <a href="./cl_spinlock_h.html#robo630">cl_spinlock_acquire</a>( &amp;p_obj-&gt;lock );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object whose lock to acquire.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo462">cl_obj_t</a>, <a href="#robo464">cl_obj_unlock</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo455">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fmgr5fcreate">
+Component Library: Object/cl_obj_mgr_create</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_mgr_create</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This routine creates an object manager used to track all objects by
+       the user.  The object manager assists with debugging efforts by identifying
+       objects that are not destroyed properly.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_obj_mgr_create</strong>(void);
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       None.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       CL_SUCCESS
+               The object manager was succesfully created.
+
+       CL_INSUFFICIENT_MEMORY
+               The object manager could not be allocated.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call must succeed before invoking any other object-related function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo456">cl_obj_mgr_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo456">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fmgr5fdestroy">
+Component Library: Object/cl_obj_mgr_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_mgr_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This routine destroys the object manager created through <a href="#robo455">cl_obj_mgr_create</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_mgr_destroy</strong>(void);
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       None.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       When the object manager is destroyed, it will display information about all
+       objects that have not yet been destroyed.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo455">cl_obj_mgr_create</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo457">[Structures]<a name="Component20Library3a20Object2fcl5fobj5fmgr5ft">
+Component Library: Object/cl_obj_mgr_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_mgr_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The global object manager.
+
+       The manager must be created before constructing any other objects, and all
+       objects must be destroyed before the object manager is destroyed.
+
+       The manager is used to maintain the list of all objects currently active
+       in the system.  It provides a pool of relationship items used to
+       describe parent-child, or dependent, relationships between two objects.
+       The manager contains an asynchronous processing thread that is used to
+       support asynchronous object destruction.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_obj_mgr
+{
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                                      obj_list;
+        cl_spinlock_t                           lock;
+
+        <a href="./cl_async_proc_h.html#robo275">cl_async_proc_t</a>                         async_proc_mgr;
+
+        <a href="./cl_qpool_h.html#robo608">cl_qpool_t</a>                                      rel_pool;
+
+}       <strong>cl_obj_mgr_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       obj_list
+               <a href="./cl_list_h.html#robo11">List</a> of all object's in the system.  <a href="#robo14">Object</a>'s are inserted into this
+               list when constructed and removed when freed.
+
+       lock
+               A lock used by the object manager for synchronization to the obj_list.
+
+       async_proc_mgr
+               An asynchronous processing manager used to process asynchronous
+               destruction requests.  Users wishing to synchronize the execution of
+               specific routines with object destruction may queue work requests to
+               this processing manager.
+
+       rel_pool
+               <a href="./cl_pool_h.html#robo18">Pool</a> of items used to describe dependent relationships.  Users may
+               obtain relationship objects from this pool when forming relationships,
+               but are not required to do so.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo455">cl_obj_mgr_create</a>, <a href="#robo456">cl_obj_mgr_destroy</a>,
+       <a href="#robo447">cl_obj_construct</a>, <a href="#robo448">cl_obj_deinit</a>,
+       <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>, cl_spinlock_t, <a href="./cl_async_proc_h.html#robo275">cl_async_proc_t</a>, <a href="./cl_qpool_h.html#robo608">cl_qpool_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo458">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fref">
+Component Library: Object/cl_obj_ref</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_ref</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Increments the reference count on an object and returns the updated count.
+       This routine is thread safe, but does not result in locking the object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_obj_ref</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to reference.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       The updated reference count.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo462">cl_obj_t</a>, <a href="#robo449">cl_obj_deref</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo459">[Structures]<a name="Component20Library3a20Object2fcl5fobj5frel5ft">
+Component Library: Object/cl_obj_rel_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_rel_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Identifies a dependent relationship between two objects.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_obj_rel
+{
+        <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>                          pool_item;              /* Must be first. */
+        struct _cl_obj                          *p_parent_obj;
+
+        <a href="./cl_qlist_h.html#robo536">cl_list_item_t</a>                          list_item;
+        struct _cl_obj                          *p_child_obj;
+
+}       <strong>cl_obj_rel_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pool_item
+               An item used to store the relationship in a free pool maintained
+               by the object manager.  This field is also used by the parent object
+               to store the relationship in its child_list.
+
+       p_parent_obj
+               A reference to the parent object for the relationship.
+
+       list_item
+               This field is used by the child object to store the relationship in
+               its parent_list.
+
+       p_child_obj
+               A reference to the child object for the relationship.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This structure is used to define all dependent relationships.  Dependent
+       relationships are those where the destruction of a parent object result in
+       the destruction of child objects.  For other types of relationships, simple
+       references between objects may be used.
+
+       Relationship items are stored in lists maintained by both the parent
+       and child objects.  References to both objects exist while the
+       relationship is maintained.  Typically, relationships are defined by
+       the user by calling <a href="#robo452">cl_obj_insert_rel</a>, but are destroyed automatically
+       via an object's destruction process.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo466">cl_rel_alloc</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo452">cl_obj_insert_rel</a>, <a href="#robo460">cl_obj_remove_rel</a>,
+       <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo460">[Functions]<a name="Component20Library3a20Object2fcl5fobj5fremove5frel">
+Component Library: Object/cl_obj_remove_rel</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_remove_rel</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Manually removes a relationship between two objects.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_remove_rel</strong>(
+        IN                              <a href="#robo459">cl_obj_rel_t</a> * const            p_rel );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_rel
+               [in] A reference to the relationship to remove.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This routine permits a user to manually remove a dependent relationship
+       between two objects.  When removing a relationship using this call, the
+       user must ensure that objects referenced by the relationship are not
+       destroyed, either directly or indirectly via a parent.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo466">cl_rel_alloc</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo452">cl_obj_insert_rel</a>, <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo461">[Functions]<a name="Component20Library3a20Object2fcl5fobj5freset">
+Component Library: Object/cl_obj_reset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_reset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Reset an object's state.  This is called after <a href="#robo450">cl_obj_destroy</a> has
+       been called on a object, but before <a href="#robo448">cl_obj_deinit</a> has been invoked.
+       After an object has been reset, it is ready for re-use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_obj_reset</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object to reset.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This routine allows an object to be initialized once, then destroyed
+       and re-used multiple times.  This permits the user to allocate and
+       maintain a pool of objects.  The objects may be reset and returned to
+       the pool, rather than freed, after being destroyed.  The objects would
+       not be freed until the pool itself was destroyed.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo450">cl_obj_destroy</a>, cl_obj_free, <a href="#robo462">cl_obj_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo462">[Structures]<a name="Component20Library3a20Object2fcl5fobj5ft">
+Component Library: Object/cl_obj_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <a href="#robo14">Object</a> structure.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_obj
+{
+        <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>                          pool_item;      /* Must be first. */
+        uint32_t                                        type;
+        cl_state_t                                      state;
+        <a href="#robo446">cl_destroy_type_t</a>                       destroy_type;
+
+        <a href="./cl_async_proc_h.html#robo273">cl_async_proc_item_t</a>            async_item;
+        cl_event_t                                      event;
+
+        <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_destroying;
+        <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_cleanup;
+        <a href="#robo465">cl_pfn_obj_call_t</a>                       pfn_free;
+
+        cl_spinlock_t                           lock;
+
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                                      parent_list;
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                                      child_list;
+
+        atomic32_t                                      ref_cnt;
+
+}       <strong>cl_obj_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pool_item
+               Used to track the object with the global object manager.  We use
+               a pool item, rather than a list item, to let users store the object
+               in a pool.
+
+       type
+               Stores a user-specified object type.
+
+       state
+               Records the current state of the object, such as initialized,
+               destroying, etc.
+
+       destroy_type
+               Specifies the type of destruction, synchronous or asynchronous, to
+               perform on this object.
+
+       async_item
+               Asynchronous item used when destroying the object asynchronously.
+               This item is queued to an asynchronous thread to complete destruction
+               processing.
+
+       event
+               <a href="./cl_event_h.html#robo7">Event</a> used when destroying the object synchronously.  A call to destroy
+               the object will wait on this event until the destruction has completed.
+
+       pfn_destroying
+               User-specified callback invoked to notify a user that an object has
+               been marked for destruction.  This callback is invoked directly from
+               the thread destroying the object and is used to notify a user that
+               a parent object has invoked a child object's destructor.
+
+       pfn_cleanup
+               User-specified callback invoked as an object is undergoing destruction.
+               For object's destroyed asynchronously, this callback is invoked from
+               the context of the asynchronous destruction thread.  Users may block
+               in the context of this thread; however, further destruction processing
+               will not continue until this callback returns.
+
+       pfn_free
+               User-specified callback invoked to notify a user that an object has
+               been destroyed and is ready for deallocation.  Users should either
+               call <a href="#robo448">cl_obj_deinit</a> or <a href="#robo461">cl_obj_reset</a> from within this callback.
+
+       lock
+               A lock provided by the object.
+
+       parent_list
+               A list of relationships to parent objects that an object is dependent
+               on.
+
+       child_list
+               A list of all child objects that are dependent on this object.
+               Destroying this object will result in all related objects maintained
+               in the child list also being destroyed.
+
+       ref_cnt
+               A count of the number of objects still referencing this object.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo447">cl_obj_construct</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo450">cl_obj_destroy</a>,
+       <a href="#robo448">cl_obj_deinit</a>, <a href="#robo465">cl_pfn_obj_call_t</a>, <a href="#robo446">cl_destroy_type_t</a>,
+       <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>, cl_state_t, <a href="./cl_async_proc_h.html#robo273">cl_async_proc_item_t</a>,
+       cl_event_t, cl_spinlock_t, <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>, atomic32_t
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo463">[Functions]<a name="Component20Library3a20Object2fcl5fobj5ftype">
+Component Library: Object/cl_obj_type</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_type</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the type of an object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE uint32_t CL_API
+<strong>cl_obj_type</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj )
+{
+        return p_obj-&gt;type;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object whose type to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       The type of the object, as specified in the call to <a href="#robo451">cl_obj_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo462">cl_obj_t</a>, <a href="#robo451">cl_obj_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo464">[Functions]<a name="Component20Library3a20Object2fcl5fobj5funlock">
+Component Library: Object/cl_obj_unlock</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_obj_unlock</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Releases an object's lock previously acquired by a call to <a href="#robo454">cl_obj_lock</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_obj_unlock</strong>(
+        IN                              <a href="#robo462">cl_obj_t</a> * const                        p_obj )
+{
+        CL_ASSERT( p_obj-&gt;state == CL_INITIALIZED ||
+                p_obj-&gt;state == CL_DESTROYING );
+        <a href="./cl_spinlock_h.html#robo634">cl_spinlock_release</a>( &amp;p_obj-&gt;lock );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] A pointer to the object whose lock to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo462">cl_obj_t</a>, <a href="#robo454">cl_obj_lock</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo465">[Definitions]<a name="Component20Library3a20Object2fcl5fpfn5fobj5fcall5ft">
+Component Library: Object/cl_pfn_obj_call_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_obj_call_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_obj_call_t</strong> function type defines the prototype for functions
+       used to return objects to the user.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_obj_call_t</strong>)(
+        IN                              struct _cl_obj                          *p_obj );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_obj
+               [in] Pointer to a <a href="#robo462">cl_obj_t</a>.  This is the object being returned to
+               the user.
+
+ RETURN VALUES
+       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as a prototype for functions provided
+       by users as parameters to the <a href="#robo451">cl_obj_init</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo451">cl_obj_init</a>, <a href="#robo462">cl_obj_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo466">[Functions]<a name="Component20Library3a20Object2fcl5frel5falloc">
+Component Library: Object/cl_rel_alloc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rel_alloc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Retrieves an object relationship item from the object manager.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="#robo459">cl_obj_rel_t</a>* CL_API
+<strong>cl_rel_alloc</strong>(void);
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       None.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       A reference to an allocated relationship object, or NULL if no relationship
+       object could be allocated.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This routine retrieves a <a href="#robo459">cl_obj_rel_t</a> structure from a pool maintained
+       by the object manager.  The pool automatically grows as needed.
+
+       Relationship items are used to describe a dependent relationship between
+       a parent and child object.  In cases where a child has a fixed number of
+       relationships, the user may be able to allocate and manage the <a href="#robo459">cl_obj_rel_t</a>
+       structures more efficiently than obtaining the structures through this call.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo467">cl_rel_free</a>, <a href="#robo452">cl_obj_insert_rel</a>, <a href="#robo460">cl_obj_remove_rel</a>, <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo467">[Functions]<a name="Component20Library3a20Object2fcl5frel5ffree">
+Component Library: Object/cl_rel_free</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rel_free</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Return a relationship object to the global object manager.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_rel_free</strong>(
+        IN                              <a href="#robo459">cl_obj_rel_t</a> * const            p_rel );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_rel
+               [in] A reference to the relationship item to free.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       None.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Relationship items must not be freed until both the parent and child
+       object have removed their references to one another.  Relationship items
+       may be freed after calling <a href="#robo460">cl_obj_remove_rel</a> or after the associated
+       child object's free callback has been invoked.  In the latter case, the
+       invalid relationship items are referenced by the child object's parent_list.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo14">Object</a>, <a href="#robo466">cl_rel_alloc</a>, <a href="#robo452">cl_obj_insert_rel</a>, <a href="#robo460">cl_obj_remove_rel</a>, <a href="#robo450">cl_obj_destroy</a>
+</pre>
+</span>
+</body>
+</html>

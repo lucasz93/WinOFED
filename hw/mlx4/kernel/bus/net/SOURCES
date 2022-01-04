@@ -1,0 +1,65 @@
+TARGETNAME=mlx4_net
+TARGETPATH=..\..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+USECXX_FLAG=1
+
+DLLDEF=net.def
+
+NTTARGETFILES=Custom_target
+
+SOURCES= net.rc		\
+	alloc.c			\
+	catas.c			\
+	cmd.c			\
+	cq.c			\
+	eq.c			\
+	fw.c			\
+	icm.c			\
+	intf.c			\
+	main.c			\
+	mcg.c			\
+	mr.c			\
+	pd.c			\
+    port.c          \
+	profile.c		\
+	qp.c			\
+	resource_tracker.c \
+	sense.c			\
+	srq.c			\
+
+INCLUDES=..;..\inc;..\..\inc;..\..\..\inc;..\core\$O;..\..\..\..\..\inc;..\..\..\..\..\inc\kernel;..\..\eth\inc;..\drv;..\ib;
+
+#PRECOMPILED_INCLUDE=precomp.h
+
+KMDF_VERSION_MAJOR=1
+
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN -DUSE_WDM_INTERRUPTS -DMAP_WC_EVERY_TIME
+#-DFORCE_LIVEFISH
+
+TARGETLIBS= \
+    $(DDK_LIB_PATH)\ntstrsafe.lib \
+	$(TARGETPATH)\*\complib.lib \
+	$(TARGETPATH)\*\mlx4_core.lib \
+	$(TARGETPATH)\*\l2w.lib \
+	
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+	-scan:..\..\inc\mlx4_debug.h \
+	-func:MLX4_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:MLX4_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

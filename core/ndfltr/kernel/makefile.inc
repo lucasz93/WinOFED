@@ -1,0 +1,13 @@
+_LNG=$(LANGUAGE)
+
+!IF !DEFINED(_INX)
+_INX=.
+!ENDIF
+
+STAMP=stampinf -a $(_BUILDARCH) -k $(KMDF_VERSION_MAJOR).$(KMDF_VERSION_MINOR)
+
+!INCLUDE mod_ver.def
+
+$(INF_TARGET) : $(_INX)\$(INF_NAME).inx 
+    copy $(_INX)\$(@B).inx $@
+    $(STAMP) -f $@ -d * -v $(IB_MAJORVERSION).$(IB_MINORVERSION).$(IB_BUILDVERSION).$(OPENIB_REV) 

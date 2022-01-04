@@ -1,0 +1,125 @@
+From cb0f57646824cc986000cc2b8e36cf306f4cda18 Mon Sep 17 00:00:00 2001
+From: Eli Cohen <eli@mellanox.co.il>
+Date: Tue, 15 Jan 2008 14:47:39 +0200
+Subject: [PATCH] Add checksum offload support to mlx4
+
+Signed-off-by: Eli Cohen <eli@mellnaox.co.il>
+Signed-off-by: Ali Ayub <ali@mellnaox.co.il>
+---
+ drivers/infiniband/hw/mlx4/cq.c   |    2 ++
+ drivers/infiniband/hw/mlx4/main.c |    5 +++++
+ drivers/infiniband/hw/mlx4/qp.c   |    3 +++
+ drivers/net/mlx4/fw.c             |    3 +++
+ include/linux/mlx4/cq.h           |    4 ++--
+ include/linux/mlx4/qp.h           |    2 ++
+ 6 files changed, 17 insertions(+), 2 deletions(-)
+
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/cq.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/cq.c	2008-01-24 12:01:00.000000000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/cq.c	2008-01-24 12:09:24.000000000 +0200
+@@ -314,6 +314,11 @@ static int mlx4_ib_poll_one(struct mlx4_
+ 	int is_send;
+ 	int is_error;
+ 	u16 wqe_ctr;
++	__be32 status;
++
++#define CSUM_MASK_BITS cpu_to_be32(0x13c00000)
++#define CSUM_VAL_BITS  cpu_to_be32(0x10400000)
++#define CSUM_MASK2_BITS cpu_to_be32(0x0c000000)
+ 
+ 	cqe = next_cqe_sw(cq);
+ 	if (!cqe)
+@@ -431,6 +436,10 @@ static int mlx4_ib_poll_one(struct mlx4_
+ 		wc->wc_flags      |= be32_to_cpu(cqe->g_mlpath_rqpn) & 0x80000000 ?
+ 			IB_WC_GRH : 0;
+ 		wc->pkey_index     = be32_to_cpu(cqe->immed_rss_invalid) & 0x7f;
++ 		status = cqe->ipoib_status;
++ 		wc->csum_ok = (status & CSUM_MASK_BITS) == CSUM_VAL_BITS &&
++ 			      (status & CSUM_MASK2_BITS) &&
++ 			      cqe->checksum == 0xffff;
+ 	}
+ 
+ 	return 0;
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/main.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/main.c	2008-01-24 12:01:17.000000000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/main.c	2008-01-24 12:03:18.000000000 +0200
+@@ -100,6 +100,8 @@ static int mlx4_ib_query_device(struct i
+ 		props->device_cap_flags |= IB_DEVICE_AUTO_PATH_MIG;
+ 	if (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_UD_AV_PORT)
+ 		props->device_cap_flags |= IB_DEVICE_UD_AV_PORT_ENFORCE;
++	if (dev->dev->caps.flags & MLX4_DEV_CAP_FLAG_IPOIB_CSUM)
++		props->device_cap_flags |= IB_DEVICE_IP_CSUM;
+ 
+ 	props->vendor_id	   = be32_to_cpup((__be32 *) (out_mad->data + 36)) &
+ 		0xffffff;
+@@ -613,6 +615,9 @@ static void *mlx4_ib_add(struct mlx4_dev
+ 	ibdev->ib_dev.unmap_fmr		= mlx4_ib_unmap_fmr;
+ 	ibdev->ib_dev.dealloc_fmr	= mlx4_ib_fmr_dealloc;
+ 
++	if (ibdev->dev->caps.flags & MLX4_DEV_CAP_FLAG_IPOIB_CSUM)
++		ibdev->ib_dev.flags |= IB_DEVICE_IP_CSUM;
++
+ 	if (init_node_data(ibdev))
+ 		goto err_map;
+ 
+Index: ofed_kernel/drivers/infiniband/hw/mlx4/qp.c
+===================================================================
+--- ofed_kernel.orig/drivers/infiniband/hw/mlx4/qp.c	2008-01-24 12:01:00.000000000 +0200
++++ ofed_kernel/drivers/infiniband/hw/mlx4/qp.c	2008-01-24 12:03:18.000000000 +0200
+@@ -1307,6 +1307,9 @@ int mlx4_ib_post_send(struct ib_qp *ibqp
+ 			 cpu_to_be32(MLX4_WQE_CTRL_CQ_UPDATE) : 0) |
+ 			(wr->send_flags & IB_SEND_SOLICITED ?
+ 			 cpu_to_be32(MLX4_WQE_CTRL_SOLICITED) : 0) |
++			((wr->send_flags & IB_SEND_IP_CSUM) ?
++			 cpu_to_be32(MLX4_WQE_CTRL_IP_CSUM |
++				     MLX4_WQE_CTRL_TCP_UDP_CSUM) : 0) |
+ 			qp->sq_signal_bits;
+ 
+ 		if (wr->opcode == IB_WR_SEND_WITH_IMM ||
+Index: ofed_kernel/drivers/net/mlx4/fw.c
+===================================================================
+--- ofed_kernel.orig/drivers/net/mlx4/fw.c	2008-01-24 12:01:17.000000000 +0200
++++ ofed_kernel/drivers/net/mlx4/fw.c	2008-01-24 12:03:18.000000000 +0200
+@@ -741,6 +741,9 @@ int mlx4_INIT_HCA(struct mlx4_dev *dev, 
+ 	MLX4_PUT(inbox, (u8) (PAGE_SHIFT - 12), INIT_HCA_UAR_PAGE_SZ_OFFSET);
+ 	MLX4_PUT(inbox, param->log_uar_sz,      INIT_HCA_LOG_UAR_SZ_OFFSET);
+ 
++	if (dev->caps.flags & MLX4_DEV_CAP_FLAG_IPOIB_CSUM)
++		*(inbox + INIT_HCA_FLAGS_OFFSET / 4) |= cpu_to_be32(1 << 3);
++
+ 	err = mlx4_cmd(dev, mailbox->dma, 0, 0, MLX4_CMD_INIT_HCA, 10000);
+ 
+ 	if (err)
+Index: ofed_kernel/include/linux/mlx4/cq.h
+===================================================================
+--- ofed_kernel.orig/include/linux/mlx4/cq.h	2008-01-24 12:01:00.000000000 +0200
++++ ofed_kernel/include/linux/mlx4/cq.h	2008-01-24 12:03:18.000000000 +0200
+@@ -45,11 +45,11 @@ struct mlx4_cqe {
+ 	u8			sl;
+ 	u8			reserved1;
+ 	__be16			rlid;
+-	u32			reserved2;
++	__be32			ipoib_status;
+ 	__be32			byte_cnt;
+ 	__be16			wqe_index;
+ 	__be16			checksum;
+-	u8			reserved3[3];
++	u8			reserved2[3];
+ 	u8			owner_sr_opcode;
+ };
+ 
+Index: ofed_kernel/include/linux/mlx4/qp.h
+===================================================================
+--- ofed_kernel.orig/include/linux/mlx4/qp.h	2008-01-24 12:01:00.000000000 +0200
++++ ofed_kernel/include/linux/mlx4/qp.h	2008-01-24 12:03:18.000000000 +0200
+@@ -158,6 +158,8 @@ enum {
+ 	MLX4_WQE_CTRL_FENCE	= 1 << 6,
+ 	MLX4_WQE_CTRL_CQ_UPDATE	= 3 << 2,
+ 	MLX4_WQE_CTRL_SOLICITED	= 1 << 1,
++	MLX4_WQE_CTRL_IP_CSUM           = 1 << 4,
++	MLX4_WQE_CTRL_TCP_UDP_CSUM      = 1 << 5,
+ };
+ 
+ struct mlx4_wqe_ctrl_seg {

@@ -1,0 +1,14 @@
+TARGETNAME=ibat
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+
+SOURCES= ibat.cpp \
+         route.cpp \
+         router.cpp
+
+INCLUDES=..;..\..\..\inc;..\..\..\inc\kernel;
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS
+
+MSC_WARNING_LEVEL= /W4

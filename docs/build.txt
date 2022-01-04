@@ -1,0 +1,32 @@
+To build the WinOF tree, you need to have the following installed:
+
+WDK version 6001.18001
+Windows Platform SDK for Windows Server 2008 and .NET Framework 3.5 (v6.1)
+
+The WinOF tree (kernel drivers and userspace libraries) is built from the WDK
+build environment.  You need to set the following environment variables:
+
+OPENIB_REV		(example set OPENIB_REV=0)
+PLATFORM_SDK_PATH	(example set PLATFORM_SDK_PATH=c:\progra~1\mi2578~1\windows\v6.1)
+ND_SDK_PATH		(example set ND_SDK_PATH=c:\progra~1\mi3029~1\networ~1)
+
+The OPENIB_REV variable can be set to the SVN revision number of the code.
+
+The PLATFORM_SDK_PATH variable must reference the SDK path, using 8.3 notation
+(no spaces).  You can use 'dir /x' to obtain the correct 8.3 notation for a
+given directory.
+
+The ND_SDK_PATH variable must reference the NetworkDirect directory of the
+HPC SDK, using 8.3 notation (no spaces).  You can use 'dir /x' to obtain the
+correct 8.3 notation for a given directory.
+
+Environment variables may be set by using the 'set' command in a command prompt
+window.  Or by selecting Control Panel -> Performance and Maintenance -> System ->
+Advanced -> Environment Variables.
+
+To build the code, cd into the trunk and type 'build -wg'.  See 'build -?' for
+additional build options.
+
+A build batch file is also available in etc\bldwo.bat that allows building
+for any OS / processor architecture from within a single command window.  Run
+'bldwo' without any arguments for more details.

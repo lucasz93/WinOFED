@@ -1,0 +1,341 @@
+; Mellanox Technologies InfiniBand HCAs.
+; Copyright 2008 Mellanox Technologies all Rights Reserved.
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+
+Provider=%MSFT%
+; must be synchronized with bus\drv.c
+DriverVer=02/01/2008,1.0.0.0
+CatalogFile=mlx4_bus.cat
+
+
+;*****************************************
+; Destination directory section
+;*****************************************
+
+[DestinationDirs]
+DefaultDestDir = 12
+Wctxtune.CopyFiles = 11
+WinVerbs.CopySysFiles = %DIRID_DRIVERS%
+WinMad.CopySysFiles = %DIRID_DRIVERS%
+
+
+;*****************************************
+; Device Install section
+;*****************************************
+
+[SourceDisksNames.amd64]
+1=%DiskId%,,,""
+
+[SourceDisksFiles.amd64]
+mlx4_bus.sys = 1,,
+winctxtune.dll =1,,
+ibbus.sys = 1,,
+winverbs.sys = 1,,
+winmad.sys = 1,,
+
+;*****************************************
+; Mlx4Bus  Install Section
+;*****************************************
+
+[Manufacturer]
+%MTL% = MLX4BUS.DeviceSection,ntamd64.6.2
+
+[MLX4BUS.DeviceSection.ntamd64.6.2]
+%MT25408.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6340
+%MT25418.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_634A
+%MT25428.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6354
+%MT25448.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6368
+%MT25458.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6372
+%MT26418.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6732
+%MT26488.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6778
+%MT26428.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_673c
+%MT26438.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6746
+%MT26448.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6750
+%MT26458.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_675A
+%MT26468.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6764
+%MT26478.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_676E
+%MT25409.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6341
+%MT25419.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_634b
+%MT26419.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6733
+%MT26429.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_673d
+%MT25449.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6369
+%MT26449.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6751
+%MT26469.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_6765
+%MT04096.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1000
+%MT04097.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1001
+%MT04098.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1002
+%MT04099.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1003
+%MT04100.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1004
+%MT04101.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1005
+%MT04102.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1006
+%MT04103.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1007
+%MT04104.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1008
+%MT04105.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1009
+%MT04106.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100a
+%MT04107.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100b
+%MT04108.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100c
+%MT04109.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100d
+%MT04110.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100e
+%MT04111.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_100f
+%MT04112.DeviceDesc%=MLX4BUS.DDInstall, PCI\VEN_15B3&DEV_1010
+
+[MLX4BUS.DDInstall.ntamd64.hw]
+AddReg = MLX4BUS.HwReg
+
+[MLX4BUS.HwReg]
+; upper filters
+HKR,,"UpperFilters",0x00010000,"ibbus","WinVerbs","WinMad"	; enable IBBUS/AL, winverbs and winmad Filter driver loading.
+
+; MSI-X support
+HKR,"Interrupt Management\MessageSignaledInterruptProperties",MSISupported,0x00010001,1
+HKR,"Interrupt Management\MessageSignaledInterruptProperties",MessageNumberLimit,0x00010001,128
+
+; AssignmentSetOverride - processors KAFFINITY mask  
+HKR,"Interrupt Management\Affinity Policy",AssignmentSetOverride,0x00000001,0x0
+
+; IrqPolicyMachineDefault (0) - use default policy for the computer
+; IrqPolicyAllCloseProcessors (1) - connect interrupts to all processors of the near NUMA node
+; IrqPolicyOneCloseProcessor (2) - connect interrupts to one processor
+; IrqPolicyAllProcessorsInMachine (3) - connect interrupts to all processors in the machine
+; IrqPolicySpecifiedProcessors (4) - connects interrupts according to AssignmentSetOverride
+; IrqPolicySpreadMessagesAcrossAllProcessors (5) - assign different message-based interrupts to different processors
+HKR,"Interrupt Management\Affinity Policy",DevicePolicy,0x00010001,0x5
+
+; IrqArbPriorityUndefined (0) - no interrupt priority policy. 
+; IrqArbPriorityLow (1) - device can tolerate low IRQL
+; IrqArbPriorityNormal (2) - device expects normal interrupt latencies
+; IrqArbPriorityHigh (3) - device requires the lowest possible interrupt latency
+HKR,"Interrupt Management\Affinity Policy",DevicePriority,0x00010001,0x3
+
+[MLX4BUS.DDInstall.ntamd64]
+CopyFiles = MLX4BUS.CopyFiles, Wctxtune.CopyFiles
+AddReg    = MLX4BUS.SoftwareReg, WinCtxTune_reg
+CopyFiles = Ibbus.CopyFiles
+CopyFiles = WinVerbs.CopySysFiles
+CopyFiles = WinMad.CopySysFiles
+
+[MLX4BUS.DDInstall.ntamd64.Services]
+AddService = mlx4_bus,%SPSVCINST_ASSOCSERVICE%,MLX4BUS.ServiceInstall,MLX4BUS.EventLog
+AddService = ibbus,,Ibbus.ServiceInstall,IBBUS.EventLog
+AddService = WinVerbs,,WinVerbs.ServiceInstall
+AddService = WinMad,,WinMad.ServiceInstall
+
+;*****************************************
+; File Copy
+;*****************************************
+
+[MLX4BUS.CopyFiles]
+mlx4_bus.sys
+[Ibbus.CopyFiles]
+ibbus.sys
+
+[WinVerbs.CopySysFiles]
+winverbs.sys
+
+[WinMad.CopySysFiles]
+winmad.sys
+
+;*****************************************
+; Service Install section
+;*****************************************
+
+[MLX4BUS.ServiceInstall]
+DisplayName     = %MLX4BUS.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_BOOT_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\mlx4_bus.sys
+LoadOrderGroup  = NDIS
+AddReg          = MLX4BUS.ParamsReg
+
+[MLX4BUS.EventLog]
+AddReg = MLX4BUS.AddEventLogReg
+
+[MLX4BUS.AddEventLogReg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\mlx4_bus.sys"
+HKR, , TypesSupported,   0x00010001, 7
+
+[MLX4BUS.SoftwareReg]
+HKR,"Parameters","CapabilityFlag",%REG_DWORD%,0x00000000
+HKR,"Parameters","EnableRoce",%REG_SZ%,"1,1"
+
+
+[MLX4BUS.ParamsReg]
+HKR,,DeviceCharacteristics,0x10001,0x0100         ; Use same security checks on relative opens
+HKR,,Security,,"D:P(A;;GA;;;BA)(A;;GA;;;SY)"      ; Allow generic-all access to Built-in administrators and Local system 
+HKR,"Parameters","DebugLevel",%REG_DWORD%,0x00000003
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x0000ffff
+HKR,"Parameters","LogNumQp",%REG_DWORD%,0x00000011
+HKR,"Parameters","LogNumRdmaRc",%REG_DWORD%,0x00000004
+HKR,"Parameters","LogNumSrq",%REG_DWORD%,0x00000010
+HKR,"Parameters","LogNumCq",%REG_DWORD%,0x00000010
+HKR,"Parameters","LogNumMcg",%REG_DWORD%,0x0000000D
+HKR,"Parameters","LogNumMpt",%REG_DWORD%,0x00000011
+HKR,"Parameters","LogNumMtt",%REG_DWORD%,0x00000014
+HKR,"Parameters","EnableQoS",%REG_DWORD%,0x00000000
+HKR,"Parameters","BlockMcastLoopBack",%REG_DWORD%,0x00000000
+HKR,"Parameters","InterruptFromFirstPacket",%REG_DWORD%,0x00000001
+
+HKR,"Parameters","LogNumMac",%REG_DWORD%,0x00000007
+HKR,"Parameters","LogNumVlan",%REG_DWORD%,0x00000007
+HKR,"Parameters","UsePrio",%REG_DWORD%,0x00000000
+HKR,"Parameters","NumFcExch",%REG_DWORD%,0x00000000
+HKR,"Parameters","MaximumWorkingThreads",%REG_DWORD%,0x4
+HKR,"Parameters","SingleMsixNum",%REG_DWORD%,0x0
+HKR,"Parameters","MultiMsixNum",%REG_DWORD%,0x0
+
+; Flex10
+HKR,"Parameters","ModeFlags",%REG_DWORD%,0x00000000			; 2 - Flex10
+HKR,"Parameters","SlaveNum",%REG_DWORD%,0x00000007			; 7 - default number of slaves
+HKR,"Parameters","LogMttsPerSeg",%REG_DWORD%,0x00000003
+HKR,"Parameters","SrIov",%REG_DWORD%,0x00000000
+HKR,"Parameters","ProbeVf",%REG_DWORD%,0x00000000
+HKR,"Parameters","Set4kMtu",%REG_DWORD%,0x00000001
+
+
+HKLM,"System\CurrentControlSet\Control\WMI\GlobalLogger\E51BB6E2-914A-4e21-93C0-192F4801BBFF","Flags",%REG_DWORD%,0xffff
+HKLM,"System\CurrentControlSet\Control\WMI\GlobalLogger\E51BB6E2-914A-4e21-93C0-192F4801BBFF","Level",%REG_DWORD%,0x3
+
+[WinCtxTune_reg]
+HKR,,icon,,"-5"
+HKR,,EnumPropPages32,,"winctxtune.dll,MlxPropPageProvider"
+
+[Wctxtune.CopyFiles]
+winctxtune.dll,,,2
+
+;*****************************************
+; IBBUS Service Install section
+;*****************************************
+
+[Ibbus.ServiceInstall]
+DisplayName     = %Ibbus.ServiceDesc%
+ServiceType     = %SERVICE_KERNEL_DRIVER%
+StartType       = %SERVICE_BOOT_START%
+ErrorControl    = %SERVICE_ERROR_NORMAL%
+ServiceBinary   = %12%\ibbus.sys
+LoadOrderGroup  = PnP Filter
+AddReg          = Ibbus.ParamsReg
+Dependencies	= mlx4_hca
+
+[IBBUS.EventLog]
+AddReg = IBBUS.AddEventLogReg
+
+[IBBUS.AddEventLogReg]
+HKR, , EventMessageFile, 0x00020000, "%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\ibbus.sys"
+HKR, , TypesSupported,   0x00010001, 7
+
+
+[Ibbus.ParamsReg]
+HKR,"Parameters","IbalDebugLevel",%REG_DWORD%,2
+HKR,"Parameters","IbalDebugFlags",%REG_DWORD%,0x00ffffff
+HKR,"Parameters","SmiPollInterval",%REG_DWORD_NO_CLOBBER%,20000
+HKR,"Parameters","IocQueryTimeout",%REG_DWORD_NO_CLOBBER%,250
+HKR,"Parameters","IocQueryRetries",%REG_DWORD_NO_CLOBBER%,4
+HKR,"Parameters","IocPollInterval",%REG_DWORD_NO_CLOBBER%,0
+HKR,"Parameters","DebugFlags",%REG_DWORD%,0x80000000
+HKR,"Parameters","ReportPortNIC",%REG_DWORD%,1
+
+HKR,"Parameters\IPoIB","DeviceId",%REG_SZ%,"IBA\IPoIB"
+HKR,"Parameters\IPoIB","CompatibleId",%REG_MULTI_SZ%,"IBA\SID_1000066a00020000"
+HKR,"Parameters\IPoIB","HardwareId",%REG_MULTI_SZ%,"IBA\IPoIB"
+HKR,"Parameters\IPoIB","Description",%REG_SZ%,"OpenIB IPoIB Adapter"
+HKR,"Parameters\IPoIB","PartitionKey",%REG_SZ%,"0XFFFF-IPoIB"
+
+;*****************************************
+; WinVerbs Service Install section
+;*****************************************
+
+[WinVerbs.ServiceInstall]
+DisplayName = %WinVerbs.ServiceDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER%
+StartType = %SERVICE_BOOT_START%
+ErrorControl = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\winverbs.sys
+LoadOrderGroup = PNP Filter
+Dependencies   = ibbus
+
+;*****************************************
+; WinMad Service Install section
+;*****************************************
+
+[WinMad.ServiceInstall]
+DisplayName = %WinMad.ServiceDesc%
+ServiceType = %SERVICE_KERNEL_DRIVER%
+StartType = %SERVICE_BOOT_START%
+ErrorControl = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\winmad.sys
+LoadOrderGroup = PNP Filter
+Dependencies   = winverbs
+
+
+;*****************************************
+; Strings
+;*****************************************
+
+[Strings]
+MSFT = "Microsoft Corporation"
+MTL="Mellanox Technologies Ltd."
+MLX4BUS.ServiceDesc = "Mellanox ConnectX Bus Enumerator"
+; VPI
+MT25408.DeviceDesc="Mellanox ConnectX VPI (MT25408) - PCIe 2.0 IB SDR / 10GigE Network Adapter"
+MT25409.DeviceDesc="Mellanox ConnectX VPI (MT25409) - IB SDR / 10GigE Network Adapter"
+MT25418.DeviceDesc="Mellanox ConnectX VPI (MT25418) - PCIe 2.0 2.5GT/s, IB DDR / 10GigE Network Adapter"
+MT25428.DeviceDesc="Mellanox ConnectX VPI (MT25428) - PCIe 2.0 2.5GT/s, IB QDR / 10GigE Network Adapter"
+MT25419.DeviceDesc="Mellanox ConnectX VPI (MT25419) - PCIe 2.0 2.5GT/s, IB DDR / 10GigE Network Adapter"
+MT26418.DeviceDesc="Mellanox ConnectX VPI (MT26418) - PCIe 2.0 5GT/s, IB DDR / 10GigE Network Adapter"
+MT26419.DeviceDesc="Mellanox ConnectX VPI (MT26419) - PCIe 2.0 5GT/s, IB DDR / 10GigE Network Adapter"
+MT26488.DeviceDesc="Mellanox ConnectX VPI (MT26488) - PCIe 2.0 5GT/s, IB DDR / 10GigE Network Adapter"
+MT26428.DeviceDesc="Mellanox ConnectX VPI (MT26428) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT26429.DeviceDesc="Mellanox ConnectX VPI (MT26429) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT26438.DeviceDesc="Mellanox ConnectX VPI (MT26438) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04096.DeviceDesc="Mellanox ConnectX VPI (MT04096) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04097.DeviceDesc="Mellanox ConnectX VPI (MT04097) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04098.DeviceDesc="Mellanox ConnectX VPI (MT04098) - PCIe 2.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04099.DeviceDesc="Mellanox ConnectX VPI (MT04099) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04100.DeviceDesc="Mellanox ConnectX VPI (MT04100) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04101.DeviceDesc="Mellanox ConnectX VPI (MT04101) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04102.DeviceDesc="Mellanox ConnectX VPI (MT04102) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04103.DeviceDesc="Mellanox ConnectX VPI (MT04103) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04104.DeviceDesc="Mellanox ConnectX VPI (MT04104) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04105.DeviceDesc="Mellanox ConnectX VPI (MT04105) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04106.DeviceDesc="Mellanox ConnectX VPI (MT04106) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04107.DeviceDesc="Mellanox ConnectX VPI (MT04107) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04108.DeviceDesc="Mellanox ConnectX VPI (MT04108) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04109.DeviceDesc="Mellanox ConnectX VPI (MT04109) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04110.DeviceDesc="Mellanox ConnectX VPI (MT04110) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04111.DeviceDesc="Mellanox ConnectX VPI (MT04111) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+MT04112.DeviceDesc="Mellanox ConnectX VPI (MT04112) - PCIe 3.0 5GT/s, IB QDR / 10GigE Network Adapter"
+; EN
+MT25448.DeviceDesc="Mellanox ConnectX EN (MT25448) - PCIe 2.0 2.5GT/s, 10GigE Ethernet Adapter"
+MT25449.DeviceDesc="Mellanox ConnectX EN (MT25449) - PCIe 2.0 2.5GT/s, 10GigE Ethernet Adapter"
+MT25458.DeviceDesc="Mellanox ConnectX EN (MT25458) - PCIe 2.0 2.5GT/s, 10GigE 10GBaseT Ethernet Adapter"
+MT26448.DeviceDesc="Mellanox ConnectX EN (MT26448) - PCIe 2.0 5GT/s, 10GigE Ethernet Adapter"
+MT26449.DeviceDesc="Mellanox ConnectX EN (MT26449) - PCIe 2.0 5GT/s, 10GigE Ethernet Adapter"
+MT26458.DeviceDesc="Mellanox ConnectX EN (MT26458) - PCIe 2.0 5GT/s, 10GigE 10GBaseT Ethernet Adapter"
+MT26468.DeviceDesc="Mellanox ConnectX EN (MT26468) - PCIe 2.0 5GT/s, 10GigE Ethernet Adapter"
+MT26469.DeviceDesc="Mellanox ConnectX EN (MT26469) - PCIe 2.0 5GT/s, 10GigE Ethernet Adapter"
+MT26478.DeviceDesc="Mellanox ConnectX EN (MT26478) - PCIe 2.0 5GT/s, 40GigE Ethernet Adapter"
+DiskId = "Mellanox Mlx4 Bus installation disk"
+SPSVCINST_NULL = 0x0
+SPSVCINST_ASSOCSERVICE = 0x00000002
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_BOOT_START     = 0
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+REG_DWORD              = 0x00010001
+REG_SZ                 = 0x00000000
+Ibbus.ServiceDesc = "Mellanox InfiniBand Bus/AL (Filter Driver)"
+WinVerbs.ServiceDesc = "WinVerbs Service"
+WinMad.ServiceDesc = "WinMad Service"
+
+REG_DWORD_NO_CLOBBER   = 0x00010003
+REG_MULTI_SZ	       = 0x00010000
+
+REG_MULTI_SZ_NO_CLOBBER = 0x00010002
+REG_MULTI_SZ_APPEND    = 0x00010008
+DIRID_SYSTEM           = 11
+DIRID_DRIVERS          = 12

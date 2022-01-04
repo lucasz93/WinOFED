@@ -1,0 +1,6 @@
+DIRS =			\
+	cmatose		\
+	rdma_server	\
+	rdma_client	\
+	rstream		\
+	riostream

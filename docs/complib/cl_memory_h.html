@@ -1,0 +1,629 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_memory_h.html</title>
+<!-- Source: ./inc/complib/cl_memory.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_memory.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo35">[Modules]<a name="Public2fMemory20Management">
+Public/Memory Management</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Memory Management
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The memory management functionality provides memory manipulation
+       functions as well as powerful debugging tools.
+
+       The Allocation Tracking functionality provides a means for tracking memory
+       allocations in order to detect memory leaks.
+
+       Memory allocation tracking stores the file name and line number where
+       allocations occur. Gathering this information does have an adverse impact
+       on performance, and memory tracking should therefore not be enabled in
+       release builds of software.
+
+       Memory tracking is compiled into the debug version of the library,
+       and can be enabled for the release version as well. To Enable memory
+       tracking in a release build of the public layer, users should define
+       the MEM_TRACK_ON keyword for compilation.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo424">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fcheck5ffor5fread">
+Component Library: Memory Management/cl_check_for_read</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_check_for_read</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Checks a user-mode virtual address for read access.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_check_for_read</strong>(
+        IN      const void* const       vaddr,
+        IN      const size_t            count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       vaddr
+               [in] Virtual address to check for read access.
+
+       count
+               [in] Number of bytes of the buffer at the specified address
+               to validate.
+
+ RETURN VALUES
+       CL_SUCCESS if the virtual address is valid for a read of the specified
+       size.
+
+       CL_INVALID_PERMISSION if the virtual address or the size is not valid.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call is only available in the kernel.  The buffer can only be accessed
+       in the context of the application thread (i.e. in the path of an IOCTL
+       request).  Callers cannot be holding a spinlock when calling this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo425">cl_check_for_write</a>, <a href="#robo427">cl_copy_to_user</a>, <a href="#robo426">cl_copy_from_user</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo425">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fcheck5ffor5fwrite">
+Component Library: Memory Management/cl_check_for_write</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_check_for_write</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Checks a user-mode virtual address for write access.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_check_for_write</strong>(
+        IN      void* const             vaddr,
+        IN      const size_t    count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       vaddr
+               [in] Virtual address to check for write access.
+
+       count
+               [in] Number of bytes of the buffer at the specified
+               address to validate.
+
+ RETURN VALUES
+       CL_SUCCESS if the virtual address is valid for a write of the specified
+       size.
+
+       CL_INVALID_PERMISSION if the virtual address or the size is not valid.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call is only available in the kernel.  The buffer can only be accessed
+       in the context of the application thread (i.e. in the path of an IOCTL
+       request).  Callers cannot be holding a spinlock when calling this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo424">cl_check_for_read</a>, <a href="#robo427">cl_copy_to_user</a>, <a href="#robo426">cl_copy_from_user</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo426">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fcopy5ffrom5fuser">
+Component Library: Memory Management/cl_copy_from_user</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_copy_from_user</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Copies data from a user-mode buffer, performing access checks.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_copy_from_user</strong>(
+        IN      void* const                     p_dest,
+        IN      const void* const       p_src,
+        IN      const size_t            count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest
+               [in] Pointer to the buffer being copied to.
+
+       p_src
+               [in] User-mode virtual address from which to copy data.
+
+       count
+               [in] Number of bytes to copy from the source buffer to the
+               destination buffer.
+
+ RETURN VALUES
+       CL_SUCCESS if the user-mode buffer virtual address is valid as the
+       source of the copy.
+
+       CL_INVALID_PERMISSION if the virtual address or the count is not valid.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call is only available in the kernel.  The buffer can only be accessed
+       in the context of the application thread (i.e. in the path of an IOCTL
+       request).  Callers cannot be holding a spinlock when calling this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo424">cl_check_for_read</a>, <a href="#robo425">cl_check_for_write</a>, <a href="#robo427">cl_copy_to_user</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo427">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fcopy5fto5fuser">
+Component Library: Memory Management/cl_copy_to_user</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_copy_to_user</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Copies data into a user-mode buffer, performing access checks.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_copy_to_user</strong>(
+        IN      void* const                     p_dest,
+        IN      const void* const       p_src,
+        IN      const size_t            count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest
+               [in] User-mode virtual address to which to copy data.
+
+       p_src
+               [in] Pointer to the buffer being copied from.
+
+       count
+               [in] Number of bytes to copy from the source buffer to the
+               destination buffer.
+
+ RETURN VALUES
+       CL_SUCCESS if the user-mode buffer virtual address is valid as the
+       destination of the copy.
+
+       CL_INVALID_PERMISSION if the virtual address or the count is not valid.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call is only available in the kernel.  The buffer can only be accessed
+       in the context of the application thread (i.e. in the path of an IOCTL
+       request).  Callers cannot be holding a spinlock when calling this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo424">cl_check_for_read</a>, <a href="#robo425">cl_check_for_write</a>, <a href="#robo426">cl_copy_from_user</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo428">[Functions]<a name="Component20Library3a20Memory20Management2fcl5ffree">
+Component Library: Memory Management/cl_free</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_free</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_free</strong> function deallocates a block of memory.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_free</strong>(
+        IN      void* const     p_memory );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_memory
+               [in] Pointer to a memory block.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The p_memory parameter is the pointer returned by a previous call to
+       <a href="#robo431">cl_malloc</a>, or <a href="#robo439">cl_zalloc</a>.
+
+       <strong>cl_free</strong> has no effect if p_memory is NULL.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, cl_alloc, <a href="#robo439">cl_zalloc</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo429">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fget5fpagesize">
+Component Library: Memory Management/cl_get_pagesize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_pagesize</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the number of bytes in a OS defined page.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint32_t CL_API
+<strong>cl_get_pagesize</strong>( void );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       NONE
+
+ RETURN VALUES
+       Returns the number of bytes in a page as defined by the Operating
+       System.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo430">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fget5fphysaddr">
+Component Library: Memory Management/cl_get_physaddr</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_physaddr</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns the Physical address for a kernel virtual address.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint64_t CL_API
+<strong>cl_get_physaddr</strong>(
+        IN      void *vaddr );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_addr
+               [in] Pointer to virtual to which the physical address is required.
+
+ RETURN VALUES
+       Returns the physical address for a virtual address.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This call is only available in kernel mode.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo431">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmalloc">
+Component Library: Memory Management/cl_malloc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_malloc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_malloc</strong> function allocates a block of memory.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void*
+<strong>cl_malloc</strong>(
+        IN      const size_t    size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       size
+               [in] Size of the requested allocation.
+
+ RETURN VALUES
+       Pointer to allocated memory if successful.
+
+       NULL otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allocated memory follows alignment rules specific to the different
+       environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo428">cl_free</a>, <a href="#robo439">cl_zalloc</a>, <a href="#robo437">cl_palloc</a>, <a href="#robo438">cl_pzalloc</a>,
+       <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo432">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmem5fdisplay">
+Component Library: Memory Management/cl_mem_display</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mem_display</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mem_display</strong> function displays all tracked memory allocations to
+       the applicable debugger.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_mem_display</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Each tracked memory allocation is displayed along with the file name and
+       line number that allocated it.
+
+       Output is sent to the platform's debugging target, which may be the
+       system log file.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo433">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmemclr">
+Component Library: Memory Management/cl_memclr</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_memclr</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_memclr</strong> function sets every byte in a memory range to zero.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_memclr</strong>(
+        IN      void* const             p_memory,
+        IN      const size_t    count )
+{
+        <a href="#robo436">cl_memset</a>( p_memory, 0, count );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_memory
+               [in] Pointer to a memory block.
+
+       count
+               [in] Number of bytes to set.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo436">cl_memset</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo434">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmemcmp">
+Component Library: Memory Management/cl_memcmp</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_memcmp</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_memcmp</strong> function compares two memory buffers.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT int32_t CL_API
+<strong>cl_memcmp</strong>(
+        IN      const void* const       p_mem,
+        IN      const void* const       p_ref,
+        IN      const size_t            count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mem
+               [in] Pointer to a memory block being compared.
+
+       p_ref
+               [in] Pointer to the reference memory block to compare against.
+
+       count
+               [in] Number of bytes to compare.
+
+ RETURN VALUES
+       Returns less than zero if p_mem is less than p_ref.
+
+       Returns greater than zero if p_mem is greater than p_ref.
+
+       Returns zero if the two memory regions are the identical.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo435">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmemcpy">
+Component Library: Memory Management/cl_memcpy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_memcpy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_memcpy</strong> function copies a given number of bytes from
+       one buffer to another.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void* CL_API
+<strong>cl_memcpy</strong>(
+        IN      void* const                     p_dest,
+        IN      const void* const       p_src,
+        IN      const size_t            count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest
+               [in] Pointer to the buffer being copied to.
+
+       p_src
+               [in] Pointer to the buffer being copied from.
+
+       count
+               [in] Number of bytes to copy from the source buffer to the
+               destination buffer.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns a pointer to the destination buffer.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo436">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fmemset">
+Component Library: Memory Management/cl_memset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_memset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_memset</strong> function sets every byte in a memory range to a given value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_memset</strong>(
+        IN      void* const             p_memory,
+        IN      const uint8_t   fill,
+        IN      const size_t    count );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_memory
+               [in] Pointer to a memory block.
+
+       fill
+               [in] Byte value with which to fill the memory.
+
+       count
+               [in] Number of bytes to set.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo437">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fpalloc">
+Component Library: Memory Management/cl_palloc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_palloc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_palloc</strong> function allocates a block of memory from paged pool if the
+       operating system supports it.  If the operating system does not distinguish
+       between pool types, <strong>cl_palloc</strong> is identical to <a href="#robo431">cl_malloc</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void*
+<strong>cl_palloc</strong>(
+        IN      const size_t    size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       size
+               [in] Size of the requested allocation.
+
+ RETURN VALUES
+       Pointer to allocated memory if successful.
+
+       NULL otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allocated memory follows alignment rules specific to the different
+       environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo428">cl_free</a>, <a href="#robo431">cl_malloc</a>, <a href="#robo439">cl_zalloc</a>, <a href="#robo438">cl_pzalloc</a>,
+       <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo438">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fpzalloc">
+Component Library: Memory Management/cl_pzalloc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pzalloc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pzalloc</strong> function allocates a block of memory from paged pool if the
+       operating system supports it and initializes it to zero.  If the operating
+       system does not distinguish between pool types, <strong>cl_pzalloc</strong> is identical
+       to <a href="#robo439">cl_zalloc</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void*
+<strong>cl_pzalloc</strong>(
+        IN      const size_t    size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       size
+               [in] Size of the requested allocation.
+
+ RETURN VALUES
+       Pointer to allocated memory if successful.
+
+       NULL otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allocated memory follows alignment rules specific to the different
+       environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo428">cl_free</a>, <a href="#robo431">cl_malloc</a>, <a href="#robo439">cl_zalloc</a>, <a href="#robo437">cl_palloc</a>,
+       <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo439">[Functions]<a name="Component20Library3a20Memory20Management2fcl5fzalloc">
+Component Library: Memory Management/cl_zalloc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_zalloc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_zalloc</strong> function allocates a block of memory initialized to zero.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void*
+<strong>cl_zalloc</strong>(
+        IN      const size_t    size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       size
+               [in] Size of the requested allocation.
+
+ RETURN VALUES
+       Pointer to allocated memory if successful.
+
+       NULL otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allocated memory follows alignment rules specific to the different
+       environments.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Memory Management, <a href="#robo428">cl_free</a>, <a href="#robo431">cl_malloc</a>, <a href="#robo437">cl_palloc</a>, <a href="#robo438">cl_pzalloc</a>,
+       <a href="#robo436">cl_memset</a>, <a href="#robo433">cl_memclr</a>, <a href="#robo435">cl_memcpy</a>, <a href="#robo434">cl_memcmp</a>
+</pre>
+</span>
+</body>
+</html>

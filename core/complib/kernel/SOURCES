@@ -1,0 +1,31 @@
+TARGETNAME=complib
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER_LIBRARY
+
+SOURCES= \
+	cl_driver.c			\
+	cl_event.c			\
+	cl_log.c			\
+	cl_memory_osd.c		\
+	cl_thread.c			\
+	cl_timer.c			\
+	cl_pnp_po.c			\
+	cl_bus_ifc.c		\
+	..\cl_async_proc.c	\
+	..\cl_list.c		\
+	..\cl_map.c			\
+	..\cl_memory.c		\
+	..\cl_obj.c			\
+	..\cl_perf.c		\
+	..\cl_pool.c		\
+	..\cl_ptr_vector.c	\
+	..\cl_reqmgr.c		\
+	..\cl_statustext.c	\
+	..\cl_threadpool.c	\
+	..\cl_vector.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\kernel;
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS
+
+MSC_WARNING_LEVEL= /W4

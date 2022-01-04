@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TARGETNAME Condition="'$(OVERRIDE_TARGETNAME)'!='true'">ndinstall</TARGETNAME>
+    <TARGETPATH Condition="'$(OVERRIDE_TARGETPATH)'!='true'">..\..\..\bin\user\obj$(BUILD_ALT_DIR)</TARGETPATH>
+    <TARGETTYPE Condition="'$(OVERRIDE_TARGETTYPE)'!='true'">PROGRAM</TARGETTYPE>
+    <UMTYPE Condition="'$(OVERRIDE_UMTYPE)'!='true'">console</UMTYPE>
+    <USE_MSVCRT Condition="'$(OVERRIDE_USE_MSVCRT)'!='true'">1</USE_MSVCRT>
+    <NTTARGETFILES Condition="'$(OVERRIDE_NTTARGETFILES)'!='true'">Custom_target</NTTARGETFILES>
+    <INCLUDES Condition="'$(OVERRIDE_INCLUDES)'!='true'">..\..\..\inc; 	..\..\..\inc\user;</INCLUDES>
+    <SOURCES Condition="'$(OVERRIDE_SOURCES)'!='true'">installsp.rc  	installsp.c</SOURCES>
+    <USER_C_FLAGS Condition="'$(OVERRIDE_USER_C_FLAGS)'!='true'">$(USER_C_FLAGS)</USER_C_FLAGS>
+    <TARGETLIBS Condition="'$(OVERRIDE_TARGETLIBS)'!='true'">$(SDK_LIB_PATH)\ws2_32.lib  	$(SDK_LIB_PATH)\LoadPerf.lib</TARGETLIBS>
+    <MSC_WARNING_LEVEL Condition="'$(OVERRIDE_MSC_WARNING_LEVEL)'!='true'">/W3</MSC_WARNING_LEVEL>
+    <LINKER_FLAGS Condition="'$(OVERRIDE_LINKER_FLAGS)'!='true'">$(LINKER_FLAGS)</LINKER_FLAGS>
+    <SXS_APPLICATION_MANIFEST Condition="'$(OVERRIDE_SXS_APPLICATION_MANIFEST)'!='true'">ndinstall.exe.manifest</SXS_APPLICATION_MANIFEST>
+    <SXS_ASSEMBLY_VERSION Condition="'$(OVERRIDE_SXS_ASSEMBLY_VERSION)'!='true'">1.0</SXS_ASSEMBLY_VERSION>
+    <SXS_ASSEMBLY_NAME Condition="'$(OVERRIDE_SXS_ASSEMBLY_NAME)'!='true'">ndinstall.exe</SXS_ASSEMBLY_NAME>
+    <SXS_ASSEMBLY_LANGUAGE Condition="'$(OVERRIDE_SXS_ASSEMBLY_LANGUAGE)'!='true'">0000</SXS_ASSEMBLY_LANGUAGE>
+  </PropertyGroup>
+  <ItemGroup>
+    <InvokedTargetsList Include="Custom_target">
+      <Pass>All</Pass>
+      <Condition>
+      </Condition>
+    </InvokedTargetsList>
+  </ItemGroup>
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

@@ -1,0 +1,64 @@
+TARGETNAME=ibsrp
+TARGETPATH=..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=MINIPORT
+
+!if $(_NT_TOOLS_VERSION) != 0x700
+# WDK build only - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=ib_srp
+INF_TARGET=..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET)
+!endif
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+
+SOURCES= ibsrp.rc			\
+		srp_connection.c	\
+		srp_data_path.c		\
+		srp_descriptors.c	\
+		srp_driver.c		\
+		srp_event.c			\
+		srp_hba.c			\
+		srp_hca.c			\
+		srp_session.c
+
+INCLUDES=..\..\..\inc;..\..\..\inc\kernel;
+
+!if defined(DDK_TARGET_OS) && "$(DDK_TARGET_OS)"=="WinXP"
+# storport.h in WinXP DDK already have "..._ALIASES" definition
+C_DEFINES=$(C_DEFINES) -DDEPRECATE_DDK_FUNCTIONS -DWinXP -DNEED_CL_OBJ
+!else
+C_DEFINES=$(C_DEFINES) -DDEPRECATE_DDK_FUNCTIONS -DSTOR_USE_SCSI_ALIASES \
+	-DNEED_CL_OBJ
+!endif
+
+TARGETLIBS= \
+	$(TARGETPATH)\*\complib.lib \
+	$(DDK_LIB_PATH)\scsiwmi.lib \
+	$(DDK_LIB_PATH)\ntoskrnl.lib \
+	$(DDK_LIB_PATH)\hal.lib
+
+#!if !defined(DDK_TARGET_OS) || "$(DDK_TARGET_OS)"=="Win2K"
+# Win2k doesn't support StorPort.
+#TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\scsiport.lib
+#!else
+TARGETLIBS= $(TARGETLIBS) $(DDK_LIB_PATH)\storport.lib
+#!endif
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP = $(SOURCES) -km -ext: .c .h .C .H \
+  -scan:srp_debug.h \
+	-func:SRP_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:SRP_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+
+!ENDIF
+
+MSC_WARNING_LEVEL= /W4

@@ -1,0 +1,16 @@
+TARGETNAME=ttcp
+TARGETPATH=..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=\
+	ttcp.c
+
+INCLUDES = ..\..\..\..;..\..\..\..\inc\user;\
+			..\..\..\..\ulp\libibmad\src\$(O);
+
+TARGETLIBS=\
+	$(SDK_LIB_PATH)\ws2_32.lib
+
+MSC_WARNING_LEVEL= /W3

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_log_h.html</title>
+<!-- Source: ./inc/complib/cl_log.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_log.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo12">[Modules]<a name="Component20Library2fLog20Provider">
+Component Library/Log Provider</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Log Provider
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The log provider allows users to log information in a system log instead of
+       the console or debugger target.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo398">[Functions]<a name="Component20Library3a20Log20Provider2fcl5flog5fevent">
+Component Library: Log Provider/cl_log_event</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_log_event</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_log_event</strong> function adds a new entry to the system log.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_log_event</strong>(
+        IN      const char* const       name,
+        IN      const <a href="#robo399">cl_log_type_t</a>     type,
+        IN      const char* const       message,
+        IN      const void* const       p_data OPTIONAL,
+        IN      const uint32_t          data_len );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       name
+               [in] Pointer to an ANSI string containing the name of the source for
+               the log entry.
+
+       type
+               [in] Defines the type of log entry to add to the system log.
+               See the definition of <a href="#robo399">cl_log_type_t</a> for acceptable values.
+
+       message
+               [in] Pointer to an ANSI string containing the text for the log entry.
+               The message should not be terminated with a new line, as the log
+               provider appends a new line to all log entries.
+
+       p_data
+               [in] Optional pointer to data providing context for the log entry.
+               At most 256 bytes of data can be successfully logged.
+
+       data_len
+               [in] Length of the buffer pointed to by the p_data parameter.  Ignored
+               if p_data is NULL.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       If the data length exceeds the maximum supported, the event is logged
+       without its accompanying data.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Log Provider, <a href="#robo399">cl_log_type_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo399">[Definitions]<a name="Component20Library3a20Log20Provider2fcl5flog5ftype5ft">
+Component Library: Log Provider/cl_log_type_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_log_type_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_log_type_t</strong> enumerated type is used to differentiate between
+       different types of log entries.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef enum _cl_log_type
+{
+        CL_LOG_INFO,
+        CL_LOG_WARN,
+        CL_LOG_ERROR
+
+} <strong>cl_log_type_t</strong>;
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       CL_LOG_INFO
+               Indicates a log entry is purely informational.
+
+       CL_LOG_WARN
+               Indicates a log entry is a warning but non-fatal.
+
+       CL_LOG_ERROR
+               Indicates a log entry is a fatal error.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Log Provider, <a href="#robo398">cl_log_event</a>
+</pre>
+</span>
+</body>
+</html>

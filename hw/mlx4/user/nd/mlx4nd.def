@@ -1,0 +1,7 @@
+LIBRARY		IbNdProv.dll
+
+EXPORTS
+	DllGetClassObject	private
+	WSPStartup			
+	DllCanUnloadNow	private
+    RegisterProviderW   private

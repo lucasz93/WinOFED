@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_event_h.html</title>
+<!-- Source: ./inc/complib/cl_event.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_event.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo7">[Modules]<a name="Component20Library2fEvent">
+Component Library/Event</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Event</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>Event</strong> provides the ability to suspend and wakeup a thread.
+
+       The event functions operates on a cl_event_t structure which should be
+       treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_event_t
+
+       Initialization/Destruction:
+               <a href="#robo320">cl_event_construct</a>, <a href="#robo322">cl_event_init</a>, <a href="#robo321">cl_event_destroy</a>
+
+       Manipulation:
+               <a href="#robo324">cl_event_signal</a>, <a href="#robo323">cl_event_reset</a>, <a href="#robo325">cl_event_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo320">[Functions]<a name="Component20Library3a20Event2fcl5fevent5fconstruct">
+Component Library: Event/cl_event_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_construct</strong> function constructs an event.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_event_construct</strong>(
+        IN      cl_event_t* const       p_event );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo321">cl_event_destroy</a> without first calling <a href="#robo322">cl_event_init</a>.
+
+       Calling <strong>cl_event_construct</strong> is a prerequisite to calling any other event
+       function except <a href="#robo322">cl_event_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo322">cl_event_init</a>, <a href="#robo321">cl_event_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo321">[Functions]<a name="Component20Library3a20Event2fcl5fevent5fdestroy">
+Component Library: Event/cl_event_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_destroy</strong> function performs any necessary cleanup of an event.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_event_destroy</strong>(
+        IN      cl_event_t* const       p_event );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function should only be called after a call to <a href="#robo320">cl_event_construct</a>
+       or <a href="#robo322">cl_event_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo320">cl_event_construct</a>, <a href="#robo322">cl_event_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo322">[Functions]<a name="Component20Library3a20Event2fcl5fevent5finit">
+Component Library: Event/cl_event_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_init</strong> function initializes an event for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_event_init</strong>(
+        IN      cl_event_t* const       p_event,
+        IN      const boolean_t         manual_reset );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure to initialize.
+
+       manual_reset
+               [in] If FALSE, indicates that the event resets itself after releasing
+               a single waiter.  If TRUE, the event remains in the signalled state
+               until explicitly reset by a call to <a href="#robo323">cl_event_reset</a>.
+
+ RETURN VALUES
+       CL_SUCCESS if event initialization succeeded.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling event manipulation functions, such as <a href="#robo324">cl_event_signal</a>,
+       <a href="#robo323">cl_event_reset</a>, and <a href="#robo325">cl_event_wait_on</a>.
+
+       The event is initially in a reset state.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo320">cl_event_construct</a>, <a href="#robo321">cl_event_destroy</a>, <a href="#robo324">cl_event_signal</a>,
+       <a href="#robo323">cl_event_reset</a>, <a href="#robo325">cl_event_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo323">[Functions]<a name="Component20Library3a20Event2fcl5fevent5freset">
+Component Library: Event/cl_event_reset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_reset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_reset</strong> function sets an event to the non-signalled state.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_event_reset</strong>(
+        IN      cl_event_t* const       p_event );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure to reset.
+
+ RETURN VALUES
+       CL_SUCCESS if the event was successfully reset.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo324">cl_event_signal</a>, <a href="#robo325">cl_event_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo324">[Functions]<a name="Component20Library3a20Event2fcl5fevent5fsignal">
+Component Library: Event/cl_event_signal</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_signal</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_signal</strong> function sets an event to the signalled state and
+       releases one or more waiting threads.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_event_signal</strong>(
+        IN      cl_event_t* const       p_event );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure to set.
+
+ RETURN VALUES
+       CL_SUCCESS if the event was successfully signalled.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       For auto-reset events, the event is reset automatically once a wait
+       operation is satisfied.
+
+       Triggering the event multiple times does not guarantee that the same
+       number of wait operations are satisfied. This is because events are
+       either in a signalled on non-signalled state, and triggering an event
+       that is already in the signalled state has no effect.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo323">cl_event_reset</a>, <a href="#robo325">cl_event_wait_on</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo325">[Functions]<a name="Component20Library3a20Event2fcl5fevent5fwait5fon">
+Component Library: Event/cl_event_wait_on</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_event_wait_on</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_event_wait_on</strong> function waits for the specified event to be
+       triggered for a minimum amount of time.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_event_wait_on</strong>(
+        IN      cl_event_t* const       p_event,
+        IN      const uint32_t          wait_us,
+        IN      const boolean_t         interruptible );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_event
+               [in] Pointer to an cl_event_t structure on which to wait.
+
+       wait_us
+               [in] Number of microseconds to wait.
+
+       interruptible
+               [in] Indicates whether the wait operation can be interrupted
+               by external signals.
+
+ RETURN VALUES
+       CL_SUCCESS if the wait operation succeeded in response to the event
+       being set.
+
+       CL_TIMEOUT if the specified time period elapses.
+
+       CL_NOT_DONE if the wait was interrupted by an external signal.
+
+       CL_ERROR if the wait operation failed.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       If wait_us is set to EVENT_NO_TIMEOUT, the function will wait until the
+       event is triggered and never timeout.
+
+       If the timeout value is zero, this function simply tests the state of
+       the event.
+
+       If the event is already in the signalled state at the time of the call
+       to <strong>cl_event_wait_on</strong>, the call completes immediately with CL_SUCCESS.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo7">Event</a>, <a href="#robo324">cl_event_signal</a>, <a href="#robo323">cl_event_reset</a>
+</pre>
+</span>
+</body>
+</html>

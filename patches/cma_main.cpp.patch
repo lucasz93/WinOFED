@@ -1,0 +1,19 @@
+Index: ulp/librdmacm/src/cma_main.cpp
+===================================================================
+--- ulp/librdmacm/src/cma_main.cpp	(revision 3602)
++++ ulp/librdmacm/src/cma_main.cpp	(working copy)
+@@ -188,10 +188,12 @@
+ RS_NETSTAT_ENTRY* rsNetstatEntryGet (int rs)
+ {
+ 	if (pNetstat) {
++		DWORD dwCurrentProcessId = GetCurrentProcessId();
++
+ 		for (int i = 0; i < NetstatCount; i++) {
+-			if (pNetstat[i].rs == rs) {
++			if (   pNetstat[i].rs          == rs
++				&& pNetstat[i].dwProcessId == dwCurrentProcessId)
+ 				return &pNetstat[i];
+-			}
+ 		}
+ 	}
+ 

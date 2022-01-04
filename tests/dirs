@@ -1,0 +1,7 @@
+DIRS=\
+	alts	\
+	cmtest	\
+	wsd	\
+	limits	\
+	wherebu	\
+	perftest

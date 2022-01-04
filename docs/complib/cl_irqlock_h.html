@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_irqlock_h.html</title>
+<!-- Source: ./inc/complib/cl_irqlock.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_irqlock.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo10">[Modules]<a name="Component20Library2fIrqlock">
+Component Library/Irqlock</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Irqlock</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <strong>Irqlock</strong> provides synchronization at interrupt level between threads for 
+       exclusive access to a resource.
+
+       The irqlock functions manipulate a cl_irqlock_t structure which should 
+       be treated as opaque and should be manipulated only through the provided 
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_irqlock_t
+
+       Initialization:
+               <a href="#robo363">cl_irqlock_construct</a>, <a href="#robo365">cl_irqlock_init</a>, <a href="#robo364">cl_irqlock_destroy</a>
+
+       Manipulation
+               <a href="#robo362">cl_irqlock_acquire</a>, <a href="#robo366">cl_irqlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo362">[Functions]<a name="Component20Library3a20Irqlock2fcl5firqlock5facquire">
+Component Library: Irqlock/cl_irqlock_acquire</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_irqlock_acquire</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_irqlock_acquire</strong> function acquires a IRQ lock.
+       This version of lock does not prevent an interrupt from 
+       occuring on the processor on which the code is being
+       executed. To protect from an interrupt level resource
+       use the cl_irqlock_acquire_irq function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_irqlock_acquire</strong>( 
+        IN      cl_irqlock_t* const             p_irqlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_irqlock 
+               [in] Pointer to a IRQ lock structure to acquire.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo10">Irqlock</a>, <a href="#robo366">cl_irqlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo363">[Functions]<a name="Component20Library3a20Irqlock2fcl5firqlock5fconstruct">
+Component Library: Irqlock/cl_irqlock_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_irqlock_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_irqlock_construct</strong> function initializes the state of a 
+       IRQ lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_irqlock_construct</strong>( 
+        IN      cl_irqlock_t* const             p_irqlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_irqlock 
+               [in] Pointer to a IRQ lock structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo364">cl_irqlock_destroy</a> without first calling 
+       <a href="#robo365">cl_irqlock_init</a>.
+
+       Calling <strong>cl_irqlock_construct</strong> is a prerequisite to calling any other
+       IRQ lock function except <a href="#robo365">cl_irqlock_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo10">Irqlock</a>, <a href="#robo365">cl_irqlock_init</a>, <a href="#robo364">cl_irqlock_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo364">[Functions]<a name="Component20Library3a20Irqlock2fcl5firqlock5fdestroy">
+Component Library: Irqlock/cl_irqlock_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_irqlock_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_irqlock_destroy</strong> function performs all necessary cleanup of a 
+       IRQ lock.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_irqlock_destroy</strong>( 
+        IN      cl_irqlock_t* const             p_irqlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_irqlock 
+               [in] Pointer to a IRQ lock structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performs any necessary cleanup of a IRQ lock. This function must only 
+       be called if either <a href="#robo363">cl_irqlock_construct</a> or <a href="#robo365">cl_irqlock_init</a> has been 
+       called.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo10">Irqlock</a>, <a href="#robo363">cl_irqlock_construct</a>, <a href="#robo365">cl_irqlock_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo365">[Functions]<a name="Component20Library3a20Irqlock2fcl5firqlock5finit">
+Component Library: Irqlock/cl_irqlock_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_irqlock_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_irqlock_init</strong> function initializes a IRQ lock for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_irqlock_init</strong>( 
+        IN      cl_irqlock_t* const             p_irqlock,
+        IN      cl_interrupt_t* const   p_interrupt );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_irqlock 
+               [in] Pointer to a IRQ lock structure to initialize.
+
+       p_interrupt
+               [in] Platform specific pointer conveying information about the
+               interrupt vector and level with which to synchronize.
+
+ RETURN VALUES
+       CL_SUCCESS if initialization succeeded.
+
+       CL_ERROR if initialization failed. Callers should call 
+       <a href="#robo364">cl_irqlock_destroy</a> to clean up any resources allocated during 
+       initialization.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Initialize the IRQ lock structure. Allows calling cl_irqlock_aquire 
+       and <a href="#robo366">cl_irqlock_release</a>.
+
+       In Linux, the p_interrupt parameter is currently ignored.
+
+       In Windows, the p_interrupt parameter is a pointer to a KINTERRUPT object,
+       the value of which is supplied by a call to IoConnectInterrupt.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo10">Irqlock</a>, <a href="#robo363">cl_irqlock_construct</a>, <a href="#robo364">cl_irqlock_destroy</a>, 
+       <a href="#robo362">cl_irqlock_acquire</a>, <a href="#robo366">cl_irqlock_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo366">[Functions]<a name="Component20Library3a20Irqlock2fcl5firqlock5frelease">
+Component Library: Irqlock/cl_irqlock_release</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_irqlock_release</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_irqlock_release</strong> function releases a IRQ lock object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_irqlock_release</strong>(
+        IN      cl_irqlock_t* const             p_irqlock );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_irqlock 
+               [in] Pointer to a IRQ lock structure to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Releases a IRQ lock after a call to <a href="#robo362">cl_irqlock_acquire</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo10">Irqlock</a>, <a href="#robo362">cl_irqlock_acquire</a>
+</pre>
+</span>
+</body>
+</html>

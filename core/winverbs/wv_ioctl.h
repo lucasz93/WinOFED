@@ -1,0 +1,754 @@
+/*
+ * Copyright (c) 2008 Intel Corporation. All rights reserved.
+ *
+ * This software is available to you under the OpenIB.org BSD license
+ * below:
+ *
+ *     Redistribution and use in source and binary forms, with or
+ *     without modification, are permitted provided that the following
+ *     conditions are met:
+ *
+ *      - Redistributions of source code must retain the above
+ *        copyright notice, this list of conditions and the following
+ *        disclaimer.
+ *
+ *      - Redistributions in binary form must reproduce the above
+ *        copyright notice, this list of conditions and the following
+ *        disclaimer in the documentation and/or other materials
+ *        provided with the distribution.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AWV
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#pragma once
+
+#ifndef _WV_IOCTL_H_
+#define _WV_IOCTL_H_
+
+typedef UINT16 NET16;
+typedef UINT32 NET32;
+typedef UINT64 NET64;
+
+#define WV_IOCTL(f)	CTL_CODE(FILE_DEVICE_INFINIBAND, f, METHOD_BUFFERED,\
+							 FILE_READ_DATA | FILE_WRITE_DATA)
+
+// input parameter / output parameter
+// IOCTL
+#define WV_IO_FUNCTION_BASE				0x800
+
+enum {
+	WV_IO_FUNCTION_MIN,
+	WV_IO_FUNCTION_GUID_QUERY,
+	WV_IO_FUNCTION_LIBRARY_QUERY,
+	WV_IO_FUNCTION_DEVICE_OPEN,
+	WV_IO_FUNCTION_DEVICE_CLOSE,
+	WV_IO_FUNCTION_DEVICE_QUERY,
+	WV_IO_FUNCTION_DEVICE_PORT_QUERY,
+	WV_IO_FUNCTION_DEVICE_GID_QUERY,
+	WV_IO_FUNCTION_DEVICE_PKEY_QUERY,
+	WV_IO_FUNCTION_DEVICE_NOTIFY,
+	WV_IO_FUNCTION_DEVICE_CANCEL,
+	WV_IO_FUNCTION_PD_ALLOCATE,
+	WV_IO_FUNCTION_PD_DEALLOCATE,
+	WV_IO_FUNCTION_MEMORY_REGISTER,
+	WV_IO_FUNCTION_MEMORY_DEREGISTER,
+	WV_IO_FUNCTION_MW_ALLOCATE,
+	WV_IO_FUNCTION_MW_DEALLOCATE,
+	WV_IO_FUNCTION_AH_CREATE,
+	WV_IO_FUNCTION_AH_DESTROY,
+	WV_IO_FUNCTION_CQ_CREATE,
+	WV_IO_FUNCTION_CQ_DESTROY,
+	WV_IO_FUNCTION_CQ_RESIZE,
+	WV_IO_FUNCTION_CQ_NOTIFY,
+	WV_IO_FUNCTION_CQ_CANCEL,
+	WV_IO_FUNCTION_SRQ_CREATE,
+	WV_IO_FUNCTION_SRQ_DESTROY,
+	WV_IO_FUNCTION_SRQ_QUERY,
+	WV_IO_FUNCTION_SRQ_MODIFY,
+	WV_IO_FUNCTION_SRQ_NOTIFY,
+	WV_IO_FUNCTION_SRQ_CANCEL,
+	WV_IO_FUNCTION_QP_CREATE,
+	WV_IO_FUNCTION_QP_DESTROY,
+	WV_IO_FUNCTION_QP_QUERY,
+	WV_IO_FUNCTION_QP_MODIFY,
+	WV_IO_FUNCTION_QP_ATTACH,
+	WV_IO_FUNCTION_QP_DETACH,
+	WV_IO_FUNCTION_QP_CANCEL,
+	WV_IO_FUNCTION_EP_CREATE,
+	WV_IO_FUNCTION_EP_DESTROY,
+	WV_IO_FUNCTION_EP_MODIFY,
+	WV_IO_FUNCTION_EP_BIND,
+	WV_IO_FUNCTION_EP_REJECT,
+	WV_IO_FUNCTION_EP_CONNECT,
+	WV_IO_FUNCTION_EP_ACCEPT,
+	WV_IO_FUNCTION_EP_DISCONNECT,
+	WV_IO_FUNCTION_EP_DISCONNECT_NOTIFY,
+	WV_IO_FUNCTION_EP_QUERY,
+	WV_IO_FUNCTION_EP_LOOKUP,
+	WV_IO_FUNCTION_EP_MULTICAST_JOIN,
+	WV_IO_FUNCTION_EP_MULTICAST_LEAVE,
+	WV_IO_FUNCTION_EP_CANCEL,
+	WV_IO_FUNCTION_EP_LISTEN,
+	WV_IO_FUNCTION_EP_GET_REQUEST,
+	WV_IO_FUNCTION_PD_CANCEL,
+	WV_IO_FUNCTION_MAX
+};
+
+// none / WV_IO_GUID_LIST
+#define WV_IOCTL_GUID_QUERY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_GUID_QUERY)
+
+// NET64 Guid / LibraryName
+#define WV_IOCTL_LIBRARY_QUERY			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_LIBRARY_QUERY)
+
+// WV_IO_ID / WV_IO_ID
+#define WV_IOCTL_DEVICE_OPEN			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_OPEN)
+
+// UINT64 Id / none
+#define WV_IOCTL_DEVICE_CLOSE			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_CLOSE)
+
+// UINT64 Id / WV_IO_DEVICE_ATTRIBUTES
+#define WV_IOCTL_DEVICE_QUERY			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_QUERY)
+
+// WV_IO_DEVICE_PORT_QUERY / WV_IO_PORT_ATTRIBUTES == WV_PORT_ATTRIBUTES
+#define WV_IOCTL_DEVICE_PORT_QUERY		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_PORT_QUERY)
+
+// WV_IO_DEVICE_PORT_QUERY / WV_IO_GID[] == WV_GID[]
+#define WV_IOCTL_DEVICE_GID_QUERY		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_GID_QUERY)
+
+// WV_IO_DEVICE_PORT_QUERY / NET16 Pkey[]
+#define WV_IOCTL_DEVICE_PKEY_QUERY		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_PKEY_QUERY)
+
+// WV_IO_ID / DWORD
+#define WV_IOCTL_DEVICE_NOTIFY			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_NOTIFY)
+
+// UINT64 Id / none
+#define WV_IOCTL_DEVICE_CANCEL			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_DEVICE_CANCEL)
+
+// WV_IO_ID / WV_IO_ID
+#define WV_IOCTL_PD_ALLOCATE			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_PD_ALLOCATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_PD_DEALLOCATE			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_PD_DEALLOCATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_PD_CANCEL				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_PD_CANCEL)
+
+// WV_IO_MEMORY_REGISTER / WV_IO_MEMORY_KEYS
+#define WV_IOCTL_MEMORY_REGISTER		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_MEMORY_REGISTER)
+
+// WV_IO_ID / none
+#define WV_IOCTL_MEMORY_DEREGISTER		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_MEMORY_DEREGISTER)
+
+// WV_IO_ID / WV_IO_ID
+#define WV_IOCTL_MW_ALLOCATE			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_MW_ALLOCATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_MW_DEALLOCATE			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_MW_DEALLOCATE)
+
+// WV_IO_AH_CREATE / WV_IO_AH_CREATE
+#define WV_IOCTL_AH_CREATE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_AH_CREATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_AH_DESTROY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_AH_DESTROY)
+
+// WV_IO_ID / WV_IO_ID
+#define WV_IOCTL_CQ_CREATE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_CQ_CREATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_CQ_DESTROY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_CQ_DESTROY)
+
+// WV_IO_ID / WV_IO_ID
+#define WV_IOCTL_CQ_RESIZE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_CQ_RESIZE)
+
+// WV_IO_ID / none
+#define WV_IOCTL_CQ_NOTIFY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_CQ_NOTIFY)
+
+// UINT64 Id / none
+#define WV_IOCTL_CQ_CANCEL				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_CQ_CANCEL)
+
+// WV_IO_SRQ_ATTRIBUTES / WV_IO_SRQ_ATTRIBUTES
+#define WV_IOCTL_SRQ_CREATE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_CREATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_SRQ_DESTROY			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_DESTROY)
+
+// WV_IO_SRQ_ATTRIBUTES / WV_IO_SRQ_ATTRIBUTES
+#define WV_IOCTL_SRQ_QUERY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_QUERY)
+
+// WV_IO_SRQ_ATTRIBUTES / WV_IO_SRQ_ATTRIBUTES
+#define WV_IOCTL_SRQ_MODIFY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_MODIFY)
+
+// UINT64 Id / none
+#define WV_IOCTL_SRQ_NOTIFY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_NOTIFY)
+
+// UINT64 Id / none
+#define WV_IOCTL_SRQ_CANCEL				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_SRQ_CANCEL)
+
+// WV_IO_QP_CREATE / WV_IO_QP_CREATE
+#define WV_IOCTL_QP_CREATE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_CREATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_QP_DESTROY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_DESTROY)
+
+// WV_IO_ID / WV_IO_QP_ATTRIBUTES
+#define WV_IOCTL_QP_QUERY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_QUERY)
+
+// WV_IO_QP_ATTRIBUTES / verbs specific
+#define WV_IOCTL_QP_MODIFY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_MODIFY)
+
+// WV_IO_QP_MULTICAST / none
+#define WV_IOCTL_QP_ATTACH				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_ATTACH)
+
+// WV_IO_QP_MULTICAST / none
+#define WV_IOCTL_QP_DETACH				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_DETACH)
+
+// UINT64 Id / none
+#define WV_IOCTL_QP_CANCEL				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_QP_CANCEL)
+
+// UINT64 EpType / UINT64 Id
+#define WV_IOCTL_EP_CREATE				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_CREATE)
+
+// UINT64 Id / none
+#define WV_IOCTL_EP_DESTROY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_DESTROY)
+
+// WV_IO_ID + UINT8[] / none
+#define WV_IOCTL_EP_MODIFY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_MODIFY)
+
+// WV_IO_EP_BIND / WV_IO_EP_BIND
+#define WV_IOCTL_EP_BIND				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_BIND)
+
+// WV_IO_ID + UINT8[] / none
+#define WV_IOCTL_EP_REJECT				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_REJECT)
+
+// WV_IO_EP_CONNECT / none
+#define WV_IOCTL_EP_CONNECT				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_CONNECT)
+
+// WV_IO_EP_ACCEPT / verbs specific
+#define WV_IOCTL_EP_ACCEPT				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_ACCEPT)
+
+// WV_IO_EP_DISCONNECT/ verbs specific
+#define WV_IOCTL_EP_DISCONNECT			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_DISCONNECT)
+
+// UINT64 Id / none
+#define WV_IOCTL_EP_DISCONNECT_NOTIFY	WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_DISCONNECT_NOTIFY)
+
+// UINT64 Id / WV_IO_EP_ATTRIBUTES
+#define WV_IOCTL_EP_QUERY				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_QUERY)
+
+// TODO
+#define WV_IOCTL_EP_LOOKUP				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_LOOKUP)
+
+// TODO
+#define WV_IOCTL_EP_MULTICAST_JOIN		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_MULTICAST_JOIN)
+
+// TODO
+#define WV_IOCTL_EP_MULTICAST_LEAVE		WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_MULTICAST_LEAVE)
+
+// UINT64 Id / none
+#define WV_IOCTL_EP_CANCEL				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_CANCEL)
+
+// WV_IO_EP_LISTEN / none
+#define WV_IOCTL_EP_LISTEN				WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_LISTEN)
+
+// WV_IO_EP_GET_REQUEST / none
+#define WV_IOCTL_EP_GET_REQUEST			WV_IOCTL(WV_IO_FUNCTION_BASE + \
+												 WV_IO_FUNCTION_EP_GET_REQUEST)
+
+#define WV_IOCTL_MIN					WV_IO_FUNCTION_BASE + WV_IO_FUNCTION_MIN
+#define WV_IOCTL_MAX					WV_IO_FUNCTION_BASE + WV_IO_FUNCTION_MAX
+
+// Device specific data follows input / output structures.
+typedef struct _WV_IO_ID
+{
+	UINT64			Id;
+	UINT32			VerbInfo;
+	UINT32			Data;
+
+}	WV_IO_ID;
+
+typedef struct _WV_IO_GUID_LIST
+{
+	UINT64			Count;
+	NET64			Guid[1];
+
+}	WV_IO_GUID_LIST;
+
+#define WV_MAX_LIB_NAME				32
+
+// Device/port capability flags
+#define WV_IO_RESIZE_MAX_WR			0x00000001
+#define WV_IO_BAD_PKEY_COUNTER		0x00000002
+#define WV_IO_BAD_QKEY_COUNTER		0x00000004
+// reserved							0x00000008
+#define WV_IO_PATH_MIGRATION		0x00000010
+#define WV_IO_CHANGE_PHYSICAL_PORT	0x00000020
+#define WV_IO_AH_PORT_CHECKING		0x00000040
+#define WV_IO_QP_STATE_MODIFIER		0x00000080
+#define WV_IO_SHUTDOWN_PORT			0x00000100
+#define WV_IO_INIT_TYPE				0x00000200
+#define WV_IO_PORT_ACTIVE_EVENT		0x00000400
+#define WV_IO_SYSTEM_IMAGE_GUID		0x00000800
+#define WV_IO_RC_RNR_NAK_GENERATION	0x00001000
+#define WV_IO_SRQ_RESIZE			0x00002000
+#define WV_IO_BATCH_NOTIFY_CQ		0x00004000
+
+#define WV_DEVICE_UNKNOWN			0
+#define WV_DEVICE_INFINIBAND		1
+#define WV_DEVICE_IWARP				2
+
+#define WV_IO_ATOMIC_NONE			0
+#define WV_IO_ATOMIC_HCA			1
+#define WV_IO_ATOMIC_NODE			2
+
+typedef struct _WV_IO_DEVICE_ATTRIBUTES
+{
+	UINT64			FwVersion;
+	NET64			NodeGuid;
+	NET64			SystemImageGuid;
+	UINT32			VendorId;
+	UINT32			VendorPartId;
+	UINT32			HwVersion;
+	UINT32			CapabilityFlags;
+	UINT32			AtomicCapability;
+	UINT32			PageSizeCapabilityFlags;
+	UINT64			MaxMrSize;
+	UINT32			MaxQp;
+	UINT32			MaxQpWr;
+	UINT32			MaxSge;
+	UINT32			MaxCq;
+	UINT32			MaxCqEntries;
+	UINT32			MaxMr;
+	UINT32			MaxPd;
+	UINT32			MaxQpResponderResources;
+	UINT32			MaxResponderResources;
+	UINT32			MaxQpInitiatorDepth;
+	UINT32			MaxInlineSend;
+	UINT32			MaxMw;
+	UINT32			MaxMulticast;
+	UINT32			MaxQpAttach;
+	UINT32			MaxMulticastQp;
+	UINT32			MaxAh;
+	UINT32			MaxFmr;
+	UINT32			MaxMapPerFmr;
+	UINT32			MaxSrq;
+	UINT32			MaxSrqWr;
+	UINT32			MaxSrqSge;
+	UINT32			MaxPkeys;
+	UINT32			DeviceType;
+	UINT8			LocalAckDelay;
+	UINT8			PhysPortCount;
+	UINT8			Reserved[2];
+
+}	WV_IO_DEVICE_ATTRIBUTES;
+
+typedef struct _WV_IO_DEVICE_PORT_QUERY
+{
+	UINT64			Id;
+	UINT8			PortNumber;
+	UINT8			Reserved[7];
+
+}	WV_IO_DEVICE_PORT_QUERY;
+
+#define WV_IO_PORT_NOP			0
+#define WV_IO_PORT_DOWN			1
+#define WV_IO_PORT_INIT			2
+#define WV_IO_PORT_ARMED		3
+#define WV_IO_PORT_ACTIVE		4
+#define WV_IO_PORT_ACTIVEDEFER	5
+
+typedef struct _WV_IO_PORT_ATTRIBUTES
+{
+	UINT32			PortCabilityFlags;
+	UINT32			State;
+	UINT32			MaxMtu;
+	UINT32			ActiveMtu;
+	UINT32			GidTableLength;
+	UINT32			MaxMessageSize;
+	UINT32			BadPkeyCounter;
+	UINT32			QkeyViolationCounter;
+	UINT16			PkeyTableLength;
+	NET16			Lid;
+	NET16			SmLid;
+	UINT8			Lmc;
+	UINT8			MaxVls;
+	UINT8			SmSl;
+	UINT8			SubnetTimeout;
+	UINT8			InitTypeReply;
+	UINT8			ActiveWidth;
+	UINT8			ActiveSpeed;
+	UINT8			PhysicalState;
+	UINT8			Transport;
+	UINT8			ExtActiveSpeed;
+	UINT8			LinkEncoding;
+
+}	WV_IO_PORT_ATTRIBUTES;
+
+// Port notification flags
+#define WV_IO_EVENT_ERROR			0x00000001
+#define WV_IO_EVENT_STATE			0x00000002
+#define WV_IO_EVENT_ADDRESS			0x00000004
+#define WV_IO_EVENT_LINK_ADDRESS	0x00000008
+#define WV_IO_EVENT_PARTITION		0x00000010
+#define WV_IO_EVENT_MANAGEMENT		0x00000020
+
+typedef struct _WV_IO_GID
+{
+	UINT8			Raw[16];
+
+}	WV_IO_GID;
+
+typedef struct _WV_IO_EVENT
+{
+	UINT32			Status;
+	UINT32			Type;
+	UINT8			PortNumber;
+	UINT8			Reserved[3];
+
+}	WV_IO_EVENT;
+
+typedef struct _WV_IO_MEMORY_REGISTER
+{
+	UINT64			Id;
+	UINT64			Address;
+	UINT64			BufferLength;
+	UINT32			AccessFlags;
+	UINT32			Reserved;			
+
+}	WV_IO_MEMORY_REGISTER;
+
+typedef struct _WV_IO_MEMORY_KEYS
+{
+	UINT32			Lkey;
+	NET32			Rkey;
+
+}	WV_IO_MEMORY_KEYS;
+
+typedef struct _WV_IO_AV
+{
+	UINT8			NetworkRouteValid;
+	UINT8			Reserved1;
+	UINT8			HopLimit;
+	UINT8			TrafficClass;
+	NET32			FlowLabel;
+	UINT8			SGid[16];
+	UINT8			DGid[16];
+
+	UINT16			Reserved2;
+	NET16			DLid;
+	UINT8			ServiceLevel;
+	UINT8			SourcePathBits;
+	UINT8			StaticRate;
+	UINT8			PortNumber;
+
+}	WV_IO_AV;
+
+typedef struct _WV_IO_AH_CREATE
+{
+	WV_IO_ID		Id;
+	WV_IO_AV		AddressVector;
+
+}	WV_IO_AH_CREATE;
+
+#define WV_CQ_ERROR				0
+#define	WV_CQ_NEXT_COMPLETION	1
+#define	WV_CQ_SOLICITED			2
+
+typedef struct _WV_IO_SRQ_ATTRIBUTES
+{
+	WV_IO_ID		Id;
+	UINT32			MaxWr;
+	UINT32			MaxSge;
+	UINT32			SrqLimit;
+	UINT32			Reserved;
+
+}	WV_IO_SRQ_ATTRIBUTES;
+
+#define WV_IO_QP_SIGNAL_SENDS			0x00000001
+#define WV_IO_QP_MEMORY_MANAGEMENT		0x00000002
+
+typedef struct _WV_IO_QP_CREATE
+{
+	WV_IO_ID		Id;
+	UINT64			SendCqId;
+	UINT64			ReceiveCqId;
+	UINT64			SrqId;
+
+	UINT32			SendDepth;
+	UINT32			SendSge;
+	UINT32			ReceiveDepth;
+	UINT32			ReceiveSge;
+	UINT32			MaxInlineSend;
+	UINT32			InitiatorDepth;
+	UINT32			ResponderResources;
+
+	UINT8			QpType;
+	UINT8			QpFlags;
+	UINT16			Reserved;
+
+}	WV_IO_QP_CREATE;
+
+#define WV_IO_QP_STATE_RESET	0
+#define WV_IO_QP_STATE_INIT		1
+#define WV_IO_QP_STATE_RTR		2
+#define WV_IO_QP_STATE_RTS		3
+#define WV_IO_QP_STATE_SQD		4
+#define WV_IO_QP_STATE_SQERROR	5
+#define WV_IO_QP_STATE_ERROR	6
+
+#define WV_IO_QP_ATTR_CAPABILITIES			0x00000001
+#define WV_IO_QP_ATTR_INITIATOR_DEPTH		0x00000002
+#define WV_IO_QP_ATTR_RESPONDER_RESOURCES	0x00000004
+#define WV_IO_QP_ATTR_CURRENT_STATE			0x00000008
+#define WV_IO_QP_ATTR_STATE					0x00000010
+#define WV_IO_QP_ATTR_PATH_MIG_STATE		0x00000020
+#define WV_IO_QP_ATTR_DESTINATION_QPN		0x00000040
+#define WV_IO_QP_ATTR_QKEY					0x00000080
+#define WV_IO_QP_ATTR_SEND_PSN				0x00000100
+#define WV_IO_QP_ATTR_RECEIVE_PSN			0x00000200
+#define WV_IO_QP_ATTR_FLAGS					0x00000400
+#define WV_IO_QP_ATTR_ACCESS_FLAGS			0x00000800
+#define WV_IO_QP_ATTR_AV					0x00001000
+#define WV_IO_QP_ATTR_ALTERNATE_AV			0x00002000
+#define WV_IO_QP_ATTR_PORT_NUMBER			0x00004000
+#define WV_IO_QP_ATTR_PKEY_INDEX			0x00008000
+#define WV_IO_QP_ATTR_ACK_TIMEOUT			0x00010000
+#define WV_IO_QP_ATTR_RNR_NAK_TIMEOUT		0x00020000
+#define WV_IO_QP_ATTR_ERROR_RETRY_COUNT		0x00040000
+#define WV_IO_QP_ATTR_RNR_RETRY_COUNT		0x00080000
+
+typedef struct _WV_IO_QP_ATTRIBUTES
+{
+	WV_IO_ID		Id;
+	UINT32			SendDepth;
+	UINT32			SendSge;
+	UINT32			ReceiveDepth;
+	UINT32			ReceiveSge;
+	UINT32			MaxInlineSend;
+	UINT32			InitiatorDepth;
+	UINT32			ResponderResources;
+
+	UINT32			Options;
+	UINT8			QpType;
+	UINT8			CurrentQpState;
+	UINT8			QpState;
+	UINT8			ApmState;
+	NET32			Qpn;
+	NET32			DestinationQpn;
+	NET32			Qkey;
+	NET32			SendPsn;
+	NET32			ReceivePsn;
+
+	WV_IO_AV		AddressVector;
+	WV_IO_AV		AlternateAddressVector;
+	UINT32			PathMtu;
+	UINT32			AlternatePathMtu;
+	UINT16			PkeyIndex;
+	UINT16			AlternatePkeyIndex;
+	UINT8			LocalAckTimeout;
+	UINT8			AlternateLocalAckTimeout;
+
+	UINT8			RnrNakTimeout;
+	UINT8			SequenceErrorRetryCount;
+	UINT8			RnrRetryCount;
+
+	UINT8			AccessFlags;
+	UINT8			QpFlags;
+	UINT8			Reserved[5];
+
+}	WV_IO_QP_ATTRIBUTES;
+
+typedef struct _WV_IO_QP_MULTICAST
+{
+	WV_IO_ID		Id;
+	WV_IO_GID		Gid;
+
+}	WV_IO_QP_MULTICAST;
+
+// Windows kernel does not define sockaddr* pre-Vista
+typedef struct _WV_IO_SOCKADDR
+{
+	UINT16			SaFamily;
+	UINT8			SaData[14];
+
+}	WV_IO_SOCKADDR;
+
+typedef struct _WV_IO_SOCKADDR_IN
+{
+	UINT16			SinFamily;
+	UINT16			SinPort;
+	UINT32			SinAddr;
+	UINT8			SinZero[8];
+
+}	WV_IO_SOCKADDR_IN;
+
+typedef struct _WV_IO_SOCKADDR_IN6
+{
+	UINT16			Sin6Family;
+	UINT16			Sin6Port;
+	UINT32			Sin6FlowInfo;
+	UINT8			Sin6Addr[16];
+	UINT32			Sin6ScopeId;
+
+}	WV_IO_SOCKADDR_IN6;
+
+typedef struct _WV_IO_SOCKADDR_DATA
+{
+	union
+	{
+		WV_IO_SOCKADDR		Sa;
+		WV_IO_SOCKADDR_IN	In;
+		WV_IO_SOCKADDR_IN6	In6;
+
+	}	SockAddr;
+
+	UINT32					Reserved;
+
+}	WV_IO_SOCKADDR_DATA;
+
+typedef struct _WV_IO_DEVICE_ADDRESS
+{
+	NET64			DeviceGuid;
+	NET16			Pkey;
+	UINT8			PortNumber;
+	UINT8			Reserved[5];
+
+}	WV_IO_DEVICE_ADDRESS;
+
+typedef struct _WV_IO_EP_BIND
+{
+	UINT64					Id;
+	WV_IO_SOCKADDR_DATA		Address;
+	WV_IO_DEVICE_ADDRESS	Device;
+
+}	WV_IO_EP_BIND;
+
+#define WV_IO_EP_OPTION_ROUTE		0x00000001
+
+#define WV_IO_EP_TYPE_CONNECT		0x0106
+#define WV_IO_EP_TYPE_DATAGRAM		0x0111
+
+typedef struct _WV_IO_EP_LISTEN
+{
+	UINT64			Id;
+	UINT64			Backlog;
+
+}	WV_IO_EP_LISTEN;
+
+typedef struct _WV_IO_EP_GET_REQUEST
+{
+	UINT64			Id;
+	UINT64			EpId;
+
+}	WV_IO_EP_GET_REQUEST;
+
+typedef struct _WV_IO_CONNECT_PARAM
+{
+	UINT64			ResponderResources;
+	UINT64			InitiatorDepth;
+	UINT8			RetryCount;
+	UINT8			RnrRetryCount;
+	UINT8			DataLength;
+	UINT8			Reserved[5];
+	UINT8			Data[56];
+
+}	WV_IO_CONNECT_PARAM;
+
+typedef struct _WV_IO_EP_CONNECT
+{
+	UINT64					Id;
+	UINT64					QpId;
+	WV_IO_SOCKADDR_DATA		PeerAddress;
+	WV_IO_CONNECT_PARAM		Param;
+
+}	WV_IO_EP_CONNECT;
+
+typedef struct _WV_IO_EP_ACCEPT
+{
+	UINT64					Id;
+	UINT64					QpId;
+	WV_IO_CONNECT_PARAM		Param;
+
+}	WV_IO_EP_ACCEPT;
+
+typedef struct _WV_IO_EP_ATTRIBUTES
+{
+	WV_IO_SOCKADDR_DATA		LocalAddress;
+	WV_IO_SOCKADDR_DATA		PeerAddress;
+	WV_IO_DEVICE_ADDRESS	Device;
+
+	union {
+		WV_IO_CONNECT_PARAM	Connect;
+		UINT64				Backlog;
+
+	}	Param;
+
+
+}	WV_IO_EP_ATTRIBUTES;
+
+typedef struct _WV_IO_EP_DISCONNECT
+{
+	UINT64					Id;
+	UINT64					QpId;
+
+}	WV_IO_EP_DISCONNECT;
+
+#endif // _WV_IOCTL_H_

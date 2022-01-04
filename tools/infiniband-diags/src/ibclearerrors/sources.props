@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TARGETNAME Condition="'$(OVERRIDE_TARGETNAME)'!='true'">ibclearerrors</TARGETNAME>
+    <TARGETPATH Condition="'$(OVERRIDE_TARGETPATH)'!='true'">..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)</TARGETPATH>
+    <TARGETTYPE Condition="'$(OVERRIDE_TARGETTYPE)'!='true'">PROGRAM</TARGETTYPE>
+    <UMTYPE Condition="'$(OVERRIDE_UMTYPE)'!='true'">console</UMTYPE>
+    <UMENTRY Condition="'$(OVERRIDE_UMENTRY)'!='true'">main</UMENTRY>
+    <USE_MSVCRT Condition="'$(OVERRIDE_USE_MSVCRT)'!='true'">1</USE_MSVCRT>
+    <NTTARGETFILES Condition="'$(OVERRIDE_NTTARGETFILES)'!='true'">Custom_target</NTTARGETFILES>
+    <SOURCES Condition="'$(OVERRIDE_SOURCES)'!='true'">..\ibclearerrors.c ibclearerrors.rc</SOURCES>
+    <INCLUDES Condition="'$(OVERRIDE_INCLUDES)'!='true'">..\..\include;..\..\include\windows; 		   ..\..\..\..\ulp\libibmad\include; 		   ..\..\..\..\ulp\libibumad\include; 		   ..\..\..\..\ulp\libibnetdisc\include; 		   ..\..\..\..\inc;..\..\..\..\inc\user; 		   ..\..\..\..\inc\user\linux;  		   ..\..\..\..\ulp\libibmad\src\$(O);  		   ..\..\..\..\ulp\libibumad\src\$(O);</INCLUDES>
+    <C_DEFINES Condition="'$(OVERRIDE_C_DEFINES)'!='true'">$(C_DEFINES) /DHAVE_CONFIG_H</C_DEFINES>
+    <TARGETLIBS Condition="'$(OVERRIDE_TARGETLIBS)'!='true'">$(SDK_LIB_PATH)\kernel32.lib	 	$(SDK_LIB_PATH)\ws2_32.lib  	$(TARGETPATH)\*\libibmad.lib	 	$(TARGETPATH)\*\libibumad.lib</TARGETLIBS>
+    <MSC_WARNING_LEVEL Condition="'$(OVERRIDE_MSC_WARNING_LEVEL)'!='true'">/W3 /wd4007</MSC_WARNING_LEVEL>
+  </PropertyGroup>
+  <ItemGroup>
+    <InvokedTargetsList Include="Custom_target">
+      <Pass>All</Pass>
+      <Condition>
+      </Condition>
+    </InvokedTargetsList>
+  </ItemGroup>
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

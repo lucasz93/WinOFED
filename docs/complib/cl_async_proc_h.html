@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_async_proc_h.html</title>
+<!-- Source: ./inc/complib/cl_async_proc.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_async_proc.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo1">[Modules]<a name="Component20Library2fAsynchronous20Processor">
+Component Library/Asynchronous Processor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Asynchronous Processor
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The asynchronous processor provides threads for executing queued callbacks.
+
+       The threads in the asynchronous processor wait for callbacks to be queued.
+
+       The asynchronous processor functions operate on a <a href="#robo275">cl_async_proc_t</a> structure
+       which should be treated as opaque and manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo275">cl_async_proc_t</a>, <a href="#robo273">cl_async_proc_item_t</a>
+
+       Initialization:
+               <a href="#robo270">cl_async_proc_construct</a>, <a href="#robo272">cl_async_proc_init</a>, <a href="#robo271">cl_async_proc_destroy</a>
+
+       Manipulation:
+               <a href="#robo274">cl_async_proc_queue</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo270">[Functions]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5fconstruct">
+Component Library: Asynchronous Processor/cl_async_proc_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_async_proc_construct</strong> function initializes the state of a
+       thread pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_async_proc_construct</strong>(
+        IN      <a href="#robo275">cl_async_proc_t</a>* const  p_async_proc );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_async_proc
+               [in] Pointer to an asynchronous processor structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo271">cl_async_proc_destroy</a> without first calling
+       <a href="#robo272">cl_async_proc_init</a>.
+
+       Calling <strong>cl_async_proc_construct</strong> is a prerequisite to calling any other
+       thread pool function except <a href="#robo272">cl_async_proc_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo272">cl_async_proc_init</a>, <a href="#robo271">cl_async_proc_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo271">[Functions]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5fdestroy">
+Component Library: Asynchronous Processor/cl_async_proc_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_async_proc_destroy</strong> function performs any necessary cleanup
+       for a thread pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_async_proc_destroy</strong>(
+        IN      <a href="#robo275">cl_async_proc_t</a>* const  p_async_proc );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_async_proc
+               [in] Pointer to an asynchronous processor structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function blocks until all threads exit, and must therefore not
+       be called from any of the asynchronous processor's threads. Because of
+       its blocking nature, callers of <strong>cl_async_proc_destroy</strong> must ensure that
+       entering a wait state is valid from the calling thread context.
+
+       This function should only be called after a call to
+       <a href="#robo270">cl_async_proc_construct</a> or <a href="#robo272">cl_async_proc_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo270">cl_async_proc_construct</a>, <a href="#robo272">cl_async_proc_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo272">[Functions]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5finit">
+Component Library: Asynchronous Processor/cl_async_proc_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_async_proc_init</strong> function initialized an asynchronous processor
+       for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_async_proc_init</strong>(
+        IN      <a href="#robo275">cl_async_proc_t</a>* const  p_async_proc,
+        IN      const uint32_t                  thread_count,
+        IN      const char* const               name );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_async_proc
+               [in] Pointer to an asynchronous processor structure to initialize.
+
+       thread_count
+               [in] Number of threads to be managed by the asynchronous processor.
+
+       name
+               [in] Name to associate with the threads.  The name may be up to 16
+               characters, including a terminating null character.  All threads
+               created in the asynchronous processor have the same name.
+
+ RETURN VALUES
+       CL_SUCCESS if the asynchronous processor creation succeeded.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to inititalize
+       the asynchronous processor.
+
+       CL_ERROR if the threads could not be created.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_async_proc_init</strong> creates and starts the specified number of threads.
+       If thread_count is zero, the asynchronous processor creates as many
+       threads as there are processors in the system.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo270">cl_async_proc_construct</a>, <a href="#robo271">cl_async_proc_destroy</a>,
+       <a href="#robo274">cl_async_proc_queue</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo273">[Structures]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5fitem5ft">
+Component Library: Asynchronous Processor/cl_async_proc_item_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_item_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Asynchronous processor item structure passed to the <a href="#robo274">cl_async_proc_queue</a>
+       function to queue a callback for execution.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_async_proc_item
+{
+        <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>                  pool_item;
+        <a href="#robo276">cl_pfn_async_proc_cb_t</a>  pfn_callback;
+
+} <strong>cl_async_proc_item_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       pool_item
+               <a href="./cl_pool_h.html#robo18">Pool</a> item for queuing the item to be invoked by the asynchronous
+               processor's threads.  This field is defined as a pool item to
+               allow items to be managed by a pool.
+
+       pfn_callback
+               Pointer to a callback function to invoke when the item is dequeued.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo274">cl_async_proc_queue</a>, <a href="#robo276">cl_pfn_async_proc_cb_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo274">[Functions]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5fqueue">
+Component Library: Asynchronous Processor/cl_async_proc_queue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_queue</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_async_proc_queue</strong> function queues a callback to an asynchronous
+       processor.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_async_proc_queue</strong>(
+        IN      <a href="#robo275">cl_async_proc_t</a>* const          p_async_proc,
+        IN      <a href="#robo273">cl_async_proc_item_t</a>* const     p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_async_proc
+               [in] Pointer to an asynchronous processor structure to initialize.
+
+       p_item
+               [in] Pointer to an asynchronous processor item to queue for execution.
+               The callback and context fields of the item must be valid.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo272">cl_async_proc_init</a>, <a href="#robo276">cl_pfn_async_proc_cb_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo275">[Structures]<a name="Component20Library3a20Asynchronous20Processor2fcl5fasync5fproc5ft">
+Component Library: Asynchronous Processor/cl_async_proc_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_async_proc_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Asynchronous processor structure.
+
+       The <strong>cl_async_proc_t</strong> structure should be treated as opaque, and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_async_proc
+{
+        <a href="./cl_threadpool_h.html#robo644">cl_thread_pool_t</a>        thread_pool;
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                      item_queue;
+        cl_spinlock_t           lock;
+        cl_state_t                      state;
+
+} <strong>cl_async_proc_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       item_pool
+               <a href="./cl_pool_h.html#robo18">Pool</a> of items storing the callback function and contexts to be invoked
+               by the asynchronous processor's threads.
+
+       thread_pool
+               Thread pool that will invoke the callbacks.
+
+       item_queue
+               Queue of items that the threads should process.
+
+       lock
+               Lock used to synchronize access to the item pool and queue.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo276">[Definitions]<a name="Component20Library3a20Asynchronous20Processor2fcl5fpfn5fasync5fproc5fcb5ft">
+Component Library: Asynchronous Processor/cl_pfn_async_proc_cb_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_async_proc_cb_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_async_proc_cb_t</strong> function type defines the prototype for
+       callbacks queued to and invoked by the asynchronous processor.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_async_proc_cb_t</strong>)(
+        IN      struct _cl_async_proc_item      *p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               Pointer to the <a href="#robo273">cl_async_proc_item_t</a> structure that was queued in
+               a call to <a href="#robo274">cl_async_proc_queue</a>.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo274">cl_async_proc_queue</a>
+       function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Asynchronous Processor, <a href="#robo273">cl_async_proc_item_t</a>
+</pre>
+</span>
+</body>
+</html>

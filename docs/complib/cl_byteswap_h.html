@@ -1,0 +1,500 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_byteswap_h.html</title>
+<!-- Source: ./inc/complib/cl_byteswap.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_byteswap.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:52
+<br />
+<hr />
+
+<h2><a name="robo3">[Modules]<a name="Component20Library2fByte20Swapping">
+Component Library/Byte Swapping</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Byte Swapping
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The byte swapping functions and macros allow swapping bytes from network
+       byte order to host byte order.
+
+       All data transmitted between systems should be in network byte order.
+       In order to utilize such data, it must be converted to host byte order
+       before use.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Functions:
+               <a href="#robo290">cl_ntoh16</a>, <a href="#robo284">cl_hton16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo288">cl_hton64</a>,
+               <a href="#robo289">cl_ntoh</a>
+
+       Macros:
+               <a href="#robo291">CL_NTOH16</a>, <a href="#robo283">CL_HTON16</a>, <a href="#robo293">CL_NTOH32</a>, <a href="#robo285">CL_HTON32</a>, <a href="#robo295">CL_NTOH64</a>, <a href="#robo287">CL_HTON64</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo283">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fHTON16">
+Component Library: Byte Swapping/CL_HTON16</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_HTON16</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_HTON16</strong> macro converts a 16-bit value from host byte order to
+       network byte order.  The <strong>CL_HTON16</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_HTON16</strong> is less efficient
+       than the <a href="#robo284">cl_hton16</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_HTON16</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 16-bit value to swap from host byte order to network byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo291">CL_NTOH16</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo291">CL_NTOH16</a>, <a href="#robo285">CL_HTON32</a>, <a href="#robo287">CL_HTON64</a>,
+       <a href="#robo284">cl_hton16</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo288">cl_hton64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo284">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fhton16">
+Component Library: Byte Swapping/cl_hton16</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_hton16</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_hton16</strong> function converts a 16-bit value from host byte order to
+       network byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint16_t
+*       <strong>cl_hton16</strong>(
+*               IN      const uint16_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from host byte order to network byte order .
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo290">cl_ntoh16</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo290">cl_ntoh16</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo288">cl_hton64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo285">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fHTON32">
+Component Library: Byte Swapping/CL_HTON32</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_HTON32</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_HTON32</strong> macro converts a 32-bit value from host byte order to
+       network byte order.  The <strong>CL_HTON32</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_HTON32</strong> is less efficient
+       than the <a href="#robo286">cl_hton32</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_HTON32</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 32-bit value to swap from host byte order to network byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo293">CL_NTOH32</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo293">CL_NTOH32</a>, <a href="#robo283">CL_HTON16</a>, <a href="#robo287">CL_HTON64</a>,
+       <a href="#robo284">cl_hton16</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo288">cl_hton64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo286">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fhton32">
+Component Library: Byte Swapping/cl_hton32</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_hton32</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_hton32</strong> function converts a 32-bit value from host byte order to
+       network byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint32_t
+*       <strong>cl_hton32</strong>(
+*               IN      const uint32_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from host byte order to network byte order .
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo292">cl_ntoh32</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo292">cl_ntoh32</a>, <a href="#robo284">cl_hton16</a>, <a href="#robo288">cl_hton64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo287">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fHTON64">
+Component Library: Byte Swapping/CL_HTON64</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_HTON64</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_HTON64</strong> macro converts a 64-bit value from host byte order to
+       network byte order.  The <strong>CL_HTON64</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_HTON64</strong> is less efficient
+       than the <a href="#robo288">cl_hton64</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_HTON64</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 64-bit value to swap from host byte order to network byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo295">CL_NTOH64</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo295">CL_NTOH64</a>, <a href="#robo283">CL_HTON16</a>, <a href="#robo285">CL_HTON32</a>,
+       <a href="#robo284">cl_hton16</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo288">cl_hton64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo288">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fhton64">
+Component Library: Byte Swapping/cl_hton64</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_hton64</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_hton64</strong> function converts a 64-bit value from host byte order to
+       network byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint64_t
+*       <strong>cl_hton64</strong>(
+*               IN      const uint64_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from host byte order to network byte order .
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted to network byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo294">cl_ntoh64</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo294">cl_ntoh64</a>, <a href="#robo284">cl_hton16</a>, <a href="#robo286">cl_hton32</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo289">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fntoh">
+Component Library: Byte Swapping/cl_ntoh</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ntoh</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ntoh</strong> function converts a value from network byte order to
+       host byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_ntoh</strong>(
+        OUT     char* const                     p_dest,
+        IN      const char* const       p_src,
+        IN      const uint8_t           size )
+{
+#if CPU_LE
+        uint8_t i;
+        char    temp;
+
+        if( p_src == p_dest )
+        {
+                /* Swap in place if source and destination are the same. */
+                for( i = 0; i &lt; size / 2; i++ )
+                {
+                        temp = p_dest[i];
+                        p_dest[i] = p_src[size - 1 - i];
+                        p_dest[size - 1 - i] = temp;
+                }
+        }
+        else
+        {
+                for( i = 0; i &lt; size; i++ )
+                        p_dest[i] = p_src[size - 1 - i];
+        }
+#else
+        /*
+         * If the source and destination are not the same, copy the source to
+         * the destination.
+         */
+        if( p_src != p_dest )
+                <a href="./cl_memory_h.html#robo435">cl_memcpy</a>( p_dest, p_src, size );
+#endif
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_dest
+               [in] Pointer to a byte array to contain the converted value of p_src.
+
+       p_src
+               [in] Pointer to a byte array to be converted from network byte
+               ordering.
+
+       size
+               [in] Number of bytes to swap.p_dest
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_ntoh</strong> can perform in place swapping if both p_src and p_dest point to
+       the same buffer.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo290">cl_ntoh16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo294">cl_ntoh64</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo291">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fNTOH16">
+Component Library: Byte Swapping/CL_NTOH16</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_NTOH16</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_NTOH16</strong> macro converts a 16-bit value from network byte order to
+       host byte order.  The <strong>CL_NTOH16</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_NTOH16</strong> is less efficient
+       than the <a href="#robo290">cl_ntoh16</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_NTOH16</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 16-bit value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo283">CL_HTON16</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo283">CL_HTON16</a>, <a href="#robo293">CL_NTOH32</a>, <a href="#robo295">CL_NTOH64</a>,
+       <a href="#robo290">cl_ntoh16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo290">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fntoh16">
+Component Library: Byte Swapping/cl_ntoh16</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ntoh16</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ntoh16</strong> function converts a 16-bit value from network byte order to
+       host byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint16_t
+*       <strong>cl_ntoh16</strong>(
+*               IN      const uint16_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted to host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo284">cl_hton16</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo284">cl_hton16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo292">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fntoh32">
+Component Library: Byte Swapping/cl_ntoh32</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ntoh32</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ntoh32</strong> function converts a 32-bit value from network byte order to
+       host byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint32_t
+*       <strong>cl_ntoh32</strong>(
+*               IN      const uint32_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted in host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo286">cl_hton32</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo286">cl_hton32</a>, <a href="#robo290">cl_ntoh16</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo293">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fNTOH32">
+Component Library: Byte Swapping/CL_NTOH32</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_NTOH32</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_NTOH32</strong> macro converts a 32-bit value from network byte order to
+       host byte order.  The <strong>CL_NTOH32</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_NTOH32</strong> is less efficient
+       than the <a href="#robo292">cl_ntoh32</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_NTOH32</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 32-bit value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo285">CL_HTON32</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo285">CL_HTON32</a>, <a href="#robo291">CL_NTOH16</a>, <a href="#robo295">CL_NTOH64</a>,
+       <a href="#robo290">cl_ntoh16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo295">[Definitions]<a name="Component20Library3a20Byte20Swapping2fCL5fNTOH64">
+Component Library: Byte Swapping/CL_NTOH64</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_NTOH64</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_NTOH64</strong> macro converts a 64-bit value from network byte order to
+       host byte order.  The <strong>CL_NTOH64</strong> macro will cause constant values to be
+       swapped by the pre-processor.  For variables, <strong>CL_NTOH64</strong> is less efficient
+       than the <a href="#robo294">cl_ntoh64</a> function.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>CL_NTOH64</strong>( val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] 64-bit value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RESULT</strong></p>
+<span class="RESULT"><pre>       Value of val converted to host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro is analogous to <a href="#robo287">CL_HTON64</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo287">CL_HTON64</a>, <a href="#robo291">CL_NTOH16</a>, <a href="#robo293">CL_NTOH32</a>,
+       <a href="#robo290">cl_ntoh16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo294">cl_ntoh64</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo294">[Functions]<a name="Component20Library3a20Byte20Swapping2fcl5fntoh64">
+Component Library: Byte Swapping/cl_ntoh64</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_ntoh64</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_ntoh64</strong> function converts a 64-bit value from network byte order to
+       host byte order.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uint64_t
+*       <strong>cl_ntoh64</strong>(
+*               IN      const uint64_t  val );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       val
+               [in] Value to swap from network byte order to host byte order.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of val converted in host byte order.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is analogous to <a href="#robo288">cl_hton64</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Byte Swapping, <a href="#robo288">cl_hton64</a>, <a href="#robo290">cl_ntoh16</a>, <a href="#robo292">cl_ntoh32</a>, <a href="#robo289">cl_ntoh</a>
+</pre>
+</span>
+</body>
+</html>

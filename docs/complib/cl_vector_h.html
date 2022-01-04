@@ -1,0 +1,984 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_vector_h.html</title>
+<!-- Source: ./inc/complib/cl_vector.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_vector.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo30">[Modules]<a name="Component20Library2fVector">
+Component Library/Vector</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Vector</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>Vector</strong> is a self-sizing array. Like a traditonal array, a vector
+       allows efficient constant time access to elements with a specified index.
+       A vector grows transparently as the user adds elements to the array.
+
+       As the vector grows in size, it does not relocate existing elements in
+       memory. This allows using pointers to elements stored in a <strong>Vector</strong>.
+
+       Users can supply an initializer functions that allow a vector to ensure
+       that new items added to the vector are properly initialized. A vector
+       calls the initializer function on a per object basis when growing the
+       array. The initializer is optional.
+
+       The initializer function can fail, and returns a <a href="./cl_types_h.html#robo308">cl_status_t</a>. The vector
+       will call the destructor function, if provided, for an element that
+       failed initialization. If an initializer fails, a vector does not call
+       the initializer for objects in the remainder of the new memory allocation.
+
+       The <a href="#robo682">cl_vector_t</a> structure should be treated as opaque and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo682">cl_vector_t</a>
+
+       Callbacks:
+               <a href="#robo666">cl_pfn_vec_init_t</a>, <a href="#robo664">cl_pfn_vec_dtor_t</a>, <a href="#robo663">cl_pfn_vec_apply_t</a>,
+               <a href="#robo665">cl_pfn_vec_find_t</a>
+
+       Item Manipulation:
+               cl_vector_set_obj, cl_vector_obj
+
+       Initialization:
+               <a href="#robo669">cl_vector_construct</a>, <a href="#robo677">cl_vector_init</a>, <a href="#robo670">cl_vector_destroy</a>
+
+       Manipulation:
+               <a href="#robo674">cl_vector_get_capacity</a>, <a href="#robo679">cl_vector_set_capacity</a>,
+               <a href="#robo676">cl_vector_get_size</a>, <a href="#robo681">cl_vector_set_size</a>, <a href="#robo680">cl_vector_set_min_size</a>
+               <a href="#robo675">cl_vector_get_ptr</a>, <a href="#robo673">cl_vector_get</a>, <a href="#robo668">cl_vector_at</a>, <a href="#robo678">cl_vector_set</a>
+
+       Search:
+               <a href="#robo672">cl_vector_find_from_start</a>, <a href="#robo671">cl_vector_find_from_end</a>
+               <a href="#robo667">cl_vector_apply_func</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo663">[Definitions]<a name="Component20Library3a20Vector2fcl5fpfn5fvec5fapply5ft">
+Component Library: Vector/cl_pfn_vec_apply_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_vec_apply_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_vec_apply_t</strong> function type defines the prototype for functions
+       used to iterate elements in a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_vec_apply_t</strong>)(
+        IN      const size_t            index,
+        IN      void* const                     p_element,
+        IN      void*                           context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the element.
+
+       p_element
+               [in] Pointer to an element at the specified index in the vector.
+
+       context
+               [in] Context provided in a call to <a href="#robo667">cl_vector_apply_func</a>.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for
+       the function passed by users as a parameter to the <a href="#robo667">cl_vector_apply_func</a>
+       function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo667">cl_vector_apply_func</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo664">[Definitions]<a name="Component20Library3a20Vector2fcl5fpfn5fvec5fdtor5ft">
+Component Library: Vector/cl_pfn_vec_dtor_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_vec_dtor_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_vec_dtor_t</strong> function type defines the prototype for functions
+       used as destructor for elements being deallocated from a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_vec_dtor_t</strong>)(
+        IN      void* const                     p_element,
+        IN      void*                           context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_element
+               [in] Pointer to an element being deallocated from a vector.
+
+       context
+               [in] Context provided in a call to <a href="#robo677">cl_vector_init</a>.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for
+       the destructor function provided by users as an optional parameter to
+       the <a href="#robo677">cl_vector_init</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo677">cl_vector_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo665">[Definitions]<a name="Component20Library3a20Vector2fcl5fpfn5fvec5ffind5ft">
+Component Library: Vector/cl_pfn_vec_find_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_vec_find_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_vec_find_t</strong> function type defines the prototype for functions
+       used to find elements in a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef <a href="./cl_types_h.html#robo308">cl_status_t</a>
+(CL_API *<strong>cl_pfn_vec_find_t</strong>)(
+        IN      const size_t            index,
+        IN      const void* const       p_element,
+        IN      void*                           context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the element.
+
+       p_element
+               [in] Pointer to an element at the specified index in the vector.
+
+       context
+               [in] Context provided in a call to <a href="#robo672">cl_vector_find_from_start</a> or
+               <a href="#robo671">cl_vector_find_from_end</a>.
+
+ RETURN VALUES
+       Return CL_SUCCESS if the element was found. This stops vector iteration.
+
+       CL_NOT_FOUND to continue the vector iteration.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo672">cl_vector_find_from_start</a>
+       and <a href="#robo671">cl_vector_find_from_end</a> functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo672">cl_vector_find_from_start</a>, <a href="#robo671">cl_vector_find_from_end</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo666">[Definitions]<a name="Component20Library3a20Vector2fcl5fpfn5fvec5finit5ft">
+Component Library: Vector/cl_pfn_vec_init_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_vec_init_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_vec_init_t</strong> function type defines the prototype for functions
+       used as initializer for elements being allocated by a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef <a href="./cl_types_h.html#robo308">cl_status_t</a>
+(CL_API *<strong>cl_pfn_vec_init_t</strong>)(
+        IN      void* const                     p_element,
+        IN      void*                           context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_element
+               [in] Pointer to an element being added to a vector.
+
+       context
+               [in] Context provided in a call to <a href="#robo677">cl_vector_init</a>.
+
+ RETURN VALUES
+       Return CL_SUCCESS to indicate that the element was initialized successfully.
+
+       Other <a href="./cl_types_h.html#robo308">cl_status_t</a> values will be returned by the <a href="#robo677">cl_vector_init</a>,
+       <a href="#robo681">cl_vector_set_size</a>, and <a href="#robo680">cl_vector_set_min_size</a> functions.
+
+       In situations where the vector's size needs to grows in order to satisfy
+       a call to <a href="#robo678">cl_vector_set</a>, a non-successful status returned by the
+       initializer callback causes the growth to stop.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for
+       the initializer function provided by users as an optional parameter to
+       the <a href="#robo677">cl_vector_init</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo677">cl_vector_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo667">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fapply5ffunc">
+Component Library: Vector/cl_vector_apply_func</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_apply_func</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_apply_func</strong> function invokes a specified function for every
+       element in a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_vector_apply_func</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      <a href="#robo663">cl_pfn_vec_apply_t</a>                      pfn_callback,
+        IN      const void* const                       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose elements to iterate.
+
+       pfn_callback
+               [in] Function invoked for every element in the array.
+               See the <a href="#robo663">cl_pfn_vec_apply_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback function.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_apply_func</strong> invokes the specified function for every element
+       in the vector, starting from the beginning of the vector.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo672">cl_vector_find_from_start</a>, <a href="#robo671">cl_vector_find_from_end</a>,
+       <a href="#robo663">cl_pfn_vec_apply_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo668">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fat">
+Component Library: Vector/cl_vector_at</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_at</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_at</strong> function copies an element stored in a vector at a
+       specified index, performing boundary checks.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_at</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      const size_t                            index,
+        OUT     void* const                                     p_element );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure from which to get a copy of
+               an element.
+
+       index
+               [in] Index of the element.
+
+       p_element
+               [out] Pointer to storage for the element. Contains a copy of the
+               desired element upon successful completion of the call.
+
+ RETURN VALUES
+       CL_SUCCESS if an element was found at the specified index.
+
+       CL_INVALID_SETTING if the index was out of range.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_at</strong> provides constant time access regardless of the index, and
+       performs boundary checking on the vector.
+
+       Upon success, the p_element parameter contains a copy of the desired element.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo673">cl_vector_get</a>, <a href="#robo675">cl_vector_get_ptr</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo669">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fconstruct">
+Component Library: Vector/cl_vector_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_construct</strong> function constructs a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_vector_construct</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo670">cl_vector_destroy</a> without first calling <a href="#robo677">cl_vector_init</a>.
+
+       Calling <strong>cl_vector_construct</strong> is a prerequisite to calling any other
+       vector function except <a href="#robo677">cl_vector_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo677">cl_vector_init</a>, <a href="#robo670">cl_vector_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo670">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fdestroy">
+Component Library: Vector/cl_vector_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_destroy</strong> function destroys a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_vector_destroy</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_destroy</strong> frees all memory allocated for the vector. The vector
+       is left initialized to a zero capacity and size.
+
+       This function should only be called after a call to <a href="#robo669">cl_vector_construct</a>
+       or <a href="#robo677">cl_vector_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo669">cl_vector_construct</a>, <a href="#robo677">cl_vector_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo671">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5ffind5ffrom5fend">
+Component Library: Vector/cl_vector_find_from_end</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_find_from_end</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_find_from_end</strong> function uses a specified function to search
+       for elements in a vector starting from the highest index.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT size_t CL_API
+<strong>cl_vector_find_from_end</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      <a href="#robo665">cl_pfn_vec_find_t</a>                       pfn_callback,
+        IN      const void* const                       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure to inititalize.
+
+       pfn_callback
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo665">cl_pfn_vec_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback function.
+
+ RETURN VALUES
+       Index of the element, if found.
+
+       Size of the vector if the element was not found.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_find_from_end</strong> does not remove the found element from
+       the vector. The index of the element is returned when the function
+       provided by the pfn_callback parameter returns CL_SUCCESS.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo672">cl_vector_find_from_start</a>, <a href="#robo667">cl_vector_apply_func</a>,
+       <a href="#robo665">cl_pfn_vec_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo672">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5ffind5ffrom5fstart">
+Component Library: Vector/cl_vector_find_from_start</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_find_from_start</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_find_from_start</strong> function uses a specified function to
+       search for elements in a vector starting from the lowest index.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT size_t CL_API
+<strong>cl_vector_find_from_start</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      <a href="#robo665">cl_pfn_vec_find_t</a>                       pfn_callback,
+        IN      const void* const                       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure to inititalize.
+
+       pfn_callback
+               [in] Function invoked to determine if a match was found.
+               See the <a href="#robo665">cl_pfn_vec_find_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback function.
+
+ RETURN VALUES
+       Index of the element, if found.
+
+       Size of the vector if the element was not found.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_find_from_start</strong> does not remove the found element from
+       the vector. The index of the element is returned when the function
+       provided by the pfn_callback parameter returns CL_SUCCESS.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo671">cl_vector_find_from_end</a>, <a href="#robo667">cl_vector_apply_func</a>, <a href="#robo665">cl_pfn_vec_find_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo673">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fget">
+Component Library: Vector/cl_vector_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_get</strong> function copies an element stored in a vector at a
+       specified index.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_vector_get</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      const size_t                            index,
+        OUT     void* const                                     p_element )
+{
+        void *p_src;
+
+        CL_ASSERT( p_vector );
+        CL_ASSERT( p_vector-&gt;state == CL_INITIALIZED );
+        CL_ASSERT( p_element );
+
+        /* Get a pointer to the element. */
+        p_src = <a href="#robo675">cl_vector_get_ptr</a>( p_vector, index );
+        p_vector-&gt;pfn_copy( p_element, p_src, p_vector-&gt;element_size );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure from which to get a copy of
+               an element.
+
+       index
+               [in] Index of the element.
+
+       p_element
+               [out] Pointer to storage for the element. Contains a copy of the
+               desired element upon successful completion of the call.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_get</strong> provides constant time access regardless of the index.
+
+       <strong>cl_vector_get</strong> does not perform boundary checking on the vector, and
+       callers are responsible for providing an index that is within the range
+       of the vector. To access elements after performing boundary checks,
+       use <a href="#robo668">cl_vector_at</a>.
+
+       The p_element parameter contains a copy of the desired element upon
+       return from this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo675">cl_vector_get_ptr</a>, <a href="#robo668">cl_vector_at</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo674">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fget5fcapacity">
+Component Library: Vector/cl_vector_get_capacity</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_get_capacity</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_get_capacity</strong> function returns the capacity of a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_vector_get_capacity</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector )
+{
+        CL_ASSERT( p_vector );
+        CL_ASSERT( p_vector-&gt;state == CL_INITIALIZED );
+
+        return( p_vector-&gt;capacity );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose capacity to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Capacity, in elements, of the vector.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The capacity is the number of elements that the vector can store, and
+       can be greater than the number of elements stored. To get the number of
+       elements stored in the vector, use <a href="#robo676">cl_vector_get_size</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo679">cl_vector_set_capacity</a>, <a href="#robo676">cl_vector_get_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo675">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fget5fptr">
+Component Library: Vector/cl_vector_get_ptr</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_get_ptr</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_get_ptr</strong> function returns a pointer to an element
+       stored in a vector at a specified index.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void* CL_API
+<strong>cl_vector_get_ptr</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector,
+        IN      const size_t                            index )
+{
+        CL_ASSERT( p_vector );
+        CL_ASSERT( p_vector-&gt;state == CL_INITIALIZED );
+
+        return( p_vector-&gt;p_ptr_array[index] );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure from which to get a
+               pointer to an element.
+
+       index
+               [in] Index of the element.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the element stored at specified index.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_get_ptr</strong> provides constant access times regardless of the index.
+
+       <strong>cl_vector_get_ptr</strong> does not perform boundary checking. Callers are
+       responsible for providing an index that is within the range of the vector.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo673">cl_vector_get</a>, <a href="#robo668">cl_vector_at</a>, <a href="#robo678">cl_vector_set</a>, <a href="#robo676">cl_vector_get_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo676">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fget5fsize">
+Component Library: Vector/cl_vector_get_size</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_get_size</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_get_size</strong> function returns the size of a vector.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_vector_get_size</strong>(
+        IN      const <a href="#robo682">cl_vector_t</a>* const        p_vector )
+{
+        CL_ASSERT( p_vector );
+        CL_ASSERT( p_vector-&gt;state == CL_INITIALIZED );
+
+        return( p_vector-&gt;size );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose size to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Size, in elements, of the vector.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo681">cl_vector_set_size</a>, <a href="#robo674">cl_vector_get_capacity</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo677">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5finit">
+Component Library: Vector/cl_vector_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_init</strong> function initializes a vector for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_init</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector,
+        IN      const size_t            min_size,
+        IN      const size_t            grow_size,
+        IN      const size_t            element_size,
+        IN      <a href="#robo666">cl_pfn_vec_init_t</a>       pfn_init OPTIONAL,
+        IN      <a href="#robo664">cl_pfn_vec_dtor_t</a>       pfn_dtor OPTIONAL,
+        IN      const void* const       context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure to inititalize.
+
+       initial_size
+               [in] Initial number of elements.
+
+       grow_size
+               [in] Number of elements to allocate when incrementally growing
+               the vector.  A value of zero disables automatic growth.
+
+       element_size
+               [in] Size of each element.
+
+       pfn_init
+               [in] Initializer callback to invoke for every new element.
+               See the <a href="#robo666">cl_pfn_vec_init_t</a> function type declaration for details about
+               the callback function.
+
+       pfn_dtor
+               [in] Destructor callback to invoke for elements being deallocated.
+               See the <a href="#robo664">cl_pfn_vec_dtor_t</a> function type declaration for details about
+               the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context.
+
+ RETURN VALUES
+       CL_SUCCESS if the vector was initialized successfully.
+
+       CL_INSUFFICIENT_MEMORY if the initialization failed.
+
+       <a href="./cl_types_h.html#robo308">cl_status_t</a> value returned by optional initializer function specified by
+       the pfn_init parameter.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The constructor and initializer functions, if any, are invoked for every
+       new element in the array.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo669">cl_vector_construct</a>, <a href="#robo670">cl_vector_destroy</a>, <a href="#robo678">cl_vector_set</a>,
+       <a href="#robo673">cl_vector_get</a>, <a href="#robo675">cl_vector_get_ptr</a>, <a href="#robo668">cl_vector_at</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo678">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fset">
+Component Library: Vector/cl_vector_set</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_set</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_set</strong> function sets the element at the specified index.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_set</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector,
+        IN      const size_t            index,
+        IN      void* const                     p_element );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure into which to store
+               an element.
+
+       index
+               [in] Index of the element.
+
+       p_element
+               [in] Pointer to an element to store in the vector.
+
+ RETURN VALUES
+       CL_SUCCESS if the element was successfully set.
+
+       CL_INSUFFICIENT_MEMORY if the vector could not be resized to accommodate
+       the new element.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_set</strong> grows the vector as needed to accommodate the new element,
+       unless the grow_size parameter passed into the <a href="#robo677">cl_vector_init</a> function
+       was zero.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo673">cl_vector_get</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo679">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fset5fcapacity">
+Component Library: Vector/cl_vector_set_capacity</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_set_capacity</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_set_capacity</strong> function reserves memory in a vector for a
+       specified number of elements.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_set_capacity</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector,
+        IN      const size_t            new_capacity );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose capacity to set.
+
+       new_capacity
+               [in] Total number of elements for which the vector should
+               allocate memory.
+
+ RETURN VALUES
+       CL_SUCCESS if the capacity was successfully set.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to satisfy the
+       operation. The vector is left unchanged.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_set_capacity</strong> increases the capacity of the vector. It does
+       not change the size of the vector. If the requested capacity is less
+       than the current capacity, the vector is left unchanged.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo674">cl_vector_get_capacity</a>, <a href="#robo681">cl_vector_set_size</a>,
+       <a href="#robo680">cl_vector_set_min_size</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo680">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fset5fmin5fsize">
+Component Library: Vector/cl_vector_set_min_size</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_set_min_size</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_set_min_size</strong> function resizes a vector to a specified size
+       if the vector is smaller than the specified size.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_set_min_size</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector,
+        IN      const size_t            min_size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose minimum size to set.
+
+       min_size
+               [in] Minimum number of elements that the vector should contain.
+
+ RETURN VALUES
+       CL_SUCCESS if the vector size is greater than or equal to min_size.  This
+       could indicate that the vector's capacity was increased to min_size or
+       that the vector was already of sufficient size.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to resize the vector.
+       The vector is left unchanged.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       If min_size is smaller than the current size of the vector, the vector is
+       unchanged. The vector is unchanged if the size could not be changed due
+       to insufficient memory being available to perform the operation.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo676">cl_vector_get_size</a>, <a href="#robo681">cl_vector_set_size</a>, <a href="#robo679">cl_vector_set_capacity</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo681">[Functions]<a name="Component20Library3a20Vector2fcl5fvector5fset5fsize">
+Component Library: Vector/cl_vector_set_size</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_set_size</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_vector_set_size</strong> function resizes a vector, either increasing or
+       decreasing its size.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_vector_set_size</strong>(
+        IN      <a href="#robo682">cl_vector_t</a>* const      p_vector,
+        IN      const size_t            size );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_vector
+               [in] Pointer to a <a href="#robo682">cl_vector_t</a> structure whose size to set.
+
+       size
+               [in] Number of elements desired in the vector.
+
+ RETURN VALUES
+       CL_SUCCESS if the size of the vector was set successfully.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to complete the
+       operation. The vector is left unchanged.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_vector_set_size</strong> sets the vector to the specified size. If size is
+       smaller than the current size of the vector, the size is reduced.
+       The destructor function, if any, will be invoked for all elements that
+       are above size. Likewise, the constructor and initializer, if any, will
+       be invoked for all new elements.
+
+       This function can only fail if size is larger than the current capacity.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>, <a href="#robo676">cl_vector_get_size</a>, <a href="#robo680">cl_vector_set_min_size</a>,
+       <a href="#robo679">cl_vector_set_capacity</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo682">[Structures]<a name="Component20Library3a20Vector2fcl5fvector5ft">
+Component Library: Vector/cl_vector_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_vector_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <a href="#robo30">Vector</a> structure.
+
+       The <strong>cl_vector_t</strong> structure should be treated as opaque and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_vector
+{
+        size_t                          size;
+        size_t                          grow_size;
+        size_t                          capacity;
+        size_t                          element_size;
+        <a href="#robo666">cl_pfn_vec_init_t</a>       pfn_init;
+        <a href="#robo664">cl_pfn_vec_dtor_t</a>       pfn_dtor;
+        cl_pfn_vec_copy_t       pfn_copy;
+        const void                      *context;
+        <a href="./cl_qlist_h.html#robo566">cl_qlist_t</a>                      alloc_list;
+        void                            **p_ptr_array;
+        cl_state_t                      state;
+
+} <strong>cl_vector_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       size
+                Number of elements successfully initialized in the vector.
+
+       grow_size
+                Number of elements to allocate when growing.
+
+       capacity
+                total # of elements allocated.
+
+       element_size
+                Size of each element.
+
+       pfn_init
+                User supplied element initializer.
+
+       pfn_dtor
+                User supplied element destructor.
+
+       pfn_copy
+                Copy operator.
+
+       context
+                User context for callbacks.
+
+       alloc_list
+                <a href="./cl_list_h.html#robo11">List</a> of allocations.
+
+       p_ptr_array
+                Internal array of pointers to elements.
+
+       state
+               State of the vector.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo30">Vector</a>
+</pre>
+</span>
+</body>
+</html>

@@ -1,0 +1,35 @@
+TARGETNAME = ibroute
+TARGETPATH = ..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+
+UMTYPE = console
+UMENTRY = main
+
+USE_MSVCRT = 1
+NTTARGETFILES=Custom_target
+
+SOURCES = ..\ibroute.c ..\ibdiag_common.c ..\ibdiag_windows.c ibroute.rc
+	
+INCLUDES = ..\..\include;..\..\include\windows;\
+		   ..\..\..\..\ulp\libibmad\include;\
+		   ..\..\..\..\ulp\libibumad\include;\
+		   ..\..\..\..\ulp\libibnetdisc\include;\
+		   ..\..\..\..\inc;..\..\..\..\inc\user;\
+		   ..\..\..\..\inc\user\linux;\
+		   ..\..\..\..\ulp\libibmad\src\$(O); \
+		   ..\..\..\..\ulp\libibumad\src\$(O); \
+		   ..\..\..\..\core\complib\user\$(O); \
+		   ..\..\..\..\core\al\user\$(O); \
+
+C_DEFINES = $(C_DEFINES) /DHAVE_CONFIG_H
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(TARGETPATH)\*\complib.lib		\
+	$(TARGETPATH)\*\ibal.lib		\
+	$(TARGETPATH)\*\libibmad.lib	\
+	$(TARGETPATH)\*\libibumad.lib	
+
+
+MSC_WARNING_LEVEL = /W3 /wd4007

@@ -1,0 +1,40 @@
+TARGETNAME = ibv_rdma_bw
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = PROGRAM
+
+NTTARGETFILES=Custom_target
+
+UMTYPE = console
+UMENTRY = main
+
+USE_MSVCRT = 1
+USE_STL = 1
+USE_NATIVE_EH = 1
+USE_IOSTREAM = 1
+
+SOURCES = rdma_bw.rc rdma_bw.c ..\perftest.c
+	
+INCLUDES = ..;..\..\..\ulp\libibverbs\include;\
+	..\..\..\ulp\librdmacm\include;\
+	..\..\..\ulp\librdmacm\include\rdma; \
+	..\..\..\inc;..\..\..\inc\user;\
+	..\..\..\inc\user\linux;..\..\..\etc\user; \
+	..\..\..\inc\complib; \
+   	..\..\..\hw\mlx4\user\hca; \
+	..\..\..\tools\perftests\user\; \
+	..\..\..\ulp\libibverbs\src\$(O); \
+	..\..\..\core\complib\user\$(O); \
+	..\..\..\ulp\libibumad\src\$(O); \
+	..\..\..\ulp\librdmacm\src\$(O);
+
+TARGETLIBS =					\
+	$(SDK_LIB_PATH)\kernel32.lib		\
+	$(SDK_LIB_PATH)\advapi32.lib		\
+	$(SDK_LIB_PATH)\user32.lib   		\
+	$(SDK_LIB_PATH)\ole32.lib    		\
+	$(SDK_LIB_PATH)\ws2_32.lib   		\
+	$(TARGETPATH)\*\libibverbs.lib		\
+	$(TARGETPATH)\*\libibumad.lib		\
+	$(TARGETPATH)\*\complib.lib		\
+	$(TARGETPATH)\*\librdmacm.lib
+

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/comp_lib_h.html</title>
+<!-- Source: ./inc/complib/comp_lib.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/comp_lib.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo4">[Modules]<a name="Component20Library2fComponent20Library">
+Component Library/Component Library</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       component library 
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The component library is a collection of components that can be used to
+       create complex projects quickly and reliably.
+
+       The component library simplifies development by eliminating the need to
+       re-implement existing functionality. This contributes to shorter
+       development cycles as well as smaller code bases, helping reduce the
+       number of bugs by leveraging tried and tested code.
+
+       The component library also provides the same interface in multiple
+       environments, such as kernel mode and user mode, allowing code to be used
+       in both, again reducing code duplication and development life cycles.
+
+       Components of the library all follow the same usage model, as follows:
+               - The constructor for all components should be called before any other
+               function for that component.  It is acceptable to call the initializer
+               without first calling the constructor.
+
+               - The initializer for all components must be called successfully
+               before any function manipulating that component is called.
+
+               - The destructor for all components must be called if the initializer
+               was called.
+
+       In a debug build, the components assert that the proper sequence is
+       followed.
+</pre>
+</span>
+</body>
+</html>

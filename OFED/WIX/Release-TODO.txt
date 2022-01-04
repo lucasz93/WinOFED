@@ -1,0 +1,30 @@
+
+Things to do prior to building an RC OFED for Windows release.
+
+1) update docs\manual.htm and Release_notes.htm, for version # changes.
+
+2) update to use the correct svn commit number:
+
+	OFED\WIX\README_release.txt
+	OFED\WIX\Release_notes.htm  (FrontPage 2003 works).
+	OFED\WIX\build_SVN.txt
+	OFED\WIX\about-OFED-base.txt (release # and title) must match here and Config.inc
+        OFED\WIX\Common\Config.inc, verify WOFREL and WOFRELNUM are correct
+	
+3) verify inc\mod_ver.inc, IB_MAJORVERSION and IB_MINORVERSION are correct
+
+4) copy items not in SVN to build tree in order build successfully:
+    OFED\WIX\wix_tools\wix*-binaries\
+    inc\user\loadperf.h
+    OFED\WIX\MSCV-VSClass3.cer 
+
+
+GA (General Availability) steps in addition to RC release.
+
+1) update OFED\WIX\README.txt, add in SVN commit # to list of winOFED releases + date released
+
+2) Update OFA Windows downloads web page
+       https://www.openfabrics.org/-download-windows-installer-.html
+   set latest symlink, correct README, WEB_README, RoadMap.txt for dates, version & svn #
+
+

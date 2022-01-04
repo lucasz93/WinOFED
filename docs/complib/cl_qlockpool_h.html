@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_qlockpool_h.html</title>
+<!-- Source: ./inc/complib/cl_qlockpool.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_qlockpool.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo21">[Modules]<a name="Component20Library2fQuick20Locking20Pool">
+Component Library/Quick Locking Pool</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> represents a thread-safe quick pool.
+
+       This object should be treated as opaque and should be
+       manipulated only through the provided functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo573">cl_qlock_pool_t</a>
+
+       Initialization:
+               <a href="#robo568">cl_qlock_pool_construct</a>, <a href="#robo571">cl_qlock_pool_init</a>, <a href="#robo569">cl_qlock_pool_destroy</a>
+
+       Manipulation
+               <a href="#robo570">cl_qlock_pool_get</a>, <a href="#robo572">cl_qlock_pool_put</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo568">[Functions]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5fconstruct">
+Component Library: Quick Locking Pool/cl_qlock_pool_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       This function constructs a Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>static inline void
+<strong>cl_qlock_pool_construct</strong>(
+        IN <a href="#robo573">cl_qlock_pool_t</a>* const p_pool )
+{
+        <a href="./cl_qpool_h.html#robo600">cl_qpool_construct</a>( &amp;p_pool-&gt;pool );
+        <a href="./cl_spinlock_h.html#robo631">cl_spinlock_construct</a>( &amp;p_pool-&gt;lock );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_pool
+               [in] Pointer to a Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo571">cl_qlock_pool_init</a>, <a href="#robo569">cl_qlock_pool_destroy</a>
+
+       Calling <strong>cl_qlock_pool_construct</strong> is a prerequisite to calling any other
+       method except <a href="#robo571">cl_qlock_pool_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo571">cl_qlock_pool_init</a>, <a href="#robo569">cl_qlock_pool_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo569">[Functions]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5fdestroy">
+Component Library: Quick Locking Pool/cl_qlock_pool_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlock_pool_destroy</strong> function destroys a node, releasing
+       all resources.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>static inline void
+<strong>cl_qlock_pool_destroy</strong>(
+        IN <a href="#robo573">cl_qlock_pool_t</a>* const p_pool )
+{
+        /*
+                If the pool has already been put into use, grab the lock
+                to sync with other threads before we blow everything away.
+        */
+        if( <a href="./cl_qpool_h.html#robo597">cl_is_qpool_inited</a>( &amp;p_pool-&gt;pool ) )
+        {
+                <a href="./cl_spinlock_h.html#robo630">cl_spinlock_acquire</a>( &amp;p_pool-&gt;lock );
+                <a href="./cl_qpool_h.html#robo602">cl_qpool_destroy</a>( &amp;p_pool-&gt;pool );
+                <a href="./cl_spinlock_h.html#robo634">cl_spinlock_release</a>( &amp;p_pool-&gt;lock );
+        }
+        else
+                <a href="./cl_qpool_h.html#robo602">cl_qpool_destroy</a>( &amp;p_pool-&gt;pool );
+
+        <a href="./cl_spinlock_h.html#robo632">cl_spinlock_destroy</a>( &amp;p_pool-&gt;lock );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_pool
+               [in] Pointer to a Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performs any necessary cleanup of the specified Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>.
+       Further operations should not be attempted on the destroyed object.
+       This function should only be called after a call to
+       <a href="#robo568">cl_qlock_pool_construct</a> or <a href="#robo571">cl_qlock_pool_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo568">cl_qlock_pool_construct</a>, <a href="#robo571">cl_qlock_pool_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo570">[Functions]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5fget">
+Component Library: Quick Locking Pool/cl_qlock_pool_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Gets an object wrapper and wire MAD from the pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>static inline <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>*
+<strong>cl_qlock_pool_get</strong>(
+        IN <a href="#robo573">cl_qlock_pool_t</a>* const p_pool )
+{
+        <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>* p_item;
+        <a href="./cl_spinlock_h.html#robo630">cl_spinlock_acquire</a>( &amp;p_pool-&gt;lock );
+        p_item = <a href="./cl_qpool_h.html#robo603">cl_qpool_get</a>( &amp;p_pool-&gt;pool );
+        <a href="./cl_spinlock_h.html#robo634">cl_spinlock_release</a>( &amp;p_pool-&gt;lock );
+        return( p_item );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_pool
+               [in] Pointer to an <a href="#robo573">cl_qlock_pool_t</a> object.
+
+ RETURN VALUES
+       Returns a pointer to a <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a> contained in the user object.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The object must eventually be returned to the pool with a call to
+       <a href="#robo572">cl_qlock_pool_put</a>.
+
+       The <a href="#robo568">cl_qlock_pool_construct</a> or <a href="#robo571">cl_qlock_pool_init</a> must be called before
+       using this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo572">cl_qlock_pool_put</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo571">[Functions]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5finit">
+Component Library: Quick Locking Pool/cl_qlock_pool_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_qlock_pool_init</strong> function initializes a Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>static inline <a href="./cl_types_h.html#robo308">cl_status_t</a>
+<strong>cl_qlock_pool_init</strong>(
+        IN <a href="#robo573">cl_qlock_pool_t</a>*                     const p_pool,
+        IN      const size_t                    min_size,
+        IN      const size_t                    max_size,
+        IN      const size_t                    grow_size,
+        IN      const size_t                    object_size,
+        IN      <a href="./cl_qpool_h.html#robo599">cl_pfn_qpool_init_t</a>             pfn_initializer OPTIONAL,
+        IN      <a href="./cl_qpool_h.html#robo598">cl_pfn_qpool_dtor_t</a>             pfn_destructor OPTIONAL,
+        IN      const void* const               context )
+{
+        <a href="./cl_types_h.html#robo308">cl_status_t</a> status;
+
+        <a href="#robo568">cl_qlock_pool_construct</a>( p_pool );
+
+        status = <a href="./cl_spinlock_h.html#robo633">cl_spinlock_init</a>( &amp;p_pool-&gt;lock );
+        if( status )
+                return( status );
+
+        status = <a href="./cl_qpool_h.html#robo605">cl_qpool_init</a>( &amp;p_pool-&gt;pool, min_size, max_size, grow_size,
+                        object_size, pfn_initializer, pfn_destructor, context );
+
+        return( status );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_pool
+               [in] Pointer to an <a href="#robo573">cl_qlock_pool_t</a> object to initialize.
+
+       min_size
+               [in] Minimum number of objects that the pool should support. All
+               necessary allocations to allow storing the minimum number of items
+               are performed at initialization time, and all necessary callbacks
+               successfully invoked.
+
+       max_size
+               [in] Maximum number of objects to which the pool is allowed to grow.
+               A value of zero specifies no maximum.
+
+       grow_size
+               [in] Number of objects to allocate when incrementally growing the pool.
+               A value of zero disables automatic growth.
+
+       object_size
+               [in] Size, in bytes, of each object.
+
+       pfn_initializer
+               [in] Initialization callback to invoke for every new object when
+               growing the pool. This parameter is optional and may be NULL. If NULL,
+               the pool assumes the <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a> structure describing objects is
+               located at the head of each object. See the <a href="./cl_qpool_h.html#robo599">cl_pfn_qpool_init_t</a>
+               function type declaration for details about the callback function.
+
+       pfn_destructor
+               [in] Destructor callback to invoke for every object before memory for
+               that object is freed. This parameter is optional and may be NULL.
+               See the <a href="./cl_qpool_h.html#robo598">cl_pfn_qpool_dtor_t</a> function type declaration for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback functions to provide context.
+
+ RETURN VALUES
+       CL_SUCCESS if the quick pool was initialized successfully.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to initialize the
+       quick pool.
+
+       CL_INVALID_SETTING if a the maximum size is non-zero and less than the
+       minimum size.
+
+       Other <a href="./cl_types_h.html#robo308">cl_status_t</a> value returned by optional initialization callback function
+       specified by the pfn_initializer parameter.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling other Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> methods.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo568">cl_qlock_pool_construct</a>, <a href="#robo569">cl_qlock_pool_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo572">[Functions]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5fput">
+Component Library: Quick Locking Pool/cl_qlock_pool_put</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_put</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Returns an object to the pool.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>static inline void
+<strong>cl_qlock_pool_put</strong>(
+        IN <a href="#robo573">cl_qlock_pool_t</a>* const p_pool,
+        IN <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>* const p_item )
+{
+        <a href="./cl_spinlock_h.html#robo630">cl_spinlock_acquire</a>( &amp;p_pool-&gt;lock );
+        <a href="./cl_qpool_h.html#robo606">cl_qpool_put</a>( &amp;p_pool-&gt;pool, p_item );
+        <a href="./cl_spinlock_h.html#robo634">cl_spinlock_release</a>( &amp;p_pool-&gt;lock );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_pool
+               [in] Pointer to an <a href="#robo573">cl_qlock_pool_t</a> object.
+
+       p_item
+               [in] Pointer to the <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a> in an object that was previously
+               retrieved from the pool.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The <a href="#robo568">cl_qlock_pool_construct</a> or <a href="#robo571">cl_qlock_pool_init</a> must be called before
+       using this function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>, <a href="#robo570">cl_qlock_pool_get</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo573">[Structures]<a name="Component20Library3a20Quick20Locking20Pool2fcl5fqlock5fpool5ft">
+Component Library: Quick Locking Pool/cl_qlock_pool_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_qlock_pool_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a> structure.
+
+       This object should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_qlock_pool
+{
+        cl_spinlock_t                           lock;
+        <a href="./cl_qpool_h.html#robo608">cl_qpool_t</a>                                      pool;
+
+} <strong>cl_qlock_pool_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       lock
+               <a href="./cl_spinlock_h.html#robo26">Spinlock</a> guarding the pool.
+
+       pool
+               quick_pool of user objects.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Quick Locking <a href="./cl_pool_h.html#robo18">Pool</a>
+</pre>
+</span>
+</body>
+</html>

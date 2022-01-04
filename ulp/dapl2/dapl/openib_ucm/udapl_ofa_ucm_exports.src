@@ -1,0 +1,10 @@
+LIBRARY dapl2-ofa-ucm.dll
+
+
+EXPORTS
+dat_provider_init
+dat_provider_fini
+#ifdef DAT_EXTENSIONS
+dapl_extensions
+#endif
+

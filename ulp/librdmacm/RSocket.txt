@@ -1,0 +1,102 @@
+
+ Copyright (c) 2012 Oce Printing Systems GmbH.  All rights reserved.
+
+ This software is available to you under the BSD license below:
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+      - Redistributions of source code must retain the above
+        copyright notice, this list of conditions and the following
+        disclaimer.
+
+      - Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+      - Neither the name Oce Printing Systems GmbH nor the names
+        of the authors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+ THIS SOFTWARE IS PROVIDED  “AS IS” AND ANY EXPRESS OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE AND
+ NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS
+ OR CONTRIBUTOR OR COPYRIGHT HOLDER BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+ OF SUCH DAMAGE. 
+
+#############################################################################
+
+
+GENERAL
+=======
+The RSockets protocol provides socket-based RDMA communication between
+Windows nodes (like to WSD or ND) as well as between Windows and Linux nodes.
+The RSockets functionality is contained within the librdmacm.dll which acts
+as a Winsock base transport provider.
+
+
+INSTALLATION
+============
+Installation of that Winsock provider (i.e. registration of the
+librdmacm.dll in the Windows Registry) can be done with the rsinstall
+tool (see tools/rsinstall) which works similar to wsdinstall for the
+WSD Winsock provider.
+For a list of available options, just call rsinstall.exe without
+parameters. (Note that rsinstall.exe requires administrative privileges
+to run properly!)
+
+The commandline tool rnetstat.exe can be used for displaying all currently
+active RSocket connections (see ulp/librdmacm/tools/rnetstat).
+This requires the RSocket Helper Service rsocksvc.exe to be installed first
+(see ulp/librdmacm/tools/rsocksvc) by performing the following command:
+	rsocksvc.exe -install
+
+
+USAGE
+=====
+Usage of the RSocket provider at application level is quite simple,
+as demonstrated by the rstream tool (see examples/rstream)
+which is also a porting from Linux OFED. In contrast to a 'normal' Winsock
+application there are just two essential differences:
+
+- The ulp\librdmacm\include\rdma\rwinsock.h header has to be included
+  instead of winsock2.h. (Nonetheless it's still necessary to call
+  WSAStartup() and WSACleanup() during initialization and shutdown of
+  your application, respectivily).
+
+- Instead of calling socket() for socket creation, a WSASocket() has to
+  be performed with a WSAPROTOCOL_INFO structure selecting the appropriate
+  Winsock provider. For convenience there is a little helper function
+  rsGetProtocolInfo() implemented in rwinsock.h which provides this structure
+  based on the provider's GUID (static variable 'rsProviderGuid' which is
+  also contained in rwinsock.h).
+
+
+RESTRICTIONS
+============
+Generally there are the same restrictions for socket applications as
+described in the Linux RSockets man page (e.g. no UDP / SOCK_DGRAM).
+Moreover the following restrictions apply:
+
+- The MSG_DONTWAIT flag is not supported when calling WSASocket().
+  Instead to configure a socket for non-blocking operation,
+  ioctlsocket(FIONBIO) can be used.
+
+- Overlapped operation is currently not supported, i.e. a WSASocket() with
+  the WSA_FLAG_OVERLAPPED flag set will be rejected with a WSAEINVAL error.
+
+- The WSAPoll() function (in Windows Vista and later) is not supported,
+  hence the select() function has to be used instead.
+
+- IPv6 should work, but has not been tested yet.

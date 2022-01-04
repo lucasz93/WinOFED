@@ -1,0 +1,64 @@
+LIBRARY	mlx4_core.lib
+
+EXPORTS
+; DllInitialize and DllUnload must be exported for the OS reference counting to
+; work, and must be private for the compiler to accept them.
+DllInitialize private
+DllUnload private
+
+; l2w.c
+pci_pool_create
+strlcpy
+__bitmap_full
+__bitmap_empty
+core_init
+core_cleanup
+
+; radix.c
+radix_tree_create
+radix_tree_insert
+radix_tree_lookup
+radix_tree_delete
+radix_tree_destroy
+
+; cache.c
+ib_get_cached_gid
+ib_find_cached_gid
+ib_get_cached_pkey
+ib_find_cached_pkey
+ib_get_cached_lmc
+
+; packer
+ib_pack
+ib_unpack
+
+; ud_header
+ib_ud_header_init
+ib_ud_header_pack
+ib_ud_header_unpack
+
+; device.c
+ib_alloc_device
+ib_dealloc_device
+ib_register_device
+ib_unregister_device
+ib_register_client
+ib_unregister_client
+ib_get_client_data
+ib_set_client_data
+ib_register_event_handler
+ib_unregister_event_handler
+ib_dispatch_event
+ib_query_device
+ib_query_port
+ib_query_gid
+ib_query_pkey
+ib_modify_device
+ib_modify_port
+ib_find_gid
+ib_find_pkey
+
+; verbs.c
+ib_modify_qp_is_ok
+ib_create_ah
+ib_destroy_ah

@@ -1,0 +1,101 @@
+This directory includes gen2 uverbs microbenchmarks.
+
+The tests are intended as:
+	1) simple, efficient usage examples.
+		Please see the COPYING file if you intend to copy it literally.
+
+	2) a useful benchmark
+		e.g. for HW or SW tuning and/or functional testing.
+		Please post results/observations to the openib-general mailing
+		list. See http://openib.org/mailman/listinfo/openib-general
+		and http://www.openib.org "Contact Us" link for contact details.
+
+
+Testing methodology
+-------------------
+
+- uses CPU cycle counter to get time stamps without context switch.
+  Some CPU architectures do NOT have such capability. e.g. Intel 80486
+  or older PPC.
+
+- measures round-trip time but reports half of that as one-way latency.
+  ie. May not be sufficiently accurate for asymetrical configurations.
+
+- Min/Median/Max result is reported.
+  The median (vs average) is less sensitive to extreme scores.
+  Typically the "Max" value is the first value measured.
+
+- larger samples only marginally help. The default (1000) is pretty good.
+  Note that an array of cycles_t (typically unsigned long) is allocated
+  once to collect samples and again to store the difference between them.
+  Really big sample sizes (e.g. 1 million) might expose other problems
+  with the program.
+
+- "-H" option will dump the histogram for additional statistical analysis.
+  See xgraph, ygraph, r-base (http://www.r-project.org/), pspp, or other 
+  statistical math programs.
+
+Architectures tested:	i686, x86_64, ia64
+
+
+
+Test Descriptions
+-----------------
+
+rdma_lat.c - latency test with RDMA write transactions
+rdma_bw.c - streaming BW test with RDMA write transactions
+
+
+The following tests are mainly useful for HW/SW benchmarking.
+They are not intended as actual usage examples.
+-----------------
+
+send_lat.c - latency test with send transactions
+send_bw.c - BW test with send transactions
+write_lat.c - latency test with RDMA write transactions
+write_bw.c - BW test with RDMA write transactions
+read_lat.c - latency test with RDMA read transactions
+read_bw.c - BW test with RDMA read transactions
+
+
+Build Tests
+-----------
+
+"make" to build all tests
+
+	Debian: build-dep on linux-kernel-headers (for asm/timex.h file)
+		build-dep on libibverbs-dev
+		depends on libibverbs1
+
+
+Run Tests
+---------
+
+Prerequisites: 
+	kernel 2.6
+	ib_uverbs (kernel module) matches libibverbs
+		("match" means binary compatible, but ideally same SVN rev)
+	Debian: dpkg -i libibverbs1_0.1.0-1_ia64.deb
+
+Server:		./<test name> <options>
+Client:		./<test name> <options> <server IP address>
+
+	o IMPORTANT: The SAME OPTIONS must be passed to both server and client.
+	o "--help" will list the available <options>.
+	o <server address> is IPv4 or IPv6 address.
+	  You can use the IPoIB address if you have IPoIB configured. 
+
+You need to be running a Subnet Manager on the switch or one of the nodes
+in your fabric. To use the opensm tool for this purpose, run
+	modprobe ib_umad
+	opensm &
+on one of the nodes
+
+First load ib_uverbs on both client and server with something like:
+	modprobe ib_uverbs
+
+Then (e.g.) "rdma_lat -C" on the server side.
+Lastly "rmda_lat -C 10.0.1.31" on the client.
+
+rmda_lat will exit on both server and client after printing results.
+

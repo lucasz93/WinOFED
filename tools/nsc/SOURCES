@@ -1,0 +1,26 @@
+TARGETNAME=nsc
+TARGETPATH=..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+
+SOURCES=nsc.c \
+        nsc.rc
+
+INCLUDES=$(SDK_INC_PATH);
+
+RCOPTIONS=/I..\..\inc;
+
+TARGETLIBS=$(SDK_LIB_PATH)\user32.lib $(SDK_LIB_PATH)\ws2_32.lib 
+
+!if $(FREEBUILD)
+
+!else
+C_DEFINES=$(C_DEFINES) -DDEBUG
+!endif
+
+C_DEFINES=$(C_DEFINES) -D__WIN__
+
+386_STDCALL=0
+
+

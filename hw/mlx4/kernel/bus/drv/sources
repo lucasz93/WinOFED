@@ -1,0 +1,95 @@
+TARGETNAME=mlx4_bus
+
+!IFNDEF HP_COMPILE
+SRC_INF_NAME=mlx4_bus
+!ELSE
+C_DEFINES=$(C_DEFINES) -DHP_PROD
+SRC_INF_NAME=hp_bus
+!ENDIF
+
+TARGETPATH=..\..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+LIBPATH=..\..\..\..\..\bin\kernel\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DRIVER
+
+# WDK build only - transform .inx --> .inf adding date & version stamp.
+# see .\makefile.inc
+INF_NAME=$(TARGETNAME)
+INF_TARGET=..\..\..\..\..\bin\kernel\$(O)\$(INF_NAME).inf
+NTTARGETFILES=$(INF_TARGET) 
+
+
+USECXX_FLAG=1
+
+
+!if $(FREEBUILD)
+ENABLE_EVENT_TRACING=1
+!else
+#ENABLE_EVENT_TRACING=1
+!endif
+
+SOURCES= \
+	bus.rc \
+	drv.c  \
+	pci.c  \
+	pdo.c  \
+	wmi.c  \
+	stat.c \
+        vpd.c  \
+	workerThread.cpp
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_PCH=precomp.pch
+PRECOMPILED_CXX=1
+
+NTTARGETFILE0=mofcomp
+
+KMDF_VERSION_MAJOR=1
+
+C_DEFINES=$(C_DEFINES) -DDRIVER -DDEPRECATE_DDK_FUNCTIONS -D__LITTLE_ENDIAN -DUSE_WDM_INTERRUPTS
+
+INCLUDES=..;..\inc;..\..\inc;..\core;..\..\..\inc;..\..\..\..\..\inc;..\..\..\..\..\inc\kernel;..\core;..\core\$(O);$(ND_SDK_PATH)\include;..\..\genutils;..\..\genutils\$(O);..\..\..\..\..\core\complib\kernel\$(O);..\ib\$(O);..\net\$(O);..\..\l2w\$(O);
+
+TARGETLIBS= $(TARGETLIBS) \
+	$(DDK_LIB_PATH)\ntstrsafe.lib \
+    $(TARGETPATH)\*\complib.lib \
+    $(TARGETPATH)\*\mlx4_core.lib \
+    $(TARGETPATH)\*\mlx4_ib.lib \
+    $(TARGETPATH)\*\mlx4_net.lib \
+    $(TARGETPATH)\*\mlx4_hca.lib \
+    $(TARGETPATH)\*\l2w.lib \
+    $(TARGETPATH)\*\genutils.lib \
+
+#LINKER_FLAGS=/MAP 
+
+
+!IFDEF ENABLE_EVENT_TRACING
+
+C_DEFINES = $(C_DEFINES) -DEVENT_TRACING
+
+RUN_WPP= $(SOURCES) -km -dll -ext: .c .cpp .h .C .CPP .H\
+#	-preserveext:.cpp .h\
+	-scan:..\..\inc\mlx4_debug.h \
+	-func:MLX4_PRINT(LEVEL,FLAGS,(MSG,...)) \
+	-func:MLX4_PRINT_EXIT(LEVEL,FLAGS,(MSG,...)) 
+!ENDIF
+
+!if defined(DDK_TARGET_OS) && "$(DDK_TARGET_OS)"=="Win7"
+#
+#  The driver is for windows7
+#
+C_DEFINES=$(C_DEFINES) -DTARGET_OS_WIN7=1
+
+!else 
+
+!if defined(DDK_TARGET_OS) && "$(DDK_TARGET_OS)"=="WinNET"
+#
+#  The driver is for windows 2003
+#
+C_DEFINES=$(C_DEFINES) -DTARGET_OS_WIN2003=1
+!endif
+
+!endif
+
+MSC_OPTIMIZATION=/Oi
+MSC_WARNING_LEVEL= /W4
+

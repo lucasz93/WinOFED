@@ -1,0 +1,50 @@
+TARGETNAME = libibmad
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\ibmad_exports.def
+NTTARGETFILES=Custom_target
+
+DLLENTRY = DllMain
+USE_MSVCRT = 1
+
+SOURCES = \
+	ibmad_main.cpp \
+	bm.c \
+	dump.c \
+	fields.c \
+	gs.c \
+	mad.c \
+	portid.c \
+	register.c \
+	resolve.c \
+	rpc.c \
+	sa.c \
+	serv.c \
+	smp.c \
+	vendor.c
+	
+INCLUDES =	..\include\infiniband;\
+			..\include;..\include\windows;\
+			..\..\libibverbs\include;\
+			..\..\libibumad\include;\
+			..\..\..\inc;\
+			..\..\..\inc\user;\
+			..\..\..\inc\user\linux;\
+			..\..\libibumad\src\$(O);\
+			..\..\..\core\complib\user\$(O);
+			
+
+USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_IBMAD_SYMBOLS
+C_DEFINES = $(C_DEFINES) /DHAVE_CONFIG_H
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib	    \
+	$(SDK_LIB_PATH)\ws2_32.lib	    \
+	$(SDK_LIB_PATH)\advapi32.lib	\
+	$(SDK_LIB_PATH)\user32.lib	    \
+	$(SDK_LIB_PATH)\ole32.lib       \
+    $(TARGETPATH)\*\complib.lib	    \
+    $(TARGETPATH)\*\libibumad.lib

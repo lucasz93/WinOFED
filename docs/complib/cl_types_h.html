@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_types_h.html</title>
+<!-- Source: ./inc/complib/cl_types.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_types.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo267">[Definitions]<a name="Component20Library2fData20Types">
+Component Library/Data Types</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Data Types
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The component library provides and uses explicitly sized types.
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       char
+               8-bit, defined by compiler.
+
+       void
+               0-bit, defined by compiler.
+
+       int8_t
+               8-bit signed integer.
+
+       uint8_t
+               8-bit unsigned integer.
+
+       int16_t
+               16-bit signed integer.
+
+       uint16_t
+               16-bit unsigned integer.
+
+       net16_t
+               16-bit network byte order value.
+
+       int32_t
+               32-bit signed integer.
+
+       uint32_t
+               32-bit unsigned integer.
+
+       net32_t
+               32-bit network byte order value.
+
+       int64_t
+               64-bit signed integer.
+
+       uint64_t
+               64-bit unsigned integer.
+
+       net64_t
+               64-bit network byte order value.
+
+       intn_t
+               Signed natural sized integer.  32-bit on a 32-bit platform, 64-bit on
+               a 64-bit platform.
+
+       uintn_t
+               Unsigned natural sized integer.  32-bit on a 32-bit platform, 64-bit on
+               a 64-bit platform.
+
+       boolean_t
+               integral sized.  Set to TRUE or FALSE and used in logical expressions.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Pointer types are not defined as these provide no value and can potentially
+       lead to naming confusion.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo268">[Definitions]<a name="Component20Library2fObject20States">
+Component Library/Object States</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <a href="./cl_obj_h.html#robo14">Object</a> States
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The object states enumerated type defines the valid states of components.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef enum _cl_state
+{
+        CL_UNINITIALIZED = 1,
+        CL_INITIALIZED,
+        CL_DESTROYING,
+        CL_DESTROYED
+
+} cl_state_t;
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       CL_UNINITIALIZED
+               Indicates that initialization was not invoked successfully.
+
+       CL_INITIALIZED
+               Indicates initialization was successful.
+
+       CL_DESTROYING
+               Indicates that the object is undergoing destruction.
+
+       CL_DESTROYED
+               Indicates that the object's destructor has already been called.  Most
+               objects set their final state to CL_DESTROYED before freeing the
+               memory associated with the object.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo269">[Definitions]<a name="Component20Library2fParameter20Keywords">
+Component Library/Parameter Keywords</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Parameter Keywords
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The Parameter Keywords can be used to clarify the usage of function
+       parameters to users.
+</pre>
+</span><p><strong>VALUES</strong></p>
+<span class="VALUES"><pre>       IN
+               Designates that the parameter is used as input to a function.
+
+       OUT
+               Designates that the parameter's value will be set by the function.
+
+       OPTIONAL
+               Designates that the parameter is optional, and may be NULL.
+               The OPTIONAL keyword, if used, follows the parameter name.
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       // Function declaration.
+       void*
+       my_func(
+           IN void* const p_param1,
+           OUT void** const p_handle OPTIONAL );
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Multiple keywords can apply to a single parameter. The IN and OUT
+       keywords precede the parameter type. The OPTIONAL
+       keyword, if used, follows the parameter name.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo307">[Definitions]<a name="Component20Library3a20Data20Types2fCL5fSTATUS5fMSG">
+Component Library: Data Types/CL_STATUS_MSG</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>CL_STATUS_MSG</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>CL_STATUS_MSG</strong> macro returns a textual representation of
+       an <a href="#robo308">cl_status_t</a> code.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       const char*
+*       <strong>CL_STATUS_MSG</strong>(
+*               IN <a href="#robo308">cl_status_t</a> errcode );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       errcode
+               [in] <a href="#robo308">cl_status_t</a> code for which to return a text representation.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to a string containing a textual representation of the errcode
+       parameter.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function performs boundary checking on the <a href="#robo308">cl_status_t</a> value,
+       masking off the upper 24-bits. If the value is out of bounds, the string
+       "invalid status code" is returned.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo308">cl_status_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo308">[Definitions]<a name="Component20Library3a20Data20Types2fcl5fstatus5ft">
+Component Library: Data Types/cl_status_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_status_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_status_t</strong> return types are used by the component library to
+       provide detailed function return values.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef enum _cl_status
+{
+        CL_SUCCESS = 0,
+        CL_ERROR,
+        CL_INVALID_STATE,
+        CL_INVALID_OPERATION,
+        CL_INVALID_SETTING,
+        CL_INVALID_PARAMETER,
+        CL_INSUFFICIENT_RESOURCES,
+        CL_INSUFFICIENT_MEMORY,
+        CL_INVALID_PERMISSION,
+        CL_COMPLETED,
+        CL_NOT_DONE,
+        CL_PENDING,
+        CL_TIMEOUT,
+        CL_CANCELED,
+        CL_REJECT,
+        CL_OVERRUN,
+        CL_NOT_FOUND,
+        CL_UNAVAILABLE,
+        CL_BUSY,
+        CL_DISCONNECT,
+        CL_DUPLICATE,
+        CL_INVALID_REQUEST,
+
+        CL_STATUS_COUNT                 /* should be the last value */
+
+} <strong>cl_status_t</strong>;
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Data Types, <a href="#robo307">CL_STATUS_MSG</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo319">[Functions]<a name="Component20Library3a20Error20Trapping2fcl5fpanic">
+Component Library: Error Trapping/cl_panic</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_panic</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Halts execution of the current process.  Halts the system if called in
+       from the kernel.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_panic</strong>(
+        IN      const char* const       message,
+        IN      ... );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       message
+               [in] ANSI string formatted identically as for a call to the standard C
+               function printf describing the cause for the panic.
+
+       ...
+               [in] Extra parameters for string formatting, as defined for the
+               standard C function printf.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The formatting of the message string is the same as for printf
+
+       <strong>cl_panic</strong> sends the message to the current message logging target.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo445">[Definitions]<a name="Component20Library3a20Object20States2fcl5fis5fstate5fvalid">
+Component Library: Object States/cl_is_state_valid</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_state_valid</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_state_valid</strong> function returns whether a state has a valid value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_state_valid</strong>(
+        IN      const cl_state_t        state )
+{
+        return( (state == CL_UNINITIALIZED) || (state == CL_INITIALIZED) ||
+                (state == CL_DESTROYING) || (state == CL_DESTROYED) );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       state
+               State whose value to validate.
+
+ RETURN VALUES
+       TRUE if the specified state has a valid value.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is used in debug builds to check for valid states.  If an
+       uninitialized object is passed, the memory for the state may cause the
+       state to have an invalid value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="./cl_obj_h.html#robo14">Object</a> States
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo489">[Definitions]<a name="Component20Library3a20Pointer20Manipulation2foffsetof">
+Component Library: Pointer Manipulation/offsetof</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>offsetof</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>offsetof</strong> macro returns the offset of a member within a structure.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       uintn_t
+*       <strong>offsetof</strong>(
+*               IN TYPE,
+*               IN MEMBER );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       TYPE
+               [in] Name of the structure containing the specified member.
+
+       MEMBER
+               [in] Name of the member whose offset in the specified structure
+               is to be returned.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Number of bytes from the beginning of the structure to the
+       specified member.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo490">PARENT_STRUCT</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo490">[Definitions]<a name="Component20Library3a20Pointer20Manipulation2fPARENT5fSTRUCT">
+Component Library: Pointer Manipulation/PARENT_STRUCT</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>PARENT_STRUCT</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>PARENT_STRUCT</strong> macro returns a pointer to a structure
+       given a name and pointer to one of its members.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       PARENT_TYPE*
+*       <strong>PARENT_STRUCT</strong>(
+*               IN void* const p_member,
+*               IN PARENT_TYPE,
+*               IN MEMBER_NAME );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_member
+               [in] Pointer to the MEMBER_NAME member of a PARENT_TYPE structure.
+
+       PARENT_TYPE
+               [in] Name of the structure containing the specified member.
+
+       MEMBER_NAME
+               [in] Name of the member whose address is passed in the p_member
+               parameter.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to a structure of type PARENT_TYPE whose MEMBER_NAME member is
+       located at p_member.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo489">offsetof</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo662">[Definitions]<a name="Component20Library3a20Unreferenced20Parameters2fUNUSED5fPARAM">
+Component Library: Unreferenced Parameters/UNUSED_PARAM</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>UNUSED_PARAM</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>UNUSED_PARAM</strong> macro can be used to eliminates compiler warnings related
+       to intentionally unused formal parameters in function implementations.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>UNUSED_PARAM</strong>( P )
+</pre>
+</span><p><strong>EXAMPLE</strong></p>
+<span class="EXAMPLE"><pre>       void my_func( int32_t value )
+       {
+               <strong>UNUSED_PARAM</strong>( value );
+       }
+</pre>
+</span>
+</body>
+</html>

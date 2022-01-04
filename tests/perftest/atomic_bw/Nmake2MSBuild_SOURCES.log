@@ -1,0 +1,424 @@
+Convert:	Verbose  : 1/17/2012 8:05:11 PM
+    ConvertFile:	Information  : Converting "B:\users\yuvala\trunk\tests\perftest\atomic_bw\SOURCES"
+        Parse  :	Verbose  : File contents after preprocessing:
+                            	TARGETNAME = ibv_atomic_bw
+                            	TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+                            	TARGETTYPE = PROGRAM
+                            	NTTARGETFILES=Custom_target
+                            	UMTYPE = console
+                            	UMENTRY = main
+                            	USE_MSVCRT = 1
+                            	USE_STL = 1
+                            	USE_NATIVE_EH = 1
+                            	USE_IOSTREAM = 1
+                            	SOURCES = atomic_bw.rc ..\atomic_bw.c ..\perftest_resources.c ..\perftest.c ..\multicast_resources.c ..\perftest_parameters.c ..\perftest_communication.c 
+                            	INCLUDES = ..;..\..\..\ulp\libibverbs\include;..\..\..\ulp\libibumad\include;..\..\..\ulp\librdmacm\include\rdma; 	   ..\..\..\inc;..\..\..\inc\user;..\..\..\inc\user\linux;..\..\..\inc\complib; 		..\..\..\hw\mlx4\user\hca;..\..\..\tools\perftests\user; 		   ..\..\..\ulp\libibverbs\src\$(O);  		   ..\..\..\ulp\libibumad\src\$(O); 		   ..\..\..\core\complib\user\$(O);  	  ..\..\..\ulp\librdmacm\src\$(O);
+                            	TARGETLIBS =						 	$(SDK_LIB_PATH)\kernel32.lib	 	$(SDK_LIB_PATH)\advapi32.lib	 	$(SDK_LIB_PATH)\user32.lib		 	$(SDK_LIB_PATH)\ole32.lib		 	$(SDK_LIB_PATH)\ws2_32.lib		 	$(SDK_LIB_PATH)\uuid.lib  	$(TARGETPATH)\*\libibverbs.lib		 	$(TARGETPATH)\*\libibumad.lib		 	$(TARGETPATH)\*\complib.lib		 	$(TARGETPATH)\*\librdmacm.lib		
+            ParseIfApplies:	Verbose  : "TARGETNAME = ibv_atomic_bw" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "TARGETTYPE = PROGRAM" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "NTTARGETFILES=Custom_target" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "UMTYPE = console" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "UMENTRY = main" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "USE_MSVCRT = 1" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "USE_STL = 1" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "USE_NATIVE_EH = 1" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "USE_IOSTREAM = 1" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "SOURCES = atomic_bw.rc ..\atomic_bw.c ..\perftest_resources.c ..\perftest.c ..\multicast_resources.c ..\perftest_parameters.c ..\perftest_communication.c " was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "INCLUDES = ..;..\..\..\ulp\libibverbs\include;..\..\..\ulp\libibumad\include;..\..\..\ulp\librdmacm\include\rdma; 	   ..\..\..\inc;..\..\..\inc\user;..\..\..\inc\user\linux;..\..\..\inc\complib; 		..\..\..\hw\mlx4\user\hca;..\..\..\tools\perftests\user; 		   ..\..\..\ulp\libibverbs\src\$(O);  		   ..\..\..\ulp\libibumad\src\$(O); 		   ..\..\..\core\complib\user\$(O);  	  ..\..\..\ulp\librdmacm\src\$(O);" was parsed as a"MacroDefinition"
+            ParseIfApplies:	Verbose  : "TARGETLIBS =						 	$(SDK_LIB_PATH)\kernel32.lib	 	$(SDK_LIB_PATH)\advapi32.lib	 	$(SDK_LIB_PATH)\user32.lib		 	$(SDK_LIB_PATH)\ole32.lib		 	$(SDK_LIB_PATH)\ws2_32.lib		 	$(SDK_LIB_PATH)\uuid.lib  	$(TARGETPATH)\*\libibverbs.lib		 	$(TARGETPATH)\*\libibumad.lib		 	$(TARGETPATH)\*\complib.lib		 	$(TARGETPATH)\*\librdmacm.lib		" was parsed as a"MacroDefinition"
+        GenerateMsBuildFile:	Information  : Generated file "B:\users\yuvala\trunk\tests\perftest\atomic_bw\SOURCES.prop
+                                            	s"
+        ConvertFile        :	Information  : Converting "B:\users\yuvala\trunk\tests\perftest\atomic_bw\makefile.inc"
+            Parse          :	Verbose  : File contents after preprocessing:
+                                        	Custom_target:
+                                        	!if "$(BUILD_PASS)" == "PASS2" || "$(BUILD_PASS)" == "ALL"
+                                        	!endif
+                                        	!INCLUDE ..\..\..\inc\mod_ver.def
+                StartProcessingHeader:	Verbose  : "Custom_target:" was parsed as start of directive type "TargetDefinition"
+                FinishProcesssing    :	Verbose  : Concluded parsing multi-line directive type "TargetDefinition" from definition:
+                                                  	 Custom_target:
+                    InitializeConditionParser:	Verbose  : Conditional parser initialized with unary operators : !  Defined  Exists  Exist  EnsureIsBool
+                    InitializeConditionParser:	Verbose  : Conditional parser initialized with binary operators: ||  &&  ==  >=  <=  !=  >  <
+                    Equals                   :	Verbose  : Given comparison operands ""$(BUILD_PASS)"" and ""PASS2"" assuming a string comparison
+                        ConvertToMSBuildQuotes:	Verbose  : NMake expression "$(BUILD_PASS)" converted to MSBuild quoted expression "'$(BUILD_PASS)'"
+                        ConvertToMSBuildQuotes:	Verbose  : NMake expression "PASS2" converted to MSBuild quoted expression "'PASS2'"
+                    Equals                    :	Verbose  : Given comparison operands ""$(BUILD_PASS)"" and ""ALL"" assuming a string comparison
+                        ConvertToMSBuildQuotes:	Verbose  : NMake expression "$(BUILD_PASS)" converted to MSBuild quoted expression "'$(BUILD_PASS)'"
+                        ConvertToMSBuildQuotes:	Verbose  : NMake expression "ALL" converted to MSBuild quoted expression "'ALL'"
+                    ConvertToMSBuildSyntax    :	Verbose  : Conditional NMake expression " "$(BUILD_PASS)" == "PASS2" || "$(BUILD_PASS)" == "ALL"" was converted to MSBuild expression "('$(BUILD_PASS)'=='PASS2') Or ('$(BUILD_PASS)'=='ALL')"
+                CreateInstance                :	Verbose  : "!if "$(BUILD_PASS)" == "PASS2" || "$(BUILD_PASS)" == "ALL"" was parsed as a"If" with a condition of " "$(BUILD_PASS)" == "PASS2" || "$(BUILD_PASS)" == "ALL""
+                CreateInstance                :	Verbose  : "!endif" was parsed as a"Endif" with a condition of ""
+                ParseIfApplies                :	Verbose  : "!INCLUDE ..\..\..\inc\mod_ver.def" was parsed as a"IncludeFile"
+            GenerateMsBuildFile               :	Verbose  : Import file "..\..\..\inc\mod_ver.def.props" will be imported relative to $(MSBuildProjectDirectory), not the current file, if a copy exists in that directory
+                PreProcessTarget              :	Verbose  : Searching for applicable inference rules for target with nmake definition:
+                                                           	Custom_target:
+                ConvertTarget                 :	Verbose  : Generated MSBuildTarget "Converted Target 0" with inputs :
+                                                           	
+                ConvertTarget                 :	Verbose  : Added commands to MSBuild Target "Converted Target 0" for output file "Custom_target" with commands:
+                                                           	
+            GenerateMsBuildFile               :	Information  : Generated file "B:\users\yuvala\trunk\tests\perftest\atomic_bw\makefile.inc
+                                                               	.props"
+            ConvertImportedFiles          :	Information  : Include file "..\..\..\inc\mod_ver.def" resolved to "B:\users\yuvala\trunk\
+                                                           	tests\perftest\atomic_bw\..\..\..\inc\mod_ver.def"
+                ConvertFile     :	Information  : Converting "B:\users\yuvala\trunk\tests\perftest\atomic_bw\..\..\..\inc\mod
+                                                 	_ver.def"
+                    Parse       :	Verbose  : File contents after preprocessing:
+                                             	!IF !DEFINED(IB_MAJORVERSION)
+                                             	IB_MAJORVERSION=4
+                                             	!ENDIF
+                                             	!IF !DEFINED(IB_MINORVERSION)
+                                             	IB_MINORVERSION=0
+                                             	!ENDIF
+                                             	!IF !DEFINED(IB_COMPANYNAME)
+                                             	IB_COMPANYNAME="""Mellanox"""
+                                             	!ENDIF
+                                             	!IF !DEFINED(IB_PRODUCTNAME)
+                                             	IB_PRODUCTNAME="""OpenFabrics\x20Windows"""
+                                             	!ENDIF
+                                             	!IF !DEFINED(OPENIB_REV)
+                                             	OPENIB_REV=0
+                                             	!ENDIF
+                                             	!IFNDEF VER_PROVIDER
+                                             	VER_PROVIDER="""Mellanox"""
+                                             	!ENDIF
+                                             	C_DEFINES=$(C_DEFINES) -DIB_COMPANYNAME=$(IB_COMPANYNAME)      -DIB_PRODUCTNAME=$(IB_PRODUCTNAME)      -DVER_FILEMAJORVERSION=$(IB_MAJORVERSION)      -DVER_FILEMINORVERSION=$(IB_MINORVERSION)      -DVER_FILEREV=$(OPENIB_REV)      -DVER_PROVIDER=$(VER_PROVIDER)      -DWINIB
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression " !DEFINED(IB_MAJORVERSION)" was converted to MSBuild expression "!('$(IB_MAJORVERSION)'!='')"
+                        CreateInstance            :	Verbose  : "!IF !DEFINED(IB_MAJORVERSION)" was parsed as a"If" with a condition of " !DEFINED(IB_MAJORVERSION)"
+                        ParseIfApplies            :	Verbose  : "IB_MAJORVERSION=4" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression " !DEFINED(IB_MINORVERSION)" was converted to MSBuild expression "!('$(IB_MINORVERSION)'!='')"
+                        CreateInstance            :	Verbose  : "!IF !DEFINED(IB_MINORVERSION)" was parsed as a"If" with a condition of " !DEFINED(IB_MINORVERSION)"
+                        ParseIfApplies            :	Verbose  : "IB_MINORVERSION=0" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression " !DEFINED(IB_COMPANYNAME)" was converted to MSBuild expression "!('$(IB_COMPANYNAME)'!='')"
+                        CreateInstance            :	Verbose  : "!IF !DEFINED(IB_COMPANYNAME)" was parsed as a"If" with a condition of " !DEFINED(IB_COMPANYNAME)"
+                        ParseIfApplies            :	Verbose  : "IB_COMPANYNAME="""Mellanox"""" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression " !DEFINED(IB_PRODUCTNAME)" was converted to MSBuild expression "!('$(IB_PRODUCTNAME)'!='')"
+                        CreateInstance            :	Verbose  : "!IF !DEFINED(IB_PRODUCTNAME)" was parsed as a"If" with a condition of " !DEFINED(IB_PRODUCTNAME)"
+                        ParseIfApplies            :	Verbose  : "IB_PRODUCTNAME="""OpenFabrics\x20Windows"""" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression " !DEFINED(OPENIB_REV)" was converted to MSBuild expression "!('$(OPENIB_REV)'!='')"
+                        CreateInstance            :	Verbose  : "!IF !DEFINED(OPENIB_REV)" was parsed as a"If" with a condition of " !DEFINED(OPENIB_REV)"
+                        ParseIfApplies            :	Verbose  : "OPENIB_REV=0" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                            ConvertToMSBuildSyntax:	Verbose  : Conditional NMake expression "!Defined( VER_PROVIDER)" was converted to MSBuild expression "!('$(VER_PROVIDER)'!='')"
+                        CreateInstance            :	Verbose  : "!IFNDEF VER_PROVIDER" was parsed as a"If" with a condition of "!Defined( VER_PROVIDER)"
+                        ParseIfApplies            :	Verbose  : "VER_PROVIDER="""Mellanox"""" was parsed as a"MacroDefinition"
+                        CreateInstance            :	Verbose  : "!ENDIF" was parsed as a"Endif" with a condition of ""
+                        ParseIfApplies            :	Verbose  : "C_DEFINES=$(C_DEFINES) -DIB_COMPANYNAME=$(IB_COMPANYNAME)      -DIB_PRODUCTNAME=$(IB_PRODUCTNAME)      -DVER_FILEMAJORVERSION=$(IB_MAJORVERSION)      -DVER_FILEMINORVERSION=$(IB_MINORVERSION)      -DVER_FILEREV=$(OPENIB_REV)      -DVER_PROVIDER=$(VER_PROVIDER)      -DWINIB" was parsed as a"MacroDefinition"
+                    GenerateMsBuildFile           :	Information  : Generated file "B:\users\yuvala\trunk\tests\perftest\atomic_bw\..\..\..\inc
+                                                                   	\mod_ver.def.props"
+            IsPropertyElementSetConditionally     :	Verbose  : Property DriverType is set conditionally. Immediate condition ="'$(PlatformToolset)'=='WindowsApplicationForDrivers8.0'". Conditional parent element = Microsoft.Build.Construction.ProjectPropertyGroupElement
+        PostProcessing                            :	Verbose  : Extracted property "PlatformToolset" with a value of "WindowsApplicationForDrivers8.0" from sources.
+        PostProcessing                            :	Verbose  : Extracted property "ConfigurationType" with a value of "Application" from sources.
+        PostProcessing                            :	Verbose  : Extracted property "DriverType" with a value of "" from sources.
+        PostProcessing                       :	Verbose  : Extracted property "TARGETNAME" with a value of "ibv_atomic_bw" from sources.
+        PostProcessing                       :	Verbose  : VcxProj file copied to "ibv_atomic_bw.VcxProj"
+        PostProcessing                       :	Verbose  : Added Project GUID: {C7535362-7A26-4B44-84F3-9666E13FA1D4}
+        PostProcessing                       :	Information  : Generated Project File ibv_atomic_bw.VcxProj
+        AddIDESupport                        :	Verbose  : Attempting to add propery page support for converted targets and macros in project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+            CheckForWellKnownTargets         :	Verbose  : Attempting to find and convert nmake targets to well-known MSBuild items, as appropriate.
+            CheckForWellKnownTargetMacros:	Verbose  : Attempting to find and convert nmake target macros to well-known MSBuild items, as appropriate.
+        AddIDESupport                    :	Verbose  : Finished adding propery page support for converted targets and macros, changes saved to B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        AddOverrideConditionsToProperies :	Verbose  : Appended override conditions to properties in file 'B:\users\yuvala\trunk\tests\perftest\atomic_bw\SOURCES.props' and its imports
+        AddOverrideConditionsToProperies :	Verbose  : Appended override conditions to properties in file 'B:\users\yuvala\trunk\tests\perftest\atomic_bw\makefile.inc.props' and its imports
+    PreProcessTarget                     :	Verbose  : Searching for applicable inference rules for target with nmake definition:
+                                                      	Custom_target:
+    ConvertTarget                        :	Verbose  : Generated MSBuildTarget "Converted Target 0" with inputs :
+                                                      	
+    ConvertTarget                        :	Verbose  : Added commands to MSBuild Target "Converted Target 0" for output file "Custom_target" with commands:
+                                                      	
+CreateSolutionIncludingDependencies      :	Information  : Checking for external project dependencies
+CreateSolutionIncludingDependencies      :	Verbose  : Processing the following list of primary projects
+                                                      	B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+    AddPrerequisitesToSolution           :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        GetPrerequisiteProjects         :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        EvaluateProject                 :	Verbose  : $(O) set to afcf4338-8447-4252-bdd2-de908ffd47b8
+        ExtractIncludesFromItem         :	Verbose  : Extracting include elements from all items of type ClCompile
+        ExtractIncludesFromItem    :	Verbose  : Extracting include elements from all items of type MessageCompile
+        ExtractIncludesFromItem    :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        ExtractIncludesFromItem    :	Verbose  : Extracting include elements from all items of type Midl
+        ExtractIncludesFromItem    :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        ExtractIncludesFromItem    :	Verbose  : Extracting include elements from all items of type ResourceCompile
+        ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+        ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+            FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\ulp\libibverbs\src\ for projects of format .vcxproj  .csproj
+            FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj: 
+                                                       	   B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\ulp\libibumad\src\ for projects of format .vcxproj  .csproj
+            FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj: 
+                                                       	   B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+            FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\complib\user\ for projects of format .vcxproj  .csproj
+            FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj: 
+                                                       	   B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+            FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\ulp\librdmacm\src\ for projects of format .vcxproj  .csproj
+            FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj: 
+                                                       	   B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+        GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj: 
+                                                       	            B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                       	            B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+                                                       	            B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                       	            B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+        AddPrerequisitesToSolution        :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            GetPrerequisiteProjects       :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            EvaluateProject               :	Verbose  : $(O) set to f374dd28-da85-4a9d-aa48-4c1720202ab5
+            ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type ClCompile
+            ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type MessageCompile
+            ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+            ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\winverbs\user\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+            GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj: 
+                                                           	                B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+            AddPrerequisitesToSolution        :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                GetPrerequisiteProjects       :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                EvaluateProject               :	Verbose  : $(O) set to cd0c6564-119d-4131-91e5-7334653f61a6
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type ClCompile
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type MessageCompile
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                    FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\complib\user\ for projects of format .vcxproj  .csproj
+                    FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj: 
+                                                               	   B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\ibat_ex\user\ for projects of format .vcxproj  .csproj
+                    FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj: 
+                                                               	   B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\al\user\ for projects of format .vcxproj  .csproj
+                    FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj: 
+                                                               	   B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj: 
+                                                               	                    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                               	                    B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                                                               	                    B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                AddPrerequisitesToSolution        :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    GetPrerequisiteProjects       :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    EvaluateProject               :	Verbose  : $(O) set to 9072244a-8854-43c4-9125-86a882c2be5c
+                    ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type ClCompile
+                    ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type MessageCompile
+                    ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+                    ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                    GetPrerequisiteProjects        :	Verbose  : No prerequisite projects found for project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                AddPrerequisitesToSolution         :	Verbose  : Project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj had no prerequisites, adding to solution
+                AddPrerequisitesToSolution         :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    GetPrerequisiteProjects        :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    EvaluateProject                :	Verbose  : $(O) set to ed7a52ff-b80b-4444-94d0-75bba5acbd32
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type ClCompile
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type MessageCompile
+                    ExtractIncludesFromItem        :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type Midl
+                    ExtractIncludesFromItem:	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                    ExtractIncludesFromItem:	Verbose  : Didn't find any items of type ResourceCompile in project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                    GetPrerequisiteProjects        :	Verbose  : No prerequisite projects found for project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                AddPrerequisitesToSolution         :	Verbose  : Project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj had no prerequisites, adding to solution
+                AddPrerequisitesToSolution         :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                    GetPrerequisiteProjects        :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                    EvaluateProject                :	Verbose  : $(O) set to 684dce08-29a3-40fe-bd9e-e443bc1e9a50
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type ClCompile
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type MessageCompile
+                    ExtractIncludesFromItem        :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                    ExtractIncludesFromItem        :	Verbose  : Extracting include elements from all items of type Midl
+                    ExtractIncludesFromItem:	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                    ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                    ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                        FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\complib\user\ for projects of format .vcxproj  .csproj
+                        FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj: 
+                                                                   	   B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                    GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj: 
+                                                                   	                        B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                AddPrerequisitesToSolution            :	Verbose  : Project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj and its prerequisites analyzed and added to solution
+            AddPrerequisitesToSolution                :	Verbose  : Project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj and its prerequisites analyzed and added to solution
+        AddPrerequisitesToSolution                    :	Verbose  : Project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj and its prerequisites analyzed and added to solution
+        AddPrerequisitesToSolution                    :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+            GetPrerequisiteProjects                   :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+            EvaluateProject                           :	Verbose  : $(O) set to a2b7a44c-5a77-472a-b760-3a2ae36accc9
+            ExtractIncludesFromItem                   :	Verbose  : Extracting include elements from all items of type ClCompile
+            ExtractIncludesFromItem                   :	Verbose  : Extracting include elements from all items of type MessageCompile
+            ExtractIncludesFromItem        :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+            ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+            ExtractIncludesFromItem   :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+            ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\winmad\user\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\ulp\libibverbs\src\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj: 
+                                                           	                B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                                                           	                B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+            AddPrerequisitesToSolution        :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                GetPrerequisiteProjects       :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                EvaluateProject               :	Verbose  : $(O) set to 13fc318a-69e3-4acd-82e1-4a94e9119d33
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type ClCompile
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type MessageCompile
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                GetPrerequisiteProjects        :	Verbose  : No prerequisite projects found for project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+            AddPrerequisitesToSolution         :	Verbose  : Project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj had no prerequisites, adding to solution
+        AddPrerequisitesToSolution             :	Verbose  : Project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj and its prerequisites analyzed and added to solution
+        AddPrerequisitesToSolution             :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+            GetPrerequisiteProjects            :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+            EvaluateProject                    :	Verbose  : $(O) set to fc124717-cf20-41c1-8ca4-01abd377ca86
+            ExtractIncludesFromItem            :	Verbose  : Extracting include elements from all items of type ClCompile
+            ExtractIncludesFromItem            :	Verbose  : Extracting include elements from all items of type MessageCompile
+            ExtractIncludesFromItem            :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+            ExtractIncludesFromItem    :	Verbose  : Extracting include elements from all items of type Midl
+            ExtractIncludesFromItem   :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+            ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+            ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\ulp\libibverbs\src\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\winverbs\user\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                FindPreReqProjectsInReferences:	Verbose  : Scanning path B:\users\yuvala\trunk\core\ibat\user\ for projects of format .vcxproj  .csproj
+                FindPreReqProjectsInReferences:	Verbose  : Found the following pre requisite projects for project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj: 
+                                                           	   B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+            GetPrerequisiteProjects           :	Verbose  : Final list of pre requisite projects for B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj: 
+                                                           	                B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                           	                B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                                                           	                B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+            AddPrerequisitesToSolution        :	Verbose  : Finding prerequisites for B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                GetPrerequisiteProjects       :	Verbose  : Scanning for prerequisites for project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                EvaluateProject               :	Verbose  : $(O) set to 45ff761c-8bb1-4881-9c05-c14d010132c8
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type ClCompile
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type MessageCompile
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type MessageCompile in project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                ExtractIncludesFromItem       :	Verbose  : Extracting include elements from all items of type Midl
+                ExtractIncludesFromItem       :	Verbose  : Didn't find any items of type Midl in project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                ExtractIncludesFromItem:	Verbose  : Extracting include elements from all items of type ResourceCompile
+                ExtractIncludesFromItem:	Verbose  : Didn't find any items of type ResourceCompile in project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalDependencies on item type Link, using splitter ;
+                ExtractIncludesFromItemMetadata:	Verbose  : Extracting include elements from metadata AdditionalIncludeDirectories on item type ClCompile, using splitter ;
+                GetPrerequisiteProjects        :	Verbose  : No prerequisite projects found for project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+            AddPrerequisitesToSolution         :	Verbose  : Project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj had no prerequisites, adding to solution
+        AddPrerequisitesToSolution             :	Verbose  : Project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj and its prerequisites analyzed and added to solution
+    AddPrerequisitesToSolution                 :	Verbose  : Project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj and its prerequisites analyzed and added to solution
+CreateSolutionIncludingDependencies            :	Information  : The primary project collection depends on the following additional projects
+                                                                	    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+                                                                	
+CreateSolutionIncludingDependencies            :	Verbose  : Attempting to generate solution file ibv_atomic_bw.sln from projects list
+        InitializeProjectsForSolution          :	Information  : Generating solution ibv_atomic_bw.sln from:
+                                                                	    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+                                                                	    B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        ExtractProjectGuid                     :	Verbose  :  GUID {692607ED-484B-4561-B14A-624DC11F78F1} was extracted from project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+        ExtractProjectGuid                     :	Verbose  :  GUID {BC928F85-9B54-48B2-A5FD-330EBBDB4DED} was extracted from project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+        ExtractProjectGuid             :	Verbose  :  GUID {ECD63FF8-BF41-437E-980F-72235E128797} was extracted from project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+        ExtractProjectGuid            :	Verbose  :  GUID {470796BC-6BF4-4410-8AFD-75B4CB103535} was extracted from project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+        ExtractProjectGuid           :	Verbose  :  GUID {DB539EDD-5530-4E45-98C1-67073C390484} was extracted from project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+        ExtractProjectGuid           :	Verbose  :  GUID {37CDED70-A6F6-4597-B85B-285F19F5F100} was extracted from project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+        ExtractProjectGuid           :	Verbose  :  GUID {40CF715F-187E-4CCF-A6EE-4F3924AAEF5B} was extracted from project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+        ExtractProjectGuid           :	Verbose  :  GUID {77C9AD71-47DD-4EB7-A504-052899F5C1CF} was extracted from project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+        ExtractProjectGuid           :	Verbose  :  GUID {0E9E2435-4846-4EC5-A755-FBA3D20F0F24} was extracted from project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+        ExtractProjectGuid:	Verbose  :  GUID {C7535362-7A26-4B44-84F3-9666E13FA1D4} was extracted from project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj does not depend on others
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj does not depend on others
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj does not depend on others
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj does not depend on others
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+        InitializeProjectsForSolution:	Verbose  : Project B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj depends on:
+                                                  	    B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+                                                  	    B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+        WriteProjectEntries          :	Verbose  : Added project complib_UM to solution with a GUID of {692607ED-484B-4561-B14A-624DC11F78F1}
+        WriteProjectEntries          :	Verbose  : Added project ibat_ex_UM to solution with a GUID of {BC928F85-9B54-48B2-A5FD-330EBBDB4DED}
+        WriteProjectEntries          :	Verbose  : Added project ibal_UM to solution with a GUID of {ECD63FF8-BF41-437E-980F-72235E128797}
+            WriteProjectEntries      :	Verbose  : Added prerequisite projects' GUIDs:
+                                                  	    {692607ED-484B-4561-B14A-624DC11F78F1}
+        WriteProjectEntries          :	Verbose  : Added project winverbs_UM to solution with a GUID of {470796BC-6BF4-4410-8AFD-75B4CB103535}
+            WriteProjectEntries      :	Verbose  : Added prerequisite projects' GUIDs:
+                                                  	    {692607ED-484B-4561-B14A-624DC11F78F1}
+                                                  	    {BC928F85-9B54-48B2-A5FD-330EBBDB4DED}
+                                                  	    {ECD63FF8-BF41-437E-980F-72235E128797}
+        WriteProjectEntries          :	Verbose  : Added project libibverbs_UM to solution with a GUID of {DB539EDD-5530-4E45-98C1-67073C390484}
+            WriteProjectEntries      :	Verbose  : Added prerequisite projects' GUIDs:
+                                                  	    {470796BC-6BF4-4410-8AFD-75B4CB103535}
+        WriteProjectEntries          :	Verbose  : Added project winmad_UM to solution with a GUID of {37CDED70-A6F6-4597-B85B-285F19F5F100}
+        WriteProjectEntries    :	Verbose  : Added project libibumad_UM to solution with a GUID of {40CF715F-187E-4CCF-A6EE-4F3924AAEF5B}
+            WriteProjectEntries:	Verbose  : Added prerequisite projects' GUIDs:
+                                            	    {37CDED70-A6F6-4597-B85B-285F19F5F100}
+                                            	    {DB539EDD-5530-4E45-98C1-67073C390484}
+        WriteProjectEntries    :	Verbose  : Added project ibat_UM to solution with a GUID of {77C9AD71-47DD-4EB7-A504-052899F5C1CF}
+        WriteProjectEntries    :	Verbose  : Added project librdmacm_UM to solution with a GUID of {0E9E2435-4846-4EC5-A755-FBA3D20F0F24}
+            WriteProjectEntries:	Verbose  : Added prerequisite projects' GUIDs:
+                                            	    {DB539EDD-5530-4E45-98C1-67073C390484}
+                                            	    {470796BC-6BF4-4410-8AFD-75B4CB103535}
+                                            	    {77C9AD71-47DD-4EB7-A504-052899F5C1CF}
+        WriteProjectEntries    :	Verbose  : Added project ibv_atomic_bw to solution with a GUID of {C7535362-7A26-4B44-84F3-9666E13FA1D4}
+            WriteProjectEntries:	Verbose  : Added prerequisite projects' GUIDs:
+                                            	    {DB539EDD-5530-4E45-98C1-67073C390484}
+                                            	    {40CF715F-187E-4CCF-A6EE-4F3924AAEF5B}
+                                            	    {692607ED-484B-4561-B14A-624DC11F78F1}
+                                            	    {0E9E2435-4846-4EC5-A755-FBA3D20F0F24}
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\complib\user\complib_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\ibat_ex\user\ibat_ex_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\al\user\ibal_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\winverbs\user\winverbs_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\ulp\libibverbs\src\libibverbs_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\winmad\user\winmad_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\ulp\libibumad\src\libibumad_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\core\ibat\user\ibat_UM.VcxProj
+    WriteProjectConfigurations :	Verbose  : Writing project configurations for B:\users\yuvala\trunk\ulp\librdmacm\src\librdmacm_UM.VcxProj
+    WriteProjectConfigurations:	Verbose  : Writing project configurations for B:\users\yuvala\trunk\tests\perftest\atomic_bw\ibv_atomic_bw.VcxProj
+CreateSolutionIncludingDependencies:	Information  : Solution ibv_atomic_bw.sln was created successfully
+Convert                            :	Information  : ========== Project Conversion Finished: 1 Solution created with 10 Projects
+                                                    	 ==========
+Convert                            :	Verbose  : 1/17/2012 8:05:14 PM

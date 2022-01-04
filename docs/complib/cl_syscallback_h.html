@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_syscallback_h.html</title>
+<!-- Source: ./inc/complib/cl_syscallback.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_syscallback.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo27">[Modules]<a name="Component20Library2fSystem20Callback">
+Component Library/System Callback</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       System Callback
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The System Callback provider uses threads from a system thread-pool to
+       invoke specified callback functions.
+
+       Callbacks can be queued in a low- or high-priority queue for processing.
+
+       <a href="./cl_thread_h.html#robo649">cl_thread_suspend</a> and <a href="./cl_thread_h.html#robo648">cl_thread_stall</a> can be used to delay or stall the
+       callback thread.
+
+       Environments that do not have a native system thread-pool emulate this
+       functionality to provide cross-environment support.
+
+       The cl_sys_callback_item_t structure should be treated as opaque and be
+       manipulated only through the provided functions.
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo635">[Functions]<a name="Component20Library3a20System20Callback2fcl5fis5fsys5fcallback5finited">
+Component Library: System Callback/cl_is_sys_callback_inited</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_sys_callback_inited</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_sys_callback_inited</strong> function returns whether the system
+       callback provider was initialized successfully
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>boolean_t
+__cl_is_sys_callback_inited( void );
+/*
+* RETURN VALUES
+*       TRUE if the system callback provider was initialized successfully.
+*
+*       FALSE otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows checking the state of the system callback provider to determine
+       if invoking member functions is appropriate.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       System Callback
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo636">[Definitions]<a name="Component20Library3a20System20Callback2fcl5fpfn5fsys5fcallback5ft">
+Component Library: System Callback/cl_pfn_sys_callback_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_sys_callback_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_sys_callback_t</strong> function type defines the prototype for
+       functions invoked by the system callback provider.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_sys_callback_t</strong>)(
+        IN      void*   get_context,
+        IN      void*   queue_context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       get_context
+               [in] Value of the get_context parameter specified in a call
+               to <a href="#robo637">cl_sys_callback_get</a>.
+
+       queue_context
+               [in] Value of the queue_context parameter specified in a call
+               to <a href="#robo639">cl_sys_callback_queue</a>.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for
+       the function provided by users as a parameter to the
+       <a href="#robo639">cl_sys_callback_queue</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       System Callback, <a href="#robo639">cl_sys_callback_queue</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo637">[Functions]<a name="Component20Library3a20System20Callback2fcl5fsys5fcallback5fget">
+Component Library: System Callback/cl_sys_callback_get</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_sys_callback_get</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_sys_callback_get</strong> function retrieves a system callback item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT cl_sys_callback_item_t* CL_API
+<strong>cl_sys_callback_get</strong>(
+        IN      const void* const get_context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       get_context
+               [in] Context value to pass into the callback function.
+
+ RETURN VALUES
+       Returns a pointer to a system callback item if successful.
+
+       Returns NULL if the call fails.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       A system callback item must be released with a call to <a href="#robo638">cl_sys_callback_put</a>.
+
+       Care must be taken to prevent a system callback item from being returned
+       to the pool while it is queued. Callers of <a href="#robo639">cl_sys_callback_queue</a> must not
+       return the system callback item to the pool until their callback has been
+       invoked.
+
+       In Windows 2000 Kernel Mode, the get_context is a pointer to the device
+       object for which the system callback is being used.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       System Callback, SysCallbackPut, SysCallbackQueue
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo638">[Functions]<a name="Component20Library3a20System20Callback2fcl5fsys5fcallback5fput">
+Component Library: System Callback/cl_sys_callback_put</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_sys_callback_put</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_sys_callback_put</strong> function releases the specified
+       system callback item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_sys_callback_put</strong>(
+        IN      cl_sys_callback_item_t* const   p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a system callback item to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The p_item parameter points to a system callback item returned by
+       a previous call to <a href="#robo637">cl_sys_callback_get</a>.
+
+       The specified system callback item must not be queued when making
+       a call to this function.  This function can, however, be called
+       from the callback function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       System Callback, <a href="#robo637">cl_sys_callback_get</a>, <a href="#robo639">cl_sys_callback_queue</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo639">[Functions]<a name="Component20Library3a20System20Callback2fcl5fsys5fcallback5fqueue">
+Component Library: System Callback/cl_sys_callback_queue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_sys_callback_queue</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_sys_callback_queue</strong> function queues the specified system callback item
+       for execution.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_sys_callback_queue</strong>(
+        IN      cl_sys_callback_item_t* const   p_item,
+        IN      <a href="#robo636">cl_pfn_sys_callback_t</a>                   pfn_callback,
+        IN      const void* const                               queue_context,
+        IN      const boolean_t                                 high_priority );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a system callback item.
+
+       pfn_callback
+               [in] Pointer to a function to be invoked by the system callback module.
+               See the <a href="#robo636">cl_pfn_sys_callback_t</a> function type definition for details
+               about the callback function.
+
+       queue_context
+               [in] Value passed to the system callback function.
+
+       high_priority
+               [in] Specifies whether the request should be queued in the high- or
+               low-priority queue.
+
+ RETURN VALUES
+       CL_SUCCESS if the system callback item was successfully queued.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       A thread from the system thread pool will invoke the specified callback
+       function with the get_context value specified in the call to
+       <a href="#robo637">cl_sys_callback_get</a> and the specified context as parameters.
+
+       The high priority queue is processed before the low priority queue. There
+       is no fairness algorithm implemented for removing items from the queues.
+
+       Care should be taken to only queue a given system callback item once
+       at a time.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       System Callback, <a href="#robo637">cl_sys_callback_get</a>, <a href="#robo636">cl_pfn_sys_callback_t</a>
+</pre>
+</span>
+</body>
+</html>

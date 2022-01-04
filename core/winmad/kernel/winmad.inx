@@ -1,0 +1,106 @@
+;
+; Copyright (c) 2008 Intel Corporation. All rights reserved.
+;
+; This software is available to you under the OpenIB.org BSD license
+; below:
+;
+;     Redistribution and use in source and binary forms, with or
+;     without modification, are permitted provided that the following
+;     conditions are met:
+;
+;      - Redistributions of source code must retain the above
+;        copyright notice, this list of conditions and the following
+;        disclaimer.
+;
+;      - Redistributions in binary form must reproduce the above
+;        copyright notice, this list of conditions and the following
+;        disclaimer in the documentation and/or other materials
+;        provided with the distribution.
+;
+; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AWV
+; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+; BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+; SOFTWARE.
+;
+
+[Version]
+Signature = "$WINDOWS NT$"
+Class = InfiniBandController
+ClassGUID = {58517E00-D3CF-40c9-A679-CEE5752F4491}
+Provider = %OFA%
+DriverVer = 05/20/2008
+CatalogFile = winmad.cat
+
+[SourceDisksNames]
+1 = %DiskId%
+
+[SourceDisksFiles]
+winmad.sys = 1
+winmad.dll = 1
+
+[DefaultInstall]
+AddReg = WmClassAddReg
+CopyFiles = WmClassCopySysFiles, WmClassCopyDllFiles
+
+[WmClassAddReg]
+HKLM, System\CurrentControlSet\Control\Class\{58517E00-D3CF-40c9-A679-CEE5752F4491}, UpperFilters, 0x00010008, winmad
+
+[DestinationDirs]
+WmClassCopySysFiles = 12
+WmClassCopyDllFiles = 11
+
+[WmClassCopySysFiles]
+winmad.sys
+
+[WmClassCopyDllFiles]
+winmad.dll
+
+[Manufacturer]
+%OFA% = WmModel, NT$ARCH$
+
+[WmModel]
+%winmad.DeviceDesc% = WmDevice, root\winmad
+
+[DefaultInstall.Services]
+AddService = winmad,, WmClassService
+
+[WmClassService]
+DisplayName = %winmad.ServiceDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary  = %12%\winmad.sys
+LoadOrderGroup = PNP Filter
+
+[WmDevice.CoInstallers]
+AddReg = WmDeviceCoInstAddReg
+CopyFiles = WmDeviceCoInstCopyFiles
+
+[DestinationDirs]
+WmDeviceCoInstCopyFiles = 11
+
+[WmDeviceCoInstAddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll, WdfCoInstaller"
+
+[WmDeviceCoInstCopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1
+
+[WmDevice.Wdf]
+KmdfService = winmad, WmWdfSect
+
+[WmWdfSect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+OFA = "OpenFabrics"
+DiskId = "OpenFabrics WinMad Installation"
+winmad.DeviceDesc = "WinMad Driver"
+winmad.ServiceDesc = "WinMad Service"
+ClassName = "WinMad Device"

@@ -1,0 +1,40 @@
+TARGETNAME = wvndprov
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+
+DLLDEF = nd_export.def
+
+
+DLLENTRY = DllMain
+USE_MSVCRT = 1
+NTTARGETFILES=Custom_target
+
+SOURCES =			\
+	netdirect.rc    \
+	nd_main.cpp		\
+	nd_base.cpp		\
+	nd_provider.cpp	\
+	nd_adapter.cpp	\
+	nd_listen.cpp	\
+	nd_connect.cpp	\
+	nd_ep.cpp		\
+	nd_mw.cpp		\
+	nd_cq.cpp
+
+INCLUDES = ..\..\..\inc;..\..\..\inc\user;\
+           ..\..\..\inc\user\linux;$(ND_SDK_PATH)\include;
+
+TARGETLIBS =					    \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib	    \
+	$(SDK_LIB_PATH)\iphlpapi.lib	\
+    $(TARGETPATH)\*\ibat.lib        \
+    $(TARGETPATH)\*\winverbs.lib
+
+
+!if !$(FREEBUILD)
+C_DEFINES=$(C_DEFINES) -D_DEBUG -DDEBUG -DDBG=1
+!endif

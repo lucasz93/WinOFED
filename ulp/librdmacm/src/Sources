@@ -1,0 +1,34 @@
+TARGETNAME = librdmacm
+
+TARGETPATH = ..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE = DYNLINK
+
+DLLDEF = $(OBJ_PATH)\$O\cma_exports.def
+
+DLLENTRY = DllMain
+USE_MSVCRT = 1
+
+SOURCES =			\
+	cma.rc			\
+	cma_main.cpp	\
+	cma.cpp			\
+	addrinfo.cpp	\
+	rsocket.cpp		\
+	indexer.cpp
+
+INCLUDES = ..\include;..\..\..\inc;..\..\..\inc\user;..\..\libibverbs\include;\
+		   ..\..\..\inc\user\linux
+
+USER_C_FLAGS = $(USER_C_FLAGS) -DEXPORT_CMA_SYMBOLS
+
+LINKER_FLAGS = /IGNORE:4210
+
+TARGETLIBS = \
+	$(SDK_LIB_PATH)\kernel32.lib	\
+	$(SDK_LIB_PATH)\uuid.lib		\
+	$(SDK_LIB_PATH)\ws2_32.lib		\
+	$(SDK_LIB_PATH)\iphlpapi.lib	\
+	$(TARGETPATH)\*\ibat.lib		\
+	$(TARGETPATH)\*\libibverbs.lib	\
+	$(TARGETPATH)\*\winverbs.lib    \
+	$(TARGETPATH)\*\complib.lib

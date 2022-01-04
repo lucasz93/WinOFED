@@ -1,0 +1,53 @@
+From a1d2b448a530a829c2ae3a896c0f2d3adc90a069 Mon Sep 17 00:00:00 2001
+From: Eli Cohen <eli@mellanox.co.il>
+Date: Tue, 15 Jan 2008 15:42:31 +0200
+Subject: [PATCH] Add creation flags to QPs
+
+This will allow a kernel verbs consumer to create a QP
+and pass special flags to the hw layer. This patch also
+defines one such flag for LSO support.
+
+Signed-off-by: Eli Cohen <eli@mellanox.co.il>
+---
+ drivers/infiniband/core/uverbs_cmd.c |    1 +
+ include/rdma/ib_verbs.h              |    5 +++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
+index 495c803..9e98cec 100644
+--- a/drivers/infiniband/core/uverbs_cmd.c
++++ b/drivers/infiniband/core/uverbs_cmd.c
+@@ -1065,6 +1065,7 @@ ssize_t ib_uverbs_create_qp(struct ib_uverbs_file *file,
+ 	attr.srq           = srq;
+ 	attr.sq_sig_type   = cmd.sq_sig_all ? IB_SIGNAL_ALL_WR : IB_SIGNAL_REQ_WR;
+ 	attr.qp_type       = cmd.qp_type;
++	attr.create_flags  = 0;
+ 
+ 	attr.cap.max_send_wr     = cmd.max_send_wr;
+ 	attr.cap.max_recv_wr     = cmd.max_recv_wr;
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index e35cc29..a4f6184 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -494,6 +494,10 @@ enum ib_qp_type {
+ 	IB_QPT_RAW_ETY
+ };
+ 
++enum qp_create_flags {
++	QP_CREATE_LSO = 1 << 0,
++};
++
+ struct ib_qp_init_attr {
+ 	void                  (*event_handler)(struct ib_event *, void *);
+ 	void		       *qp_context;
+@@ -504,6 +508,7 @@ struct ib_qp_init_attr {
+ 	enum ib_sig_type	sq_sig_type;
+ 	enum ib_qp_type		qp_type;
+ 	u8			port_num; /* special QP types only */
++	enum qp_create_flags    create_flags;
+ };
+ 
+ enum ib_rnr_timeout {
+-- 
+1.5.3.8
+

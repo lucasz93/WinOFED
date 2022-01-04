@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Choose>
+    <When Condition="('$(BUILD_PASS)'=='PASS2') Or ('$(BUILD_PASS)'=='ALL')" />
+  </Choose>
+  <PropertyGroup>
+    <ImportFilePath_57799F65CF4841D5B935C89E18ACAB00 Condition="'$(OVERRIDE_ImportFilePath_57799F65CF4841D5B935C89E18ACAB00)'!='true'">..\..\..\..\inc\mod_ver.def.props</ImportFilePath_57799F65CF4841D5B935C89E18ACAB00>
+    <ImportFilePath_57799F65CF4841D5B935C89E18ACAB00 Condition="(!$([System.IO.Path]::IsPathRooted('..\..\..\..\inc\mod_ver.def.props'))) And ('$(OVERRIDE_ImportFilePath_57799F65CF4841D5B935C89E18ACAB00)'!='true')">$([System.IO.Path]::Combine($(MSBuildProjectDirectory),'..\..\..\..\inc\mod_ver.def.props'))</ImportFilePath_57799F65CF4841D5B935C89E18ACAB00>
+    <AlternateImportFilePath_A2312D23D99A434EB4773CBACB4BD0B6 Condition="'$(OVERRIDE_AlternateImportFilePath_A2312D23D99A434EB4773CBACB4BD0B6)'!='true'">$([System.IO.Path]::Combine($(MSBuildThisFileDirectory),'..\..\..\..\inc\mod_ver.def.props'))</AlternateImportFilePath_A2312D23D99A434EB4773CBACB4BD0B6>
+  </PropertyGroup>
+  <Import Project="$(ImportFilePath_57799F65CF4841D5B935C89E18ACAB00)" Condition="Exists($(ImportFilePath_57799F65CF4841D5B935C89E18ACAB00))" />
+  <Import Project="$(AlternateImportFilePath_A2312D23D99A434EB4773CBACB4BD0B6)" Condition="!Exists($(ImportFilePath_57799F65CF4841D5B935C89E18ACAB00))" />
+  <ItemGroup>
+    <NmakeTarget Include=" ">
+      <TargetKillSwitch>ConvertedTarget0_Disabled</TargetKillSwitch>
+      <TargetName>Converted Target 0</TargetName>
+      <Outputs>Custom_target</Outputs>
+      <Condition>
+      </Condition>
+    </NmakeTarget>
+  </ItemGroup>
+  <Target Name="Converted Target 0" BeforeTargets="BeforeClCompile" Condition="'$(ConvertedTarget0_Disabled)'!='true'">
+    <ItemGroup>
+      <AllEvaluatedTargetInputs Remove="@(AllEvaluatedTargetInputs)" />
+      <AllEvaluatedTargetInputs Include=" " />
+    </ItemGroup>
+    <Message Condition="'$(TargetOutDated)'!='true'" Text="File Custom_target is up-to-date" />
+  </Target>
+</Project>

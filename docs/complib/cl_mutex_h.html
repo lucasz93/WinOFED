@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_mutex_h.html</title>
+<!-- Source: ./inc/complib/cl_mutex.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_mutex.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo0">[Modules]<a name="complib2fMutex">
+complib/Mutex</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Mutex</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       <strong>Mutex</strong> provides synchronization between threads for exclusive access to
+       a resource.
+
+       The <strong>Mutex</strong> functions manipulate a cl_mutex_t structure which should
+       be treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_mutex_t
+
+       Initialization:
+               <a href="#robo441">cl_mutex_construct</a>, <a href="#robo443">cl_mutex_init</a>, <a href="#robo442">cl_mutex_destroy</a>
+
+       Manipulation
+               <a href="#robo440">cl_mutex_acquire</a>, <a href="#robo444">cl_mutex_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo440">[Functions]<a name="Component20Library3a20Mutex2fcl5fmutex5facquire">
+Component Library: Mutex/cl_mutex_acquire</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mutex_acquire</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mutex_acquire</strong> function acquires a mutex.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_mutex_acquire</strong>(
+        IN      cl_mutex_t* const       p_mutex );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mutex
+               [in] Pointer to a mutex structure to acquire.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo0">Mutex</a>, <a href="#robo444">cl_mutex_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo441">[Functions]<a name="Component20Library3a20Mutex2fcl5fmutex5fconstruct">
+Component Library: Mutex/cl_mutex_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mutex_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mutex_construct</strong> function initializes the state of a
+       mutex.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_mutex_construct</strong>(
+        IN      cl_mutex_t* const       p_mutex );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mutex
+               [in] Pointer to a mutex structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling cl_semphore_destroy without first calling
+       <a href="#robo443">cl_mutex_init</a>.
+
+       Calling <strong>cl_mutex_construct</strong> is a prerequisite to calling any other
+       mutex function except <a href="#robo443">cl_mutex_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo0">Mutex</a>, cl_semphore_init <a href="#robo442">cl_mutex_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo442">[Functions]<a name="Component20Library3a20Mutex2fcl5fmutex5fdestroy">
+Component Library: Mutex/cl_mutex_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mutex_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mutex_destroy</strong> function performs all necessary cleanup of a
+       mutex.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_mutex_destroy</strong>(
+        IN      cl_mutex_t* const       p_mutex );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mutex
+               [in] Pointer to a mutex structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performs any necessary cleanup of a mutex. This function must only
+       be called if either <a href="#robo441">cl_mutex_construct</a> or <a href="#robo443">cl_mutex_init</a> has been
+       called.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo0">Mutex</a>, <a href="#robo441">cl_mutex_construct</a>, <a href="#robo443">cl_mutex_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo443">[Functions]<a name="Component20Library3a20Mutex2fcl5fmutex5finit">
+Component Library: Mutex/cl_mutex_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mutex_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mutex_init</strong> function initializes a mutex for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_mutex_init</strong>(
+        IN      cl_mutex_t* const       p_mutex );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mutex
+               [in] Pointer to a mutex structure to initialize.
+
+ RETURN VALUES
+       CL_SUCCESS if initialization succeeded.
+
+       CL_ERROR if initialization failed. Callers should call
+       <a href="#robo442">cl_mutex_destroy</a> to clean up any resources allocated during
+       initialization.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Initializes the mutex structure. Allows calling cl_mutex_aquire
+       and <a href="#robo444">cl_mutex_release</a>. The cl_mutex is always created in the unlocked state.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo0">Mutex</a>, <a href="#robo441">cl_mutex_construct</a>, <a href="#robo442">cl_mutex_destroy</a>,
+       <a href="#robo440">cl_mutex_acquire</a>, <a href="#robo444">cl_mutex_release</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo444">[Functions]<a name="Component20Library3a20Mutex2fcl5fmutex5frelease">
+Component Library: Mutex/cl_mutex_release</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_mutex_release</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_mutex_release</strong> function releases a mutex object.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_mutex_release</strong>(
+        IN      cl_mutex_t* const       p_mutex );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_mutex
+               [in] Pointer to a mutex structure to release.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Releases a mutex after a call to <a href="#robo440">cl_mutex_acquire</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo0">Mutex</a>, <a href="#robo440">cl_mutex_acquire</a>
+</pre>
+</span>
+</body>
+</html>

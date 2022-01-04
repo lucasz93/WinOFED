@@ -1,0 +1,7 @@
+LIBRARY	ibal.sys
+
+EXPORTS
+; DllInitialize and DllUnload must be exported for the OS reference counting to
+; work, and must be private for the compiler to accept them.
+DllInitialize private
+DllUnload private

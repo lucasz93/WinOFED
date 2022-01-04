@@ -1,0 +1,583 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_perf_h.html</title>
+<!-- Source: ./inc/complib/cl_perf.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_perf.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo16">[Modules]<a name="Component20Library2fPerformance20Counters">
+Component Library/Performance Counters</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       Performance Counters
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The performance counters allows timing operations to benchmark
+       software performance and help identify potential bottlenecks.
+
+       All performance counters are NULL macros when disabled, preventing them
+       from adversly affecting performance in builds where the counters are not
+       used.
+
+       Each counter records elapsed time in micro-seconds, minimum time elapsed,
+       and total number of samples.
+
+       Each counter is independently protected by a spinlock, allowing use of
+       the counters in multi-processor environments.
+
+       The impact of serializing access to performance counters is measured,
+       allowing measurements to be corrected as necessary.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Performance counters do impact performance, and should only be enabled
+       when gathering data.  Counters can be enabled or disabled on a per-user
+       basis at compile time.  To enable the counters, users should define
+       the PERF_TRACK_ON keyword before including the <a href="#robo_top_of_doc">cl_perf.h</a> file.
+       Undefining the PERF_TRACK_ON keyword disables the performance counters.
+       When disabled, all performance tracking calls resolve to no-ops.
+
+       When using performance counters, it is the user's responsibility to
+       maintain the counter indexes.  It is recomended that users define an
+       enumerated type to use for counter indexes.  It improves readability
+       and simplifies maintenance by reducing the work necessary in managing
+       the counter indexes.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_perf_t
+
+       Initialization:
+               <a href="#robo476">cl_perf_construct</a>, <a href="#robo480">cl_perf_init</a>, <a href="#robo477">cl_perf_destroy</a>
+
+       Manipulation
+               <a href="#robo482">cl_perf_reset</a>, <a href="#robo478">cl_perf_display</a>, <a href="#robo483">cl_perf_start</a>, <a href="#robo485">cl_perf_update</a>,
+               <a href="#robo481">cl_perf_log</a>, <a href="#robo484">cl_perf_stop</a>
+
+       Macros:
+               <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo475">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fclr">
+Component Library: Performance Counters/cl_perf_clr</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_clr</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_clr</strong> macro clears a counter variable.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<a href="#robo479">cl_perf_inc</a>(
+        IN      const uintn_t index );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the performance counter to set.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo481">cl_perf_log</a>,
+       <a href="#robo485">cl_perf_update</a>, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo476">[Functions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fconstruct">
+Component Library: Performance Counters/cl_perf_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_construct</strong> macro constructs a performance
+       tracking container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_construct</strong>(
+        IN      cl_perf_t* const        p_perf );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to construct.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_perf_construct</strong> allows calling <a href="#robo477">cl_perf_destroy</a> without first calling
+       <a href="#robo480">cl_perf_init</a>.
+
+       Calling <strong>cl_perf_construct</strong> is a prerequisite to calling any other
+       perfromance counter function except <a href="#robo480">cl_perf_init</a>.
+
+       This function is implemented as a macro and has no effect when
+       performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo480">cl_perf_init</a>, <a href="#robo477">cl_perf_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo477">[Functions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fdestroy">
+Component Library: Performance Counters/cl_perf_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_destroy</strong> function destroys a performance tracking container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_destroy</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const boolean_t         display );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to destroy.
+
+       display
+               [in] If TRUE, causes the performance counters to be displayed.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_perf_destroy</strong> frees all resources allocated in a call to <a href="#robo480">cl_perf_init</a>.
+       If the display parameter is set to TRUE, displays all counter values
+       before deallocating resources.
+
+       This function should only be called after a call to <a href="#robo476">cl_perf_construct</a>
+       or <a href="#robo480">cl_perf_init</a>.
+
+       This function is implemented as a macro and has no effect when
+       performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo476">cl_perf_construct</a>, <a href="#robo480">cl_perf_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo478">[Functions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fdisplay">
+Component Library: Performance Counters/cl_perf_display</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_display</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_display</strong> function displays the current performance
+       counter values.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_display</strong>(
+        IN      const cl_perf_t* const  p_perf );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container whose counter
+               values to display.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is implemented as a macro and has no effect when
+       performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo480">cl_perf_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo479">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5finc">
+Component Library: Performance Counters/cl_perf_inc</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_inc</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_inc</strong> macro increments a counter variable by one.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_inc</strong>(
+        IN      const uintn_t index );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the performance counter to set.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo481">cl_perf_log</a>,
+       <a href="#robo485">cl_perf_update</a>, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo480">[Functions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5finit">
+Component Library: Performance Counters/cl_perf_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_init</strong> function initializes a performance counter container
+       for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre><a href="./cl_types_h.html#robo308">cl_status_t</a>
+<strong>cl_perf_init</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const uintn_t           num_counters );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to initalize.
+
+       num_cntrs
+               [in] Number of counters to allocate in the container.
+
+ RETURN VALUES
+       CL_SUCCESS if initialization was successful.
+
+       CL_INSUFFICIENT_MEMORY if there was not enough memory to initialize
+       the container.
+
+       CL_ERROR if an error was encountered initializing the locks for the
+       performance counters.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function allocates all memory required for the requested number of
+       counters and initializes all locks protecting those counters.  After a
+       successful initialization, <strong>cl_perf_init</strong> calibrates the counters and
+       resets their value.
+
+       This function is implemented as a macro and has no effect when
+       performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo476">cl_perf_construct</a>, <a href="#robo477">cl_perf_destroy</a>, <a href="#robo478">cl_perf_display</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo481">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5flog">
+Component Library: Performance Counters/cl_perf_log</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_log</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_log</strong> macro adds a given timing sample to a
+       counter in a performance counter container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_log</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const uintn_t           index,
+        IN      const uint64_t          pc_total_time );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to whose counter
+               the sample should be added.
+
+       index
+               [in] Number of the performance counter to update with a new sample.
+
+       pc_total_time
+               [in] Total elapsed time for the sample being added.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo483">cl_perf_start</a>,
+       <a href="#robo485">cl_perf_update</a>, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo482">[Functions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5freset">
+Component Library: Performance Counters/cl_perf_reset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_reset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_reset</strong> function resets the counters contained in
+       a performance tracking container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_reset</strong>(
+        IN      cl_perf_t* const        p_perf );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container whose counters
+               to reset.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function is implemented as a macro and has no effect when
+       performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo483">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fstart">
+Component Library: Performance Counters/cl_perf_start</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_start</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_start</strong> macro sets the starting value of a timed sequence.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_start</strong>(
+        IN      const uintn_t index );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the performance counter to set.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo481">cl_perf_log</a>,
+       <a href="#robo485">cl_perf_update</a>, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo484">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fstop">
+Component Library: Performance Counters/cl_perf_stop</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_stop</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <a href="#robo481">cl_perf_log</a> macro updates a counter in a performance counter
+       container with a new timing sample.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_stop</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const uintn_t           index );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to whose counter
+               a sample should be added.
+
+       index
+               [in] Number of the performance counter to update with a new sample.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       The ending time stamp is taken and elapsed time calculated before updating
+       the specified counter.
+
+       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo483">cl_perf_start</a>,
+       <a href="#robo481">cl_perf_log</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo485">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fupdate">
+Component Library: Performance Counters/cl_perf_update</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_update</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_update</strong> macro adds a timing sample based on a provided start
+       time to a counter in a performance counter container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_update</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const uintn_t           index,
+        IN      const uint64_t          start_time );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to whose counter
+               the sample should be added.
+
+       index
+               [in] Number of the performance counter to update with a new sample.
+
+       start_time
+               [in] Timestamp to use as the start time for the timing sample.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo483">cl_perf_start</a>,
+       cl_perf_lob, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo486">[Definitions]<a name="Component20Library3a20Performance20Counters2fcl5fperf5fupdate5fctr">
+Component Library: Performance Counters/cl_perf_update_ctr</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_perf_update_ctr</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_perf_update_ctr</strong> macro updates a counter in a performance
+       counter container.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>void
+<strong>cl_perf_update_ctr</strong>(
+        IN      cl_perf_t* const        p_perf,
+        IN      const uintn_t           index );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_perf
+               [in] Pointer to a performance counter container to whose counter
+               the sample should be added.
+
+       index
+               [in] Number of the performance counter to update with a new sample.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo483">cl_perf_start</a>,
+       cl_perf_lob, <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo487">[Definitions]<a name="Component20Library3a20Performance20Counters2fPERF5fDECLARE">
+Component Library: Performance Counters/PERF_DECLARE</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>PERF_DECLARE</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>PERF_DECLARE</strong> macro declares a performance counter variable used
+       to store the starting time of a timing sequence.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>PERF_DECLARE</strong>( index )
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the performance counter for which to use this
+               variable.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Variables should generally be declared on the stack to support
+       multi-threading.  In cases where a counter needs to be used to
+       time operations accross multiple functions, care must be taken to
+       ensure that the start time stored in this variable is not overwritten
+       before the related performance counter has been updated.
+
+       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo488">PERF_DECLARE_START</a>, <a href="#robo483">cl_perf_start</a>, <a href="#robo481">cl_perf_log</a>,
+       <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo488">[Definitions]<a name="Component20Library3a20Performance20Counters2fPERF5fDECLARE5fSTART">
+Component Library: Performance Counters/PERF_DECLARE_START</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>PERF_DECLARE_START</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>PERF_DECLARE_START</strong> macro declares a performance counter variable
+       and sets it to the starting time of a timed sequence.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>*       <strong>PERF_DECLARE_START</strong>( index )
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       index
+               [in] Index of the performance counter for which to use this
+               variable.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Variables should generally be declared on the stack to support
+       multi-threading.
+
+       This macro has no effect when performance counters are disabled.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Performance Counters, <a href="#robo487">PERF_DECLARE</a>, <a href="#robo483">cl_perf_start</a>, <a href="#robo481">cl_perf_log</a>,
+       <a href="#robo484">cl_perf_stop</a>
+</pre>
+</span>
+</body>
+</html>

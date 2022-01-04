@@ -1,0 +1,21 @@
+DIRS = \
+	ibaddr		\
+	ibcacheedit	\
+	iblinkinfo	\
+	ibnetdiscover	\
+	ibping		\
+	ibportstate	\
+	ibqueryerrors	\
+	ibroute		\
+	ibsendtrap	\
+	ibstat		\
+	ibsysstat	\
+	ibtracert	\
+	mcm_rereg_test	\
+	perfquery	\
+	saquery		\
+	sminfo		\
+	smpdump		\
+	smpquery	\
+	vendstat	\
+	ibclearerrors

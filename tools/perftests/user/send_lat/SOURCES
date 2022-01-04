@@ -1,0 +1,25 @@
+TARGETNAME=ib_send_lat
+TARGETPATH=..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=PROGRAM
+UMTYPE=console
+USE_MSVCRT=1
+NTTARGETFILES=Custom_target
+
+C_DEFINES=$(C_DEFINES) /D__WIN__ 
+
+SOURCES=send_lat.rc \
+	..\getopt.c \
+	..\perf_utils.c \
+	send_lat.c 
+
+INCLUDES=..;..\..\..\..\inc;..\..\..\..\inc\user;..\..\..\..\hw\mlx4\user\hca;..\..\..\..\inc\complib;..\..\..\..\core\complib\user\$(O);..\..\..\..\core\al\user\$(O);
+
+RCOPTIONS=/I..\..\win\include
+
+TARGETLIBS= \
+			$(DDK_LIB_PATH)\Ws2_32.lib \
+			$(TARGETPATH)\*\complib.lib \
+			$(TARGETPATH)\*\ibal.lib
+
+
+MSC_WARNING_LEVEL= /W3

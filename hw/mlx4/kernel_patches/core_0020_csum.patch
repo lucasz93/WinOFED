@@ -1,0 +1,51 @@
+From 11d392f57b2199f5c8071360ebf03c2fc6c4afb2 Mon Sep 17 00:00:00 2001
+From: Eli Cohen <eli@mellanox.co.il>
+Date: Tue, 15 Jan 2008 12:15:59 +0200
+Subject: [PATCH] Add checksum support to ib core
+
+Signed-off-by: Eli Cohen <eli@mellanox.co.il>
+---
+ include/rdma/ib_verbs.h |   13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
+index 11f3960..e35cc29 100644
+--- a/include/rdma/ib_verbs.h
++++ b/include/rdma/ib_verbs.h
+@@ -95,7 +95,14 @@ enum ib_device_cap_flags {
+ 	IB_DEVICE_N_NOTIFY_CQ		= (1<<14),
+ 	IB_DEVICE_ZERO_STAG		= (1<<15),
+ 	IB_DEVICE_SEND_W_INV		= (1<<16),
+-	IB_DEVICE_MEM_WINDOW		= (1<<17)
++	IB_DEVICE_MEM_WINDOW		= (1<<17),
++	/*
++	 * devices which publish this capability must support insertion of UDP
++	 * and TCP checksum on outgoing packets and can verify the validity of
++	 * checksum for incoming packets. Setting this flag implies the driver
++	 * may set NETIF_F_IP_CSUM.
++	 */
++	IB_DEVICE_IP_CSUM		= (1<<18),
+ };
+ 
+ enum ib_atomic_cap {
+@@ -431,6 +438,7 @@ struct ib_wc {
+ 	u8			sl;
+ 	u8			dlid_path_bits;
+ 	u8			port_num;	/* valid only for DR SMPs on switches */
++	int			csum_ok;
+ };
+ 
+ enum ib_cq_notify_flags {
+@@ -615,7 +623,8 @@ enum ib_send_flags {
+ 	IB_SEND_FENCE		= 1,
+ 	IB_SEND_SIGNALED	= (1<<1),
+ 	IB_SEND_SOLICITED	= (1<<2),
+-	IB_SEND_INLINE		= (1<<3)
++	IB_SEND_INLINE		= (1<<3),
++	IB_SEND_IP_CSUM         = (1<<4)
+ };
+ 
+ struct ib_sge {
+-- 
+1.5.3.8
+

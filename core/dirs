@@ -1,0 +1,10 @@
+DIRS=\
+	complib		\
+	al		\
+	bus		\
+	ibat		\
+	winverbs	\
+	winmad		\
+	ndfltr		\
+	fip		\
+	iou

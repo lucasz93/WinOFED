@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_timer_h.html</title>
+<!-- Source: ./inc/complib/cl_timer.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_timer.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo29">[Modules]<a name="Component20Library2fTimer">
+Component Library/Timer</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>Timer</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>Timer</strong> provides the ability to schedule a function to be invoked at
+       a given time in the future.
+
+       The timer callback function must not perform any blocking operations.
+
+       The timer functions operate on a cl_timer_t structure which should be
+       treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               cl_timer_t
+
+       Callbacks:
+               <a href="#robo655">cl_pfn_timer_callback_t</a>
+
+       Initialization:
+               <a href="#robo656">cl_timer_construct</a>, <a href="#robo658">cl_timer_init</a>, <a href="#robo657">cl_timer_destroy</a>
+
+       Manipulation:
+               <a href="#robo659">cl_timer_start</a>, <a href="#robo660">cl_timer_stop</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo650">[Functions]<a name="Component20Library3a20Time20Stamp2fcl5fget5ftick5fcount">
+Component Library: Time Stamp/cl_get_tick_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_tick_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_get_tick_count</strong> function returns the raw high-resolution
+       performance counter value.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint64_t CL_API
+<strong>cl_get_tick_count</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Value of the high-resolution performance counter.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo652">cl_get_time_stamp</a>, <a href="#robo651">cl_get_tick_freq</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo651">[Functions]<a name="Component20Library3a20Time20Stamp2fcl5fget5ftick5ffreq">
+Component Library: Time Stamp/cl_get_tick_freq</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_tick_freq</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_get_tick_freq</strong> function returns the frequency of the
+       high-resolution performance counter.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint64_t CL_API
+<strong>cl_get_tick_freq</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       The frequency of the high-resolution performance counter.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo652">cl_get_time_stamp</a>, <a href="#robo650">cl_get_tick_count</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo652">[Functions]<a name="Component20Library3a20Time20Stamp2fcl5fget5ftime5fstamp">
+Component Library: Time Stamp/cl_get_time_stamp</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_time_stamp</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_get_time_stamp</strong> function returns the current time stamp in
+       microseconds since the system was booted.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint64_t CL_API
+<strong>cl_get_time_stamp</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Time elapsed, in microseconds, since the system was booted.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo654">cl_get_time_stamp_usec</a>, <a href="#robo653">cl_get_time_stamp_sec</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo653">[Functions]<a name="Component20Library3a20Time20Stamp2fcl5fget5ftime5fstamp5fsec">
+Component Library: Time Stamp/cl_get_time_stamp_sec</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_time_stamp_sec</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_get_time_stamp_sec</strong> function returns the current time stamp in
+       seconds since the system was booted.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT uint32_t CL_API
+<strong>cl_get_time_stamp_sec</strong>( void );
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Time elapsed, in seconds, since the system was booted.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo652">cl_get_time_stamp</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo654">[Functions]<a name="Component20Library3a20Time20Stamp2fcl5fget5ftime5fstamp5fusec">
+Component Library: Time Stamp/cl_get_time_stamp_usec</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_get_time_stamp_usec</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_get_time_stamp_usec</strong> function returns the current time stamp in
+       microseconds since the system was booted.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE uint64_t CL_API
+<strong>cl_get_time_stamp_usec</strong>( void )
+{
+        return <a href="#robo652">cl_get_time_stamp</a>();
+}
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Time elapsed, in microseconds, since the system was booted.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo652">cl_get_time_stamp</a>, <a href="#robo653">cl_get_time_stamp_sec</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo655">[Definitions]<a name="Component20Library3a20Timer2fcl5fpfn5ftimer5fcallback5ft">
+Component Library: Timer/cl_pfn_timer_callback_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_definitions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_pfn_timer_callback_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_pfn_timer_callback_t</strong> function type defines the prototype for
+       functions used to notify users of a timer expiration.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef void
+(CL_API *<strong>cl_pfn_timer_callback_t</strong>)(
+        IN void*        context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       context
+               [in] Value specified in a previous call to <a href="#robo658">cl_timer_init</a>.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       This function type is provided as function prototype reference for the
+       function provided by users as a parameter to the <a href="#robo658">cl_timer_init</a> function.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo658">cl_timer_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo656">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5fconstruct">
+Component Library: Timer/cl_timer_construct</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_construct</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_construct</strong> function initializes the state of a timer.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_timer_construct</strong>(
+        IN      cl_timer_t* const       p_timer );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure whose state to initialize.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo657">cl_timer_destroy</a> without first calling <a href="#robo658">cl_timer_init</a>.
+
+       Calling <strong>cl_timer_construct</strong> is a prerequisite to calling any other
+       timer function except <a href="#robo658">cl_timer_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo658">cl_timer_init</a>, <a href="#robo657">cl_timer_destroy</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo657">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5fdestroy">
+Component Library: Timer/cl_timer_destroy</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_destroy</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_destroy</strong> function performs any necessary cleanup of a timer.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_timer_destroy</strong>(
+        IN      cl_timer_t* const       p_timer );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure to destroy.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_timer_destroy</strong> cancels any pending callbacks.
+
+       This function should only be called after a call to <a href="#robo656">cl_timer_construct</a>
+       or <a href="#robo658">cl_timer_init</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo656">cl_timer_construct</a>, <a href="#robo658">cl_timer_init</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo658">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5finit">
+Component Library: Timer/cl_timer_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_init</strong> function initializes a timer for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_timer_init</strong>(
+        IN      cl_timer_t* const               p_timer,
+        IN      <a href="#robo655">cl_pfn_timer_callback_t</a> pfn_callback,
+        IN      const void* const               context );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure to initialize.
+
+       pfn_callback
+               [in] Address of a callback function to be invoked when a timer expires.
+               See the <a href="#robo655">cl_pfn_timer_callback_t</a> function type definition for details
+               about the callback function.
+
+       context
+               [in] Value to pass to the callback function.
+
+ RETURN VALUES
+       CL_SUCCESS if the timer was successfully initialized.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling <a href="#robo659">cl_timer_start</a> and <a href="#robo660">cl_timer_stop</a>.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo656">cl_timer_construct</a>, <a href="#robo657">cl_timer_destroy</a>, <a href="#robo659">cl_timer_start</a>,
+       <a href="#robo660">cl_timer_stop</a>, <a href="#robo655">cl_pfn_timer_callback_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo659">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5fstart">
+Component Library: Timer/cl_timer_start</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_start</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_start</strong> function sets a timer to expire after a given interval.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_timer_start</strong>(
+        IN      cl_timer_t* const       p_timer,
+        IN      const uint32_t          time_ms );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure to schedule.
+
+       time_ms
+               [in] Time, in milliseconds, before the timer should expire.
+
+ RETURN VALUES
+       CL_SUCCESS if the timer was successfully scheduled.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_timer_start</strong> implicitly stops the timer before being scheduled.
+
+       The interval specified by the time_ms parameter is a minimum interval.
+       The timer is guaranteed to expire no sooner than the desired interval, but
+       may take longer to expire.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo660">cl_timer_stop</a>, <a href="#robo661">cl_timer_trim</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo660">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5fstop">
+Component Library: Timer/cl_timer_stop</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_stop</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_stop</strong> function stops a pending timer from expiring.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_timer_stop</strong>(
+        IN      cl_timer_t* const       p_timer );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo659">cl_timer_start</a>, <a href="#robo661">cl_timer_trim</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo661">[Functions]<a name="Component20Library3a20Timer2fcl5ftimer5ftrim">
+Component Library: Timer/cl_timer_trim</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_timer_trim</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_timer_trim</strong> function pulls in the absolute expiration
+       time of a timer if the current expiration time exceeds the specified
+       interval.
+
+       sets a timer to expire after a given
+       interval if that interval is less than the current timer expiration.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT <a href="./cl_types_h.html#robo308">cl_status_t</a> CL_API
+<strong>cl_timer_trim</strong>(
+        IN      cl_timer_t* const       p_timer,
+        IN      const uint32_t          time_ms );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_timer
+               [in] Pointer to a cl_timer_t structure to schedule.
+
+       time_ms
+               [in] Maximum time, in milliseconds, before the timer should expire.
+
+ RETURN VALUES
+       CL_SUCCESS if the timer was successfully scheduled.
+
+       CL_ERROR otherwise.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_timer_trim</strong> has no effect if the time interval is greater than the
+       remaining time when the timer is set.
+
+       If the new interval time is less than the remaining time, <strong>cl_timer_trim</strong>
+       implicitly stops the timer before reseting it.
+
+       If the timer is reset, it is guaranteed to expire no sooner than the
+       new interval, but may take longer to expire.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       <a href="#robo29">Timer</a>, <a href="#robo659">cl_timer_start</a>, <a href="#robo660">cl_timer_stop</a>
+</pre>
+</span>
+</body>
+</html>

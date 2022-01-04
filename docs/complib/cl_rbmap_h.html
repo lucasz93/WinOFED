@@ -1,0 +1,563 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="../robodoc.css" type="text/css">
+<title>./inc_docs/complib/cl_rbmap_h.html</title>
+<!-- Source: ./inc/complib/cl_rbmap.h -->
+<!-- Generated with ROBODoc Version 4.99.17 (Aug  2 2005) -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated from ./inc/complib/cl_rbmap.h</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.17 on Sun Mar 04 2007 18:17:51
+<br />
+<hr />
+
+<h2><a name="robo24">[Modules]<a name="Component20Library2fRB20Map">
+Component Library/RB Map</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="./comp_lib_h.html#robo4">parent</a>][<a href="../robo_modules.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       RB map implements a binary tree that stores user provided <a href="#robo614">cl_rbmap_item_t</a>
+       structures.  Each item stored in a RB map has a unique key
+       (duplicates are not allowed).  RB map provides the ability to
+       efficiently search for an item given a key.
+
+       RB map does not allocate any memory, and can therefore not fail
+       any operations due to insufficient memory.  RB map can thus be useful
+       in minimizing the error paths in code.
+
+       RB map is not thread safe, and users must provide serialization when
+       adding and removing items from the map.
+
+       The RB map functions operate on a <a href="#robo620">cl_rbmap_t</a> structure which should be
+       treated as opaque and should be manipulated only through the provided
+       functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       Structures:
+               <a href="#robo620">cl_rbmap_t</a>, <a href="#robo614">cl_rbmap_item_t</a>
+
+       Initialization:
+               <a href="#robo612">cl_rbmap_init</a>
+
+       Iteration:
+               <a href="#robo619">cl_rbmap_root</a>, <a href="#robo611">cl_rbmap_end</a>, <a href="#robo615">cl_rbmap_left</a>, <a href="#robo618">cl_rbmap_right</a>, cl_rbmap_up
+
+       Manipulation:
+               <a href="#robo613">cl_rbmap_insert</a>, cl_rbmap_get, <a href="#robo616">cl_rbmap_remove_item</a>, cl_rbmap_remove,
+               <a href="#robo617">cl_rbmap_reset</a>, cl_rbmap_merge, cl_rbmap_delta
+
+       Search:
+               cl_rbmap_apply_func
+
+       Attributes:
+               <a href="#robo610">cl_rbmap_count</a>, <a href="#robo609">cl_is_rbmap_empty</a>,
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo609">[Functions]<a name="Component20Library3a20RB20Map2fcl5fis5frbmap5fempty">
+Component Library: RB Map/cl_is_rbmap_empty</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_is_rbmap_empty</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_is_rbmap_empty</strong> function returns whether a RB map is empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE boolean_t CL_API
+<strong>cl_is_rbmap_empty</strong>(
+        IN      const <a href="#robo620">cl_rbmap_t</a>* const p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+
+        return( p_map-&gt;count == 0 );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure to test for emptiness.
+
+ RETURN VALUES
+       TRUE if the RB map is empty.
+
+       FALSE otherwise.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo610">cl_rbmap_count</a>, <a href="#robo617">cl_rbmap_reset</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo610">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5fcount">
+Component Library: RB Map/cl_rbmap_count</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_count</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_count</strong> function returns the number of items stored
+       in a RB map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE size_t CL_API
+<strong>cl_rbmap_count</strong>(
+        IN      const <a href="#robo620">cl_rbmap_t</a>* const p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        return( p_map-&gt;count );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure whose item count to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Returns the number of items stored in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo609">cl_is_rbmap_empty</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo611">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5fend">
+Component Library: RB Map/cl_rbmap_end</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_end</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_end</strong> function returns the end of a RB map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE const <a href="#robo614">cl_rbmap_item_t</a>* const CL_API
+<strong>cl_rbmap_end</strong>(
+        IN      const <a href="#robo620">cl_rbmap_t</a>* const p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+        /* Nil is the end of the map. */
+        return( &amp;p_map-&gt;nil );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure whose end to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the end of the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <strong>cl_rbmap_end</strong> is useful for determining the validity of map items returned
+       by cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, or cl_rbmap_prev.  If the map
+       item pointer returned by any of these functions compares to the end, the
+       end of the map was encoutered.
+       When using cl_rbmap_head or cl_rbmap_tail, this condition indicates that
+       the map is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, cl_rbmap_prev
+       <a href="#robo619">cl_rbmap_root</a>, <a href="#robo615">cl_rbmap_left</a>, <a href="#robo618">cl_rbmap_right</a>, cl_rbmap_up
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo612">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5finit">
+Component Library: RB Map/cl_rbmap_init</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_init</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_init</strong> function initialized a RB map for use.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_rbmap_init</strong>(
+        IN      <a href="#robo620">cl_rbmap_t</a>* const       p_map )
+{
+        CL_ASSERT( p_map );
+
+        /* special setup for the root node */
+        p_map-&gt;root.p_left = &amp;p_map-&gt;nil;
+        p_map-&gt;root.p_right = &amp;p_map-&gt;nil;
+        p_map-&gt;root.p_up = &amp;p_map-&gt;root;
+        p_map-&gt;root.color = CL_MAP_BLACK;
+
+        /* Setup the node used as terminator for all leaves. */
+        p_map-&gt;nil.p_left = &amp;p_map-&gt;nil;
+        p_map-&gt;nil.p_right = &amp;p_map-&gt;nil;
+        p_map-&gt;nil.p_up = &amp;p_map-&gt;nil;
+        p_map-&gt;nil.color = CL_MAP_BLACK;
+
+#ifdef _DEBUG_
+        p_map-&gt;root.p_map = p_map;
+        p_map-&gt;nil.p_map = p_map;
+#endif
+
+        p_map-&gt;state = CL_INITIALIZED;
+
+        p_map-&gt;count = 0;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure to initialize.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Allows calling RB map manipulation functions.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo613">cl_rbmap_insert</a>, cl_rbmap_remove
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo613">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5finsert">
+Component Library: RB Map/cl_rbmap_insert</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_insert</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_insert</strong> function inserts a map item into a RB map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_rbmap_insert</strong>(
+        IN      <a href="#robo620">cl_rbmap_t</a>* const               p_map,
+        IN      <a href="#robo614">cl_rbmap_item_t</a>* const  p_insert_at,
+        IN      <a href="#robo614">cl_rbmap_item_t</a>* const  p_item,
+        IN      boolean_t                               left );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure into which to add the item.
+
+       p_insert_at
+               [in] Pointer to a <a href="#robo614">cl_rbmap_item_t</a> structure to serve as parent
+               to p_item.
+
+       p_item
+               [in] Pointer to a <a href="#robo614">cl_rbmap_item_t</a> stucture to insert into the RB map.
+
+       left
+               [in] Indicates that p_item should be inserted to the left of p_insert_at.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the item in the map with the specified key.  If insertion
+       was successful, this is the pointer to the item.  If an item with the
+       specified key already exists in the map, the pointer to that item is
+       returned.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Insertion operations may cause the RB map to rebalance.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_remove, <a href="#robo614">cl_rbmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo614">[Structures]<a name="Component20Library3a20RB20Map2fcl5frbmap5fitem5ft">
+Component Library: RB Map/cl_rbmap_item_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_item_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_item_t</strong> structure is used by maps to store objects.
+
+       The <strong>cl_rbmap_item_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_rbmap_item
+{
+        struct _cl_rbmap_item           *p_left;
+        struct _cl_rbmap_item           *p_right;
+        struct _cl_rbmap_item           *p_up;
+        cl_map_color_t                          color;
+#ifdef _DEBUG_
+        struct _cl_rbmap                        *p_map;
+#endif
+
+} <strong>cl_rbmap_item_t</strong>;
+</pre>
+</span><p><strong>FIELDS</strong></p>
+<span class="FIELDS"><pre>       p_left
+               Pointer to the map item that is a child to the left of the node.
+
+       p_right
+               Pointer to the map item that is a child to the right of the node.
+
+       p_up
+               Pointer to the map item that is the parent of the node.
+
+       color
+               Indicates whether a node is red or black in the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       None of the fields of this structure should be manipulated by users, as
+       they are crititcal to the proper operation of the map in which they
+       are stored.
+
+       To allow storing items in either a quick list, a quick pool, or a quick
+       map, the map implementation guarantees that the map item can be safely
+       cast to a pool item used for storing an object in a quick pool, or cast to
+       a list item used for storing an object in a quick list.  This removes the
+       need to embed a map item, a list item, and a pool item in objects that need
+       to be stored in a quick list, a quick pool, and a RB map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, <a href="#robo613">cl_rbmap_insert</a>, cl_rbmap_key, <a href="./cl_qcomppool_h.html#robo524">cl_pool_item_t</a>, <a href="./cl_qlist_h.html#robo536">cl_list_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo615">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5fleft">
+Component Library: RB Map/cl_rbmap_left</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_left</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_left</strong> function returns the map item to the left
+       of the specified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo614">cl_rbmap_item_t</a>* CL_API
+<strong>cl_rbmap_left</strong>(
+        IN      const <a href="#robo614">cl_rbmap_item_t</a>* const    p_item )
+{
+        CL_ASSERT( p_item );
+        return( (<a href="#robo614">cl_rbmap_item_t</a>*)p_item-&gt;p_left );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item whose predecessor to return.
+
+ RETURN VALUES
+       Pointer to the map item to the left in a RB map.
+
+       Pointer to the map end if no item is to the left.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, <a href="#robo611">cl_rbmap_end</a>,
+       <a href="#robo614">cl_rbmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo616">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5fremove5fitem">
+Component Library: RB Map/cl_rbmap_remove_item</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_remove_item</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_remove_item</strong> function removes the specified map item
+       from a RB map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_EXPORT void CL_API
+<strong>cl_rbmap_remove_item</strong>(
+        IN      <a href="#robo620">cl_rbmap_t</a>* const               p_map,
+        IN      <a href="#robo614">cl_rbmap_item_t</a>* const  p_item );
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item to remove from its RB map.
+
+ RETURN VALUES
+       This function does not return a value.
+
+       In a debug build, <strong>cl_rbmap_remove_item</strong> asserts that the item being removed
+       is in the specified map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       Removes the map item pointed to by p_item from its RB map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_remove, <a href="#robo617">cl_rbmap_reset</a>, <a href="#robo613">cl_rbmap_insert</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo617">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5freset">
+Component Library: RB Map/cl_rbmap_reset</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_reset</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_reset</strong> function removes all items in a RB map,
+       leaving it empty.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE void CL_API
+<strong>cl_rbmap_reset</strong>(
+        IN      <a href="#robo620">cl_rbmap_t</a>* const       p_map )
+{
+        CL_ASSERT( p_map );
+        CL_ASSERT( p_map-&gt;state == CL_INITIALIZED );
+
+        p_map-&gt;root.p_left = &amp;p_map-&gt;nil;
+        p_map-&gt;count = 0;
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure to empty.
+
+ RETURN VALUES
+       This function does not return a value.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_remove, <a href="#robo616">cl_rbmap_remove_item</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo618">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5fright">
+Component Library: RB Map/cl_rbmap_right</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_right</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_right</strong> function returns the map item to the right
+       of the specified map item.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo614">cl_rbmap_item_t</a>* CL_API
+<strong>cl_rbmap_right</strong>(
+        IN      const <a href="#robo614">cl_rbmap_item_t</a>* const    p_item )
+{
+        CL_ASSERT( p_item );
+        return( (<a href="#robo614">cl_rbmap_item_t</a>*)p_item-&gt;p_right );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_item
+               [in] Pointer to a map item whose predecessor to return.
+
+ RETURN VALUES
+       Pointer to the map item to the right in a RB map.
+
+       Pointer to the map end if no item is to the right.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, <a href="#robo611">cl_rbmap_end</a>,
+       <a href="#robo614">cl_rbmap_item_t</a>
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo619">[Functions]<a name="Component20Library3a20RB20Map2fcl5frbmap5froot">
+Component Library: RB Map/cl_rbmap_root</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_functions.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_root</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       The <strong>cl_rbmap_root</strong> function returns the root of a RB map.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>CL_INLINE <a href="#robo614">cl_rbmap_item_t</a>* const CL_API
+<strong>cl_rbmap_root</strong>(
+        IN      const <a href="#robo620">cl_rbmap_t</a>* const p_map )
+{
+        CL_ASSERT( p_map );
+        return( p_map-&gt;root.p_left );
+}
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       p_map
+               [in] Pointer to a <a href="#robo620">cl_rbmap_t</a> structure whose root to return.
+</pre>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><pre>       Pointer to the end of the map.
+</pre>
+</span><p><strong>NOTES</strong></p>
+<span class="NOTES"><pre>       <a href="#robo611">cl_rbmap_end</a> is useful for determining the validity of map items returned
+       by cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, or cl_rbmap_prev.  If the map
+       item pointer returned by any of these functions compares to the end, the
+       end of the map was encoutered.
+       When using cl_rbmap_head or cl_rbmap_tail, this condition indicates that
+       the map is empty.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>, cl_rbmap_head, cl_rbmap_tail, cl_rbmap_next, cl_rbmap_prev,
+       <a href="#robo611">cl_rbmap_end</a>, <a href="#robo615">cl_rbmap_left</a>, <a href="#robo618">cl_rbmap_right</a>, cl_rbmap_up
+</pre>
+</span>
+<hr />
+
+<h2><a name="robo620">[Structures]<a name="Component20Library3a20RB20Map2fcl5frbmap5ft">
+Component Library: RB Map/cl_rbmap_t</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>][<a href="../robo_strutures.html#top">index</a>]</p>
+<p><strong>NAME</strong></p>
+<span class="NAME"><pre>       <strong>cl_rbmap_t</strong>
+</pre>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><pre>       Quick map structure.
+
+       The <strong>cl_rbmap_t</strong> structure should be treated as opaque and should
+       be manipulated only through the provided functions.
+</pre>
+</span><p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><pre>typedef struct _cl_rbmap
+{
+        <a href="#robo614">cl_rbmap_item_t</a> root;
+        <a href="#robo614">cl_rbmap_item_t</a> nil;
+        cl_state_t              state;
+        size_t                  count;
+
+} <strong>cl_rbmap_t</strong>;
+</pre>
+</span><p><strong>PARAMETERS</strong></p>
+<span class="PARAMETERS"><pre>       root
+               <a href="./cl_map_h.html#robo13">Map</a> item that serves as root of the map.  The root is set up to
+               always have itself as parent.  The left pointer is set to point to
+               the item at the root.
+
+       nil
+               <a href="./cl_map_h.html#robo13">Map</a> item that serves as terminator for all leaves, as well as providing
+               the list item used as quick list for storing map items in a list for
+               faster traversal.
+
+       state
+               State of the map, used to verify that operations are permitted.
+
+       count
+               Number of items in the map.
+</pre>
+</span><p><strong>SEE ALSO</strong></p>
+<span class="SEE_ALSO"><pre>       RB <a href="./cl_map_h.html#robo13">Map</a>
+</pre>
+</span>
+</body>
+</html>

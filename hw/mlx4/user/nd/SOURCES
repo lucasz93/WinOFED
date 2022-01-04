@@ -1,0 +1,51 @@
+BASETARGETNAME=mlx4nd
+TARGETNAME = $(BASETARGETNAME)
+
+TARGETPATH=..\..\..\..\bin\user\obj$(BUILD_ALT_DIR)
+TARGETTYPE=DYNLINK
+DLLDEF = $(OBJ_PATH)\$O\mlx4nd.def
+DLLENTRY=DllMain
+
+USE_NTDLL=1
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_CXX=1
+USECXX_FLAG=1
+
+SOURCES= \
+    mlx4nd.rc \
+    main.cpp \
+    factory.cpp \
+    provider.cpp \
+    adapter.cpp \
+    connector.cpp \
+    cq.cpp \
+    listener.cpp \
+    mr.cpp \
+    mw.cpp \
+    qp.cpp \
+    srq.cpp
+
+INCLUDES= \
+    $(SDK_INC_PATH); \
+    $(PLATFORM_SDK_PATH)\include; \
+    $(ND_SDK_PATH)\include; \
+    ..\..\inc; \
+    ..\..\..\..\inc; \
+    ..\..\..\..\inc\user; \
+    ..\..\..\..\core\ndfltr\kernel; \
+    ..\hca;
+
+#/GL
+#LINKER_FLAGS=$(LINKER_FLAGS) /LTCG
+
+TARGETLIBS= \
+    $(SDK_LIB_PATH)\Kernel32.lib	\
+    $(SDK_LIB_PATH)\Advapi32.lib	\
+    $(SDK_LIB_PATH)\ws2_32.lib		\
+    $(SDK_LIB_PATH)\uuid.lib		\
+    $(TARGETPATH)\*\mlx4u.lib
+
+BUILD_PRODUCES=mlx4nd
+
+MSC_WARNING_LEVEL= /W4
